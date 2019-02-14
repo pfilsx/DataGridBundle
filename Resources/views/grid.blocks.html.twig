@@ -1,0 +1,137 @@
+{% block grid_table %}
+    {% set attr = attr|merge({'class': attr.class|default('')~' data_grid_table'}) %}
+    <table {{ block('attributes') }}>
+        <thead>
+            {{ block('grid_head') }}
+        </thead>
+        <tbody>
+            {{ block('grid_body') }}
+        </tbody>
+    </table>
+    {% if data_grid.hasPagination and data_grid.paginationOptions.pages|length > 1 %}
+        {{ block('pagination') }}
+    {% endif %}
+{% endblock %}
+
+{% block grid_head %}
+    <tr>
+        {% for column in data_grid.columns %}
+            {% if column.hasAttributes %}
+                {% set attr = column.attributes %}
+            {% else %}
+                {% set attr = [] %}
+            {% endif %}
+            <th {{ block('attributes') }}>
+                {% if column.hasSort %}
+                    {% if column.getSort is same as('ASC') %}
+                        {% set sort_attribute = {'sortBy': '-' ~ column.attribute} %}
+                    {% elseif column.getSort is same as('DESC') %}
+                        {% set sort_attribute = {'sortBy': null} %}
+                    {% else %}
+                        {% set sort_attribute = {'sortBy': column.attribute} %}
+                    {% endif %}
+                    <a href="{{ path(request.get('_route'),
+                       request.query|merge({'data_grid': request.query.get('data_grid')|default({})|merge(sort_attribute)})) }}"
+                       class="data_grid_sort{% if column.getSort is same as('ASC') %} up{% elseif column.getSort is same as('DESC') %} down{% endif %}"
+                       data-attribute="{{ column.attribute }}">{{ column.headContent }}</a>
+                {% else %}
+                    {{ column.headContent }}
+                {% endif %}
+            </th>
+        {% endfor %}
+    </tr>
+    {% if data_grid.hasFilters %}
+        <tr>
+            {% for column in data_grid.columns %}
+                <th>{{ column.filterContent|raw }}</th>
+            {% endfor %}
+        </tr>
+    {% endif %}
+{% endblock %}
+
+{%  block grid_body %}
+    {% for entity in data_grid.data %}
+        <tr>
+            {% for column in data_grid.columns %}
+                {% if column.hasAttributes %}
+                    {% set attr = column.attributes %}
+                {% else %}
+                    {% set attr = [] %}
+                {% endif %}
+                <td {{ block('attributes') }}>{{ column.getCellContent(entity, data_grid)|raw }}</td>
+            {% endfor %}
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="{{ data_grid.columns|length }}">{{ data_grid.noDataMessage }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block attributes -%}
+
+    {%- for attrname, attrvalue in attr -%}
+        {{- " " -}}
+        {%- if attrname in ['placeholder', 'title'] -%}
+            {{- attrname }}="{{ translation_domain is same as(false) ? attrvalue : attrvalue|trans({}, translation_domain) }}"
+        {%- elseif attrvalue is same as(true) -%}
+            {{- attrname }}="{{ attrname }}"
+        {%- elseif attrvalue is not same as(false) -%}
+            {{- attrname }}="{{ attrvalue }}"
+        {%- endif -%}
+    {%- endfor -%}
+{%- endblock attributes -%}
+
+{% block action_button %}
+    {% if action == 'delete' %}
+        <form method="post" style="display: inline-block" action="{{ url }}" onsubmit="return confirm('{% trans %}are you sure you want to delete this item?{% endtrans %}');">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entity.id) }}">
+            <input type="submit" style="{{ block('action_button_styles') }}" value="{{ action }}">
+        </form>
+    {% else %}
+        <a href="{{ url }}" style="{{ block('action_button_styles') }}">{{ action }}</a>
+    {% endif %}
+{% endblock %}
+
+{% block action_button_styles %}
+    color:#212529;font-size:0.9rem;font-weight:300;background:none;border:0;cursor:pointer;padding:0
+{% endblock %}
+
+{% block pagination %}
+    {% set pages = data_grid.paginationOptions.pages %}
+    {% set current_page = data_grid.paginationOptions.currentPage %}
+    {% for i in pages %}
+        {% if i == current_page %}
+            {{ i }}
+        {% elseif i is same as(null) %}
+            ...
+        {% else %}
+            <a href="{{ path(request.get('_route'),
+                request.query|merge({'data_grid': request.query.get('data_grid')|default({})|merge({'page': i})})) }}"
+               class="data_grid_page" data-page="{{ i }}">{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block grid_filter %}
+    {% set attr = options|merge({class: (options.class|default('') ~ ' data_grid_filter')|trim}) %}
+    {{ block(block_name) }}
+{% endblock %}
+
+{% block text_filter %}
+    <input type="text" {{ block('attributes') }} name="{{ attribute }}" value="{{ value }}">
+{% endblock %}
+
+{% block boolean_filter %}
+    {{ block('choice_filter') }}
+{% endblock %}
+
+{% block choice_filter %}
+    <select {{ block('attributes') }} name="{{ attribute }}">
+        <option value=""></option>
+        {% for val,label in choices %}
+            <option value="{{ val }}" {% if val is same as(value) %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+{% endblock %}
