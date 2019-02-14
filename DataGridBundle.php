@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Pfilsx\DataGrid\DataGridBundle;
+namespace Pfilsx\DataGrid;
 
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
