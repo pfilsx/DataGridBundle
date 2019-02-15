@@ -131,7 +131,7 @@
     <select {{ block('attributes') }} name="{{ attribute }}">
         <option value=""></option>
         {% for val,label in choices %}
-            <option value="{{ val }}" {% if val is same as(value) %}selected{% endif %}>{{ label }}</option>
+            <option value="{{ val }}" {% if (val not in [null, false, 0] and val == value) or val is same as(value) %}selected{% endif %}>{{ label }}</option>
         {% endfor %}
     </select>
 {% endblock %}
