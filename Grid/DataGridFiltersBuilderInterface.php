@@ -12,6 +12,8 @@ interface DataGridFiltersBuilderInterface
 
     public function addLikeFilter(string $attribute, array $params): self;
 
+    public function addRelationFilter(string $attribute, string $relationClass, array $params): self;
+
     /**
      * @internal
      * @return Criteria
