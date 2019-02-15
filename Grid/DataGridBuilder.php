@@ -57,7 +57,7 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     public function addDataColumn(string $attribute, array $config = []): DataGridBuilderInterface
     {
-        return $this->addColumn(DataColumn::class, array_merge($config, ['attribute' => $attribute, 'label' => $attribute]));
+        return $this->addColumn(DataColumn::class, array_merge(['label' => $attribute], $config, ['attribute' => $attribute]));
     }
     /**
      * @param string $path
