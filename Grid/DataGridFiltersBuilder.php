@@ -45,6 +45,16 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
         return $this;
     }
 
+    public function addRelationFilter(string $attribute, string $relationClass, array $params): DataGridFiltersBuilderInterface
+    {
+        if (array_key_exists($attribute, $params)) {
+            $repository = $this->container->get('doctrine')->getRepository($relationClass);
+            $entity = $repository->findOneBy(['id' => $params[$attribute]]);
+            $this->criteria->andWhere(Criteria::expr()->eq($attribute, $entity));
+        }
+        return $this;
+    }
+
     /**
      * @internal
      * @return Criteria
