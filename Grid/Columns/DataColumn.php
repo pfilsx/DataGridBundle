@@ -64,9 +64,10 @@ class DataColumn extends AbstractColumn
 
     public function getCellContent($entity, DataGrid $grid)
     {
+        $result = (string)$this->getCellValue($entity);
         return $this->format == 'html'
-            ? $this->getCellValue($entity)
-            : htmlspecialchars($this->getCellValue($entity));
+            ? $result
+            : htmlspecialchars($result);
     }
 
     public function getAttribute(){

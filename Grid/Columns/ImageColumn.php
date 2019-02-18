@@ -15,17 +15,19 @@ class ImageColumn extends DataColumn
 
     protected $format = 'html';
 
+    protected $alt = '';
 
     function getCellContent($entity, DataGrid $grid)
     {
-        if ($this->format !== 'raw')
-            return '<img src="'.$this->getImgUrl($entity).'" width="'.$this->width.'" height="'.$this->height.'"/>';
-        return htmlspecialchars($this->getImgUrl($entity));
-    }
-
-    protected function getImgUrl($entity){
-        $manager = $this->container->get('assets.packages');
-        return $manager->getUrl($this->getCellValue($entity));
+        if ($this->format !== 'raw'){
+            return $grid->getTemplate()->renderBlock('grid_img', [
+                'src' => $this->getCellValue($entity),
+                'width' => $this->width,
+                'height' => $this->height,
+                'alt' => $this->alt
+            ]);
+        }
+        return htmlspecialchars((string)$this->getCellValue($entity));
     }
 
     /**
@@ -58,5 +60,21 @@ class ImageColumn extends DataColumn
     protected function setHeight(int $height): void
     {
         $this->height = $height;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlt(): string
+    {
+        return $this->alt;
+    }
+
+    /**
+     * @param string $alt
+     */
+    protected function setAlt(string $alt): void
+    {
+        $this->alt = $alt;
     }
 }
