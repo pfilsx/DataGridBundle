@@ -10,6 +10,7 @@ abstract class AbstractGridType
 {
     const ACTION_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\ActionColumn';
     const BOOLEAN_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\BooleanColumn';
+    const IMAGE_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\ImageColumn';
     const DATA_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\DataColumn';
     const SERIAL_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\SerialColumn';
 
