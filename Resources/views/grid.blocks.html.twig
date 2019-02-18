@@ -98,6 +98,10 @@
     color:#212529;font-size:0.9rem;font-weight:300;background:none;border:0;cursor:pointer;padding:0
 {% endblock %}
 
+{% block grid_img %}
+    <img src="{{ asset(src) }}" height="{{ height }}" width="{{ width }}" alt="{{ alt }}"/>
+{% endblock %}
+
 {% block pagination %}
     {% set pages = data_grid.paginationOptions.pages %}
     {% set current_page = data_grid.paginationOptions.currentPage %}
