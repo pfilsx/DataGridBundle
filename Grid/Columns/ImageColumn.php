@@ -17,17 +17,24 @@ class ImageColumn extends DataColumn
 
     protected $alt = '';
 
+    protected $noImageMessage = '-';
+
     function getCellContent($entity, DataGrid $grid)
     {
-        if ($this->format !== 'raw'){
-            return $grid->getTemplate()->renderBlock('grid_img', [
-                'src' => $this->getCellValue($entity),
-                'width' => $this->width,
-                'height' => $this->height,
-                'alt' => $this->alt
-            ]);
+        $value = (string)$this->getCellValue($entity);
+        if (!empty($value)){
+            if ($this->format !== 'raw'){
+                return $grid->getTemplate()->renderBlock('grid_img', [
+                    'src' => $value,
+                    'width' => $this->width,
+                    'height' => $this->height,
+                    'alt' => $this->alt
+                ]);
+            }
+            return htmlspecialchars($value);
+        } else {
+            return $this->noImageMessage;
         }
-        return htmlspecialchars((string)$this->getCellValue($entity));
     }
 
     /**
@@ -76,5 +83,21 @@ class ImageColumn extends DataColumn
     protected function setAlt(string $alt): void
     {
         $this->alt = $alt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNoImageMessage(): string
+    {
+        return $this->noImageMessage;
+    }
+
+    /**
+     * @param string $noImageMessage
+     */
+    protected function setNoImageMessage(string $noImageMessage): void
+    {
+        $this->noImageMessage = $noImageMessage;
     }
 }

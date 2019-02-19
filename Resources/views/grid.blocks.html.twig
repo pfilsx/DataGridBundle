@@ -139,3 +139,7 @@
         {% endfor %}
     </select>
 {% endblock %}
+
+{% block date_filter %}
+    <input type="date" {{ block('attributes') }} name="{{ attribute }}" value="{{ value }}"/>
+{% endblock %}
