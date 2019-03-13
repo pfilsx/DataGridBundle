@@ -10,6 +10,20 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "symfony/framework-bundle": "^4.0",
+        "symfony/orm-pack": "*",
+        "symfony/flex": "^1.1",
+        "symfony/twig-bundle": "^4.0",
+        "symfony/dependency-injection": "^4.0",
+        "symfony/expression-language": "^4.0",
+        "symfony/asset": "^4.0",
+        "symfony/config": "^4.0",
+        "symfony/http-foundation": "^4.0",
+        "symfony/http-kernel": "^4.0",
+        "symfony/options-resolver": "^4.0",
+        "symfony/property-access": "^4.0",
+        "symfony/routing": "^4.0",
+        "doctrine/doctrine-bundle": "*"
     },
     "autoload": {
         "psr-4": { "Pfilsx\\DataGrid\\": "" }

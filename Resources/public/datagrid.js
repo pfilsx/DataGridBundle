@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var element = filterElements[i];
         if (element.tagName.toLowerCase() == 'input'){
             filterElements[i].addEventListener('keypress', function(e){
-                if (e.keyCode == 13){
+                if ((typeof(e.code) != undefined && e.code == 'Enter') || e.keyCode == 13){
                     e.preventDefault();
                     _datagrid_setFilter(this);
                 }

@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class DataGridFactory implements DataGridFactoryInterface
 {
@@ -16,6 +17,10 @@ class DataGridFactory implements DataGridFactoryInterface
      * @var ContainerInterface
      */
     protected $container;
+    /**
+     * @var Request
+     */
+    protected $request;
     /**
      * @var DataGridBuilder
      */
@@ -42,9 +47,10 @@ class DataGridFactory implements DataGridFactoryInterface
      */
     protected $columns;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack)
     {
         $this->container = $container;
+        $this->request = $requestStack->getCurrentRequest();
         $this->options['twig'] = $container->get('twig');
         $this->options['router'] = $container->get('router');
         $this->gridBuilder = new DataGridBuilder($container);
@@ -53,7 +59,7 @@ class DataGridFactory implements DataGridFactoryInterface
     }
 
 
-    public function createGrid(string $gridType, ServiceEntityRepository $repository): DataGridFactoryInterface
+    public function createGrid(string $gridType, ServiceEntityRepository $repository): DataGrid
     {
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of' . AbstractGridType::class);
@@ -64,12 +70,13 @@ class DataGridFactory implements DataGridFactoryInterface
         $this->gridType->buildGrid($this->gridBuilder);
         $this->columns = $this->gridBuilder->getColumns();
         $this->options = array_merge($this->options, $this->gridBuilder->getOptions());
-        return $this;
+        $this->handleRequest();
+        return new DataGrid($this->repository, $this->columns, $this->options);
     }
 
-    public function handleRequest(Request $request): DataGridFactoryInterface
+    protected function handleRequest(): void
     {
-        $params = array_key_exists('data_grid', $request->query->all()) ? $request->query->get('data_grid') : [];
+        $params = array_key_exists('data_grid', $this->request->query->all()) ? $this->request->query->get('data_grid') : [];
         if (array_key_exists('sortBy', $params)){
             $this->setSort($params['sortBy']);
             unset($params['sortBy']);
@@ -87,14 +94,9 @@ class DataGridFactory implements DataGridFactoryInterface
                 $column->setFilterValue($params[$column->getAttribute()]);
             }
         }
+        $this->filterBuilder->setParams($params);
         $this->gridType->handleFilters($this->filterBuilder, $params);
         $this->options['filtersCriteria'] = $this->filterBuilder->getCriteria();
-        return $this;
-    }
-
-    public function getGrid(): DataGrid
-    {
-        return new DataGrid($this->repository, $this->columns, $this->options);
     }
 
     protected function setSort($attribute){

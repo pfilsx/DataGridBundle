@@ -87,23 +87,6 @@ class DataGridBuilder implements DataGridBuilderInterface
         $this->options['paginationOptions'] = $options;
         return $this;
     }
-
-
-
-    // region filters
-    public function addEqualFilter(string $attribute, array $params): DataGridBuilderInterface {
-        if (array_key_exists($attribute, $params))
-            $this->options['filters'][] = ['equal', $attribute, $params[$attribute]];
-        return $this;
-    }
-
-    public function addLikeFilter(string $attribute, array $params): DataGridBuilderInterface {
-        if (array_key_exists($attribute, $params))
-            $this->options['filters'][] = ['like', $attribute, $params[$attribute]];
-        return $this;
-    }
-    //endregion
-
     /**
      * @internal
      * @return array
