@@ -55,6 +55,14 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
         return $this;
     }
 
+    public function addCustomFilter(string $attribute, callable $callback, array $params): DataGridFiltersBuilderInterface
+    {
+        if (array_key_exists($attribute, $params)){
+            call_user_func_array($callback, [&$this->criteria, $attribute, $params[$attribute]]);
+        }
+        return $this;
+    }
+
     /**
      * @internal
      * @return Criteria

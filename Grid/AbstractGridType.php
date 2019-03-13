@@ -13,11 +13,13 @@ abstract class AbstractGridType
     const IMAGE_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\ImageColumn';
     const DATA_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\DataColumn';
     const SERIAL_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\SerialColumn';
+    const DATE_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\DateColumn';
 
     const FILTER_TEXT = 'Pfilsx\DataGrid\Grid\Filters\TextFilter';
     const FILTER_BOOLEAN = 'Pfilsx\DataGrid\Grid\Filters\BooleanFilter';
     const FILTER_ENTITY = 'Pfilsx\DataGrid\Grid\Filters\EntityFilter';
     const FILTER_CHOICE = 'Pfilsx\DataGrid\Grid\Filters\ChoiceFilter';
+    const FILTER_DATE = 'Pfilsx\DataGrid\Grid\Filters\DateFilter';
 
     /**
      * @var ContainerInterface
