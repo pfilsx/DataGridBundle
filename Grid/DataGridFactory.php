@@ -94,6 +94,7 @@ class DataGridFactory implements DataGridFactoryInterface
                 $column->setFilterValue($params[$column->getAttribute()]);
             }
         }
+        $this->filterBuilder->setParams($params);
         $this->gridType->handleFilters($this->filterBuilder, $params);
         $this->options['filtersCriteria'] = $this->filterBuilder->getCriteria();
     }
