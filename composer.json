@@ -14,7 +14,6 @@
         "symfony/orm-pack": "*",
         "symfony/flex": "^1.1",
         "symfony/twig-bundle": "^4.0",
-        "symfony/symfony": "^4.0",
         "symfony/dependency-injection": "^4.0",
         "symfony/expression-language": "^4.0",
         "symfony/asset": "^4.0",
