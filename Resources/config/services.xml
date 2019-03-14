@@ -4,13 +4,17 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <parameters>
-        <parameter key="grid.twig_extension.class">Pfilsx\DataGrid\Twig\DataGridExtension</parameter>
+        <parameter key="data_grid.twig_extension.class">Pfilsx\DataGrid\Twig\DataGridExtension</parameter>
     </parameters>
 
     <services>
-        <service id="data_grid.twig_extension" class="%grid.twig_extension.class%" public="false">
+        <service id="data_grid.twig_extension" class="%data_grid.twig_extension.class%" public="false">
             <tag name="twig.extension" />
             <argument type="service" id="service_container" />
+        </service>
+
+        <service id="data_grid.configuration" class="%data_grid.configuration.class" public="false">
+            <argument type="collection" />
         </service>
     </services>
 </container>
