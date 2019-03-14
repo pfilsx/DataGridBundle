@@ -24,7 +24,11 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('template')->defaultValue('@DataGrid/grid.blocks.html.twig')->end()
                 ->scalarNode('noDataMessage')->defaultValue('No data found')->end()
-                ->arrayNode('pagination')->defaultValue([])->end()
+                ->arrayNode('pagination')
+                    ->children()
+                        ->integerNode('limit')->defaultValue(10)->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
