@@ -4,6 +4,7 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
@@ -47,7 +48,7 @@ class DataGridFactory implements DataGridFactoryInterface
      */
     protected $columns;
 
-    public function __construct(ContainerInterface $container, RequestStack $requestStack)
+    public function __construct(ContainerInterface $container, RequestStack $requestStack, DataGridConfigurationInterface $configs)
     {
         $this->container = $container;
         $this->request = $requestStack->getCurrentRequest();
@@ -56,6 +57,12 @@ class DataGridFactory implements DataGridFactoryInterface
         $this->gridBuilder = new DataGridBuilder($container);
         $this->filterBuilder = new DataGridFiltersBuilder($container);
         $this->options['filtersCriteria'] = $this->filterBuilder->getCriteria();
+        foreach ($configs->getConfigs() as $key => $value){
+            $setter = 'setDefault'.ucfirst($key);
+            if (method_exists($this, $setter)){
+                $this->$setter($value);
+            }
+        }
     }
 
 
@@ -113,5 +120,17 @@ class DataGridFactory implements DataGridFactoryInterface
             $this->options['page'] = (int)$page;
         else
             $this->options['page'] = 1;
+    }
+
+    protected function setDefaultTemplate($template){
+        $this->gridBuilder->setTemplate($template);
+    }
+    protected function setDefaultNoDataMessage($message){
+        $this->gridBuilder->setNoDataMessage($message);
+    }
+    protected function setDefaultPagination($pagination){
+        if ($pagination['enabled']){
+            $this->gridBuilder->enablePagination($pagination['options']);
+        }
     }
 }
