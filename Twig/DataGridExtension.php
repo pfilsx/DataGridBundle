@@ -6,11 +6,11 @@ namespace Pfilsx\DataGrid\Twig;
 
 use Pfilsx\DataGrid\Grid\DataGrid;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Twig_Environment;
-use Twig_Extension;
 
-class DataGridExtension extends Twig_Extension
+class DataGridExtension extends AbstractExtension
 {
     const DEFAULT_TEMPLATE = '@DataGrid/grid.blocks.html.twig';
     protected $container;
@@ -30,7 +30,7 @@ class DataGridExtension extends Twig_Extension
         ];
     }
 
-    public function generateGrid(Twig_Environment $environment, DataGrid $grid, array $attributes = []){
+    public function generateGrid(Environment $environment, DataGrid $grid, array $attributes = []){
         $template = $grid->getTemplate();
         if (!$template->hasBlock('grid_table', [])){
             $template = $environment->loadTemplate(self::DEFAULT_TEMPLATE);

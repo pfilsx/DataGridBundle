@@ -18,8 +18,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('data_grid');
+        if (\method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('data_grid');
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $treeBuilder = new TreeBuilder();
+            $rootNode = $treeBuilder->root('data_grid');
+        }
         $rootNode
             ->children()
                 ->scalarNode('template')->defaultValue('@DataGrid/grid.blocks.html.twig')->end()
