@@ -11,7 +11,7 @@ class CustomFilter extends AbstractFilter
     public function render($attribute, $value): string
     {
         $this->prepareValue($value);
-        return call_user_func_array($this->value, ["data_grid[$attribute]", $value, $this->options]);
+        return call_user_func_array($this->value, [$attribute, $value, $this->options]);
     }
 
 
