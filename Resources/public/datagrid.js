@@ -1,6 +1,3 @@
-
-require('./datagrid.css');
-
 document.addEventListener('DOMContentLoaded', function(){
     var filterElements = document.getElementsByClassName('data_grid_filter');
     for (var i = 0; i < filterElements.length; i++){

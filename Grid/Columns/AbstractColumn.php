@@ -24,6 +24,8 @@ abstract class AbstractColumn
 
     protected $sort = false;
 
+    protected $isVisible = true;
+
     protected $template;
     /**
      * @var ContainerInterface
@@ -156,6 +158,22 @@ abstract class AbstractColumn
         if ($this->hasFilter()){
             $this->filter->setTemplate($template);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible(): bool
+    {
+        return $this->isVisible;
+    }
+
+    /**
+     * @param bool $visibility
+     */
+    protected function setVisible(bool $visibility): void
+    {
+        $this->isVisible = $visibility;
     }
 
 }

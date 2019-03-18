@@ -20,6 +20,7 @@ abstract class AbstractGridType
     const FILTER_ENTITY = 'Pfilsx\DataGrid\Grid\Filters\EntityFilter';
     const FILTER_CHOICE = 'Pfilsx\DataGrid\Grid\Filters\ChoiceFilter';
     const FILTER_DATE = 'Pfilsx\DataGrid\Grid\Filters\DateFilter';
+    const FILTER_CUSTOM = 'Pfilsx\DataGrid\Grid\Filters\CustomFilter';
 
     /**
      * @var ContainerInterface
