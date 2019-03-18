@@ -17,6 +17,12 @@ class ActionColumn extends AbstractColumn
 
     protected $pathPrefix;
 
+    protected $buttonsVisibility = [
+        'show' => true,
+        'edit' => true,
+        'delete' => true
+    ];
+
     function getHeadContent()
     {
         return '';
@@ -35,17 +41,20 @@ class ActionColumn extends AbstractColumn
     function getCellContent($entity, DataGrid $grid)
     {
         return preg_replace_callback('/\{(\w+)\}/', function($matches) use ($entity, $grid) {
-            if (array_key_exists($matches[1], $this->buttons) && is_callable($this->buttons[$matches[1]])){
-                return call_user_func_array($this->buttons[$matches[1]], [
-                    $entity,
-                    $this->generateUrl($entity, $matches[1], $grid)
+            if ($this->isButtonVisible($matches[1])){
+                if (array_key_exists($matches[1], $this->buttons) && is_callable($this->buttons[$matches[1]])){
+                    return call_user_func_array($this->buttons[$matches[1]], [
+                        $entity,
+                        $this->generateUrl($entity, $matches[1], $grid)
+                    ]);
+                }
+                return $grid->getTemplate()->renderBlock('action_button', [
+                    'url' => $this->generateUrl($entity, $matches[1], $grid),
+                    'action' => $matches[1],
+                    'entity' => $entity
                 ]);
             }
-            return $grid->getTemplate()->renderBlock('action_button', [
-                'url' => $this->generateUrl($entity, $matches[1], $grid),
-                'action' => $matches[1],
-                'entity' => $entity
-            ]);
+            return '';
         }, $this->buttonsTemplate);
     }
 
@@ -128,5 +137,22 @@ class ActionColumn extends AbstractColumn
     protected function setPathPrefix($pathPrefix): void
     {
         $this->pathPrefix = $pathPrefix;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function isButtonVisible(string $name): bool
+    {
+        return !array_key_exists($name, $this->buttonsVisibility) || $this->buttonsVisibility[$name];
+    }
+
+    /**
+     * @param array $buttonsVisibility
+     */
+    public function setButtonsVisibility(array $buttonsVisibility): void
+    {
+        $this->buttonsVisibility = array_merge($this->buttonsVisibility, $buttonsVisibility);
     }
 }
