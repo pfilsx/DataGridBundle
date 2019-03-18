@@ -89,7 +89,7 @@ class DataGrid
             }
         }
         foreach ($columns as $column){
-            if ($column->hasFilter()){
+            if ($column->hasFilter() && $column->isVisible()){
                 $this->hasFilters = true;
                 break;
             }
@@ -135,9 +135,9 @@ class DataGrid
     /**
      * @internal
      * @param string $path
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function setTemplate(string $path){
         $template = $this->twig->loadTemplate($path);
