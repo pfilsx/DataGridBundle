@@ -24,7 +24,7 @@ class SerialColumn extends AbstractColumn
         return '';
     }
 
-    function getCellContent($entity, DataGrid $grid)
+    function getCellContent($entity, ?DataGrid $grid)
     {
         return static::$counter++;
     }

@@ -38,10 +38,10 @@ abstract class AbstractFilter
         return $this->template;
     }
 
-    public function setTemplate(string $template)
+    public function setTemplate(?string $template)
     {
         $twig = $this->container->get('twig');
-        $this->template = $twig->loadTemplate($template);
+        $this->template = is_string($template) ? $twig->loadTemplate($template) : $twig->loadTemplate($this->defaultTemplate);
     }
 
     public function getOptions()
