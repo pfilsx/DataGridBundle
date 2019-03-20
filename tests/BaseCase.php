@@ -2,6 +2,7 @@
 namespace Pfilsx\DataGrid\tests;
 
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
+use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,10 @@ abstract class BaseCase extends TestCase
      * @var AbstractColumn
      */
     protected $testColumn;
+    /**
+     * @var AbstractFilter
+     */
+    protected $testFilter;
 
     protected function setUp(): void
     {
