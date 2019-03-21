@@ -10,6 +10,8 @@ configured.
 
 Here, an example where we create the DataGrid instance::
 
+.. codeblock:: php
+
     use Pfilsx\DataGrid\Grid\DataGridFactoryInterface;
 
     public function index(EntityRepository $entityRepository, DataGridFactoryInterface $factory): Response
