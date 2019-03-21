@@ -15,7 +15,7 @@ class BooleanFilter extends AbstractFilter
         $value = $value == null ? null : (int)(bool)$value;
     }
 
-    protected function getBlockName(): string
+    public function getBlockName(): ?string
     {
         return 'boolean_filter';
     }

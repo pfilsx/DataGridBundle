@@ -62,7 +62,7 @@ class DataColumn extends AbstractColumn
         return '';
     }
 
-    public function getCellContent($entity, DataGrid $grid)
+    public function getCellContent($entity, ?DataGrid $grid)
     {
         $result = (string)$this->getCellValue($entity);
         return $this->format == 'html'
@@ -77,14 +77,11 @@ class DataColumn extends AbstractColumn
     protected function getCellValue($entity){
         if (is_callable($this->value)){
             return call_user_func_array($this->value, [$entity]);
-        }
-        if ($this->value !== null){
+        } elseif ($this->value !== null){
             return $this->value;
-        }
-        if (is_string($this->attribute)){
+        } else {
             return $this->getEntityAttribute($entity, $this->attribute);
         }
-        throw new Exception('attribute or value property must be set for '.self::class);
     }
 
     protected function getEntityAttribute($entity, $attribute){
