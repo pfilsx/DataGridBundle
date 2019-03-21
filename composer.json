@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Symfony 4 Data Grid rendering bundle.",
     "keywords": [
-        "datagrid", "Symfony", "bundle"
+        "datagrid", "symfony4", "bundle", "data-table", "pagination", "sort", "filters", "table"
     ],
     "authors": [
         {
@@ -14,6 +14,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "php": ">=7.1",
         "symfony/framework-bundle": "^4.0",
         "symfony/orm-pack": "*",
         "symfony/flex": "^1.1",
