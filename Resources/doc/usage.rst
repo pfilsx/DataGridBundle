@@ -45,7 +45,7 @@ Step 2: Create data grid type for entity
                     ]
                 ])
                 ->addColumn(self::ACTION_COLUMN, [
-                    'pathPrefix' => 'entity_'
+                    'pathPrefix' => 'entity'
                 ]);
         }
 
