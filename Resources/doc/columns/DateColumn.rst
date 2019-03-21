@@ -31,7 +31,7 @@ Filter configuration. See filters docs.
 
 .. code-block:: php
 
-$builder->addColumn(self::DATE_COLUMN, [
+    $builder->addColumn(self::DATE_COLUMN, [
         ...
         'filter' => [
             'class' => self::FILTER_TEXT

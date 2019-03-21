@@ -29,7 +29,7 @@ Filter configuration. See filters docs.
 
 .. code-block:: php
 
-$builder->addColumn(self::BOOLEAN_COLUMN, [
+    $builder->addColumn(self::BOOLEAN_COLUMN, [
         ...
         'filter' => [
             'class' => self::FILTER_BOOLEAN

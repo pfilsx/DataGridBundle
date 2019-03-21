@@ -27,7 +27,7 @@ Filter configuration. See filters docs.
 
 .. code-block:: php
 
-$builder->addColumn(self::DATA_COLUMN, [
+    $builder->addColumn(self::DATA_COLUMN, [
         ...
         'filter' => [
             'class' => self::FILTER_TEXT
