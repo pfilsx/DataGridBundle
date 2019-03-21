@@ -8,7 +8,7 @@ The bundle integrates DataGrid tables into `Symfony`_ . It
 automatically registers a new DataGridFactory which can be fully
 configured.
 
-Here, an example where we create the DataGrid instance::
+Here, an example where we create the DataGrid instance:
 
 .. code-block:: php
 
