@@ -10,7 +10,7 @@ configured.
 
 Here, an example where we create the DataGrid instance::
 
-.. codeblock:: php
+.. code-block:: php
 
     use Pfilsx\DataGrid\Grid\DataGridFactoryInterface;
 
