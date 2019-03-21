@@ -4,7 +4,8 @@ ActionColumn Class Reference
 Usage
 -----
 
-.. codeblock::php
+.. codeblock:: php
+
     $builder->addColumn(self::ACTION_COLUMN, [
         'pathPrefix' => 'path_prefix'
     ]);
@@ -24,7 +25,8 @@ buttons - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Can be used to override default button rendering.
 
-.. codeblock::php
+.. codeblock:: php
+
     $builder->addColumn(self::ACTION_COLUMN, [
         'buttons' => [
             'show' => function(Object $entity, string $url){
@@ -48,7 +50,8 @@ whether to display a column
 urlGenerator - callable(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Can be used to override default url generation function.
-.. codeblock::php
+.. codeblock:: php
+
     $builder->addColumn(self::ACTION_COLUMN, [
         'buttons' => [
             'urlGenerator' => function($entity, string $action, RouterInterface $router){
