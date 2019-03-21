@@ -13,12 +13,12 @@ Usage
 Configuration
 -------------
 
-attributes - array
-~~~~~~~~~~~~~~~~~~
+attributes - array(default: [])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 html attributes to be applied to the tag <td>.
 
 buttonsTemplate - string(default: '{show} {edit} {delete}')
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 buttons rendering template.
 
 buttons - array(default: [])
@@ -39,13 +39,17 @@ buttonsVisibility - array(default: ['show' => true, 'edit' => true, 'delete' => 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Can be used to set visibility of each button.
 
+format - string(default: 'raw')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Format of the output data(raw|html).
+
 pathPrefix - string(default: null)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Path prefix would be used in default url generation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Path prefix would be used in default url generation.
 
 visible - boolean(default: true)
-~~~~~~~~~~~~~~~~~
-whether to display a column
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+whether to display a column.
 
 urlGenerator - callable(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
