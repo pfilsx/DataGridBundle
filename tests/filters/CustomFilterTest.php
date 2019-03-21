@@ -25,8 +25,13 @@ class CustomFilterTest extends BaseCase
         ]);
     }
 
+    public function testBlockName():void {
+        $this->assertNull($this->testFilter->getBlockName());
+    }
+
     public function testRender(): void
     {
-        $this->assertEquals('test_filter', $this->testFilter->render('testAttribute', '1'));
+        $renderResult = $this->testFilter->render('testAttribute', '1');
+        $this->assertEquals('test_filter', $renderResult);
     }
 }

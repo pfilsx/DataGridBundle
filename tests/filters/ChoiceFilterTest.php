@@ -30,6 +30,7 @@ class ChoiceFilterTest extends BaseCase
 
     public function testRender(): void
     {
-        $this->assertEquals('grid_filter', $this->testFilter->render('testAttribute', '1'));
+        $renderResult = json_decode($this->testFilter->render('testAttribute', '1'), true);
+        $this->assertEquals('grid_filter', $renderResult[0]);
     }
 }

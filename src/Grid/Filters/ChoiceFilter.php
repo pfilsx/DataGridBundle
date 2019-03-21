@@ -8,7 +8,7 @@ class ChoiceFilter extends AbstractFilter
 {
     protected $choices = [];
 
-    protected function getBlockName(): string
+    public function getBlockName(): ?string
     {
         return 'choice_filter';
     }

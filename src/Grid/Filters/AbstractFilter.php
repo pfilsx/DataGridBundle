@@ -54,7 +54,7 @@ abstract class AbstractFilter
         $this->options = $value;
     }
 
-    protected abstract function getBlockName(): string;
+    public abstract function getBlockName(): ?string;
 
     protected function getParams(): array
     {

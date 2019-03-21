@@ -86,7 +86,8 @@ class DataColumnTest extends BaseCase
         ]);
         $this->assertTrue($this->testColumn->hasFilter());
         $this->assertInstanceOf(AbstractFilter::class, $this->testColumn->getFilter());
-        $this->assertEquals('grid_filter', $this->testColumn->getFilterContent());
+        $filterContent = json_decode($this->testColumn->getFilterContent(), true);
+        $this->assertEquals('grid_filter', $filterContent[0]);
     }
 
     public function testGetHeadContent(): void

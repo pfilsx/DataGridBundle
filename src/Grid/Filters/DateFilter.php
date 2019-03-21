@@ -51,7 +51,7 @@ class DateFilter extends AbstractFilter
         ];
     }
 
-    protected function getBlockName(): string
+    public function getBlockName(): ?string
     {
         return 'date_filter';
     }
