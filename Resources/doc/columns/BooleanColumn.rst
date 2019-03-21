@@ -16,6 +16,7 @@ Configuration
 -------------
 
 attribute - string(default: null)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Entity attribute.
 
 attributes - array(default: [])
@@ -25,6 +26,9 @@ html attributes to be applied to the tag <td>.
 filter - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Filter configuration. See filters docs.
+
+.. code-block:: php
+
 $builder->addColumn(self::BOOLEAN_COLUMN, [
         ...
         'filter' => [

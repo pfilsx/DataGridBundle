@@ -28,6 +28,9 @@ Date format for output. See `PHP_Date`_
 filter - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Filter configuration. See filters docs.
+
+.. code-block:: php
+
 $builder->addColumn(self::DATE_COLUMN, [
         ...
         'filter' => [
