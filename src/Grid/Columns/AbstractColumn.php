@@ -139,7 +139,7 @@ abstract class AbstractColumn
 
     abstract function getFilterContent();
 
-    abstract function getCellContent($entity, DataGrid $grid);
+    abstract function getCellContent($entity, ?DataGrid $grid);
 
     /**
      * @return mixed

@@ -15,7 +15,7 @@ class CustomFilter extends AbstractFilter
     }
 
 
-    protected function getBlockName(): string
+    public function getBlockName(): ?string
     {
         return null;
     }

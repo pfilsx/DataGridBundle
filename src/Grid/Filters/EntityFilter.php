@@ -42,7 +42,7 @@ class EntityFilter extends AbstractFilter
         $this->entityClass = $class;
     }
 
-    protected function getBlockName(): string
+    public function getBlockName(): ?string
     {
         return 'choice_filter';
     }

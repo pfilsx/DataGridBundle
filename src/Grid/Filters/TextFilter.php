@@ -7,7 +7,7 @@ namespace Pfilsx\DataGrid\Grid\Filters;
 class TextFilter extends AbstractFilter
 {
 
-    protected function getBlockName(): string
+    public function getBlockName(): ?string
     {
         return 'text_filter';
     }

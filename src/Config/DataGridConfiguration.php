@@ -23,28 +23,14 @@ class DataGridConfiguration implements DataGridConfigurationInterface
         }
     }
 
-
-    public function getTemplate(): string
-    {
-        return $this->template;
-    }
-
     protected function setTemplate(string $template){
         $this->template = $template;
     }
 
-    public function getNoDataMessage(): string
-    {
-        return $this->noDataMessage;
-    }
     protected function setNoDataMessage(string $message){
         $this->noDataMessage = $message;
     }
 
-    public function getPagination(): array
-    {
-        return $this->pagination;
-    }
     protected function setPagination(array $options){
         if (!empty($options)){
             $this->pagination = true;

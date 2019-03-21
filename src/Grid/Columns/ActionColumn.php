@@ -38,7 +38,7 @@ class ActionColumn extends AbstractColumn
         return null;
     }
 
-    function getCellContent($entity, DataGrid $grid)
+    function getCellContent($entity, ?DataGrid $grid)
     {
         return preg_replace_callback('/\{(\w+)\}/', function($matches) use ($entity, $grid) {
             if ($this->isButtonVisible($matches[1])){
