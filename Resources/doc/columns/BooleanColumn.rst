@@ -40,13 +40,17 @@ format - string(default: 'raw')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Format of the output data(raw|html).
 
+label - string(default: attribute name|'')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Label of column.
+
 trueValue - string(default: 'yes')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Text output for true value
+Text output for true value.
 
 falseValue - string(default: 'no')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Text output for false value
+Text output for false value.
 
 value - callable(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

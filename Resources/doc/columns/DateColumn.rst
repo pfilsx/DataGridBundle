@@ -42,6 +42,10 @@ format - string(default: 'raw')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Format of the output data(raw|html).
 
+label - string(default: attribute name|'')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Label of column.
+
 value - callable(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Can be used to override default output generation.

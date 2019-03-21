@@ -1,5 +1,6 @@
 Configuration Reference
 =======================
+
 .. configuration-block::
 
     .. code-block:: yaml

@@ -3,12 +3,14 @@ Usage
 
 Step 1: Create data entity
 --------------------------
+
 .. code-block:: bash
 
     $ php bin/console make:entity ...
 
 Step 2: Create data grid type for entity
 ----------------------------------------
+
 .. code-block:: php
 
     namespace App\Grid;
@@ -57,9 +59,12 @@ Step 2: Create data grid type for entity
                 ->addEqualFilter('is_enabled');
         }
     }
+
 Step 3: Create grid in your controller
 ----------------------------------------
+
 .. code-block:: php
+
     public function index(EntityRepository $entityRepository, DataGridFactoryInterface $factory): Response
     {
         $grid = $factory->createGrid(EntityGridType::class, $entityRepository);
@@ -67,10 +72,14 @@ Step 3: Create grid in your controller
             'dataGrid' => $grid
         ]);
     }
+
 Step 4: Display grid in your twig template
 ------------------------------------------
+
 .. code-block:: twig
+
     {{ grid_view(dataGrid, {class: 'table'}) }}
+
 
 DataGridType columns reference
 ------------------------------

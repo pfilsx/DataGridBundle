@@ -33,6 +33,10 @@ height - integer(default: 25)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Height of output image.
 
+label - string(default: attribute name|'')
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Label of column.
+
 noImageMessage - string(default: '-')
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Empty value message.
