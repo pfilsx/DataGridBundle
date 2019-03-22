@@ -19,7 +19,7 @@ class ImageColumn extends DataColumn
 
     protected $noImageMessage = '-';
 
-    function getCellContent($entity, ?DataGrid $grid)
+    function getCellContent($entity, DataGrid $grid)
     {
         $value = (string)$this->getCellValue($entity);
         if (!empty($value)){
@@ -75,7 +75,7 @@ class ImageColumn extends DataColumn
      */
     public function getAlt($entity): string
     {
-        return $alt = is_callable($this->alt)
+        return is_callable($this->alt)
             ? htmlspecialchars(call_user_func_array($this->alt, [$entity]))
             : '';
     }

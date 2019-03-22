@@ -23,22 +23,22 @@ class ActionColumn extends AbstractColumn
         'delete' => true
     ];
 
-    function getHeadContent()
+    public function getHeadContent()
     {
         return '';
     }
 
-    function hasFilter()
+    public function hasFilter()
     {
         return false;
     }
 
-    function getFilterContent()
+    public function getFilterContent()
     {
         return null;
     }
 
-    function getCellContent($entity, ?DataGrid $grid)
+    public function getCellContent($entity, DataGrid $grid)
     {
         return preg_replace_callback('/\{(\w+)\}/', function($matches) use ($entity, $grid) {
             if ($this->isButtonVisible($matches[1])){

@@ -15,9 +15,8 @@ use Twig\Template;
  *
  * @property ImageColumn $testColumn
  */
-class ImageColumnTest extends BaseCase
+class ImageColumnTest extends ColumnCase
 {
-    private $grid;
 
     protected function setUp(): void
     {
@@ -31,14 +30,6 @@ class ImageColumnTest extends BaseCase
             },
             'noImageMessage' => 'Empty'
         ]);
-        $self = $this;
-        $this->grid = $this->createMock(DataGrid::class);
-        $this->grid->expects($this->any())
-            ->method('getTemplate')
-            ->will($this->returnCallback(function() use ($self){
-                $mock = $self->createMock(Template::class);
-                return $mock;
-            }));
     }
 
     public function testGetWidth(): void

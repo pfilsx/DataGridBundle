@@ -9,22 +9,23 @@ use Pfilsx\DataGrid\Grid\DataGrid;
 class SerialColumn extends AbstractColumn
 {
     protected static $counter = 1;
-    function getHeadContent()
+
+    public function getHeadContent()
     {
         return '#';
     }
 
-    function hasFilter()
+    public function hasFilter()
     {
         return false;
     }
 
-    function getFilterContent()
+    public function getFilterContent()
     {
         return '';
     }
 
-    function getCellContent($entity, ?DataGrid $grid)
+    public function getCellContent($entity, DataGrid $grid)
     {
         return static::$counter++;
     }
