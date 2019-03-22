@@ -5,3 +5,4 @@ if (file_exists($file = __DIR__.'/../vendor/autoload.php')) {
     die("Please install dependencies using Composer to run the test suite. \n");
 }
 require_once __DIR__.'/BaseCase.php';
+require_once __DIR__.'/columns/ColumnCase.php';

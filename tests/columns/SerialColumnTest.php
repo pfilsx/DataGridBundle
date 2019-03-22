@@ -13,7 +13,7 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property SerialColumn $testColumn
  */
-class SerialColumnTest extends BaseCase
+class SerialColumnTest extends ColumnCase
 {
     protected function setUp(): void
     {
@@ -34,7 +34,7 @@ class SerialColumnTest extends BaseCase
 
     public function testGetCellContent(): void
     {
-        $this->assertEquals(1, $this->testColumn->getCellContent(null, null));
-        $this->assertEquals(2, $this->testColumn->getCellContent(null, null));
+        $this->assertEquals(1, $this->testColumn->getCellContent(null, $this->grid));
+        $this->assertEquals(2, $this->testColumn->getCellContent(null, $this->grid));
     }
 }

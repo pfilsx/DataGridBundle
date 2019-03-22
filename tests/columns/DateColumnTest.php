@@ -14,7 +14,7 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property DateColumn $testColumn
  */
-class DateColumnTest extends BaseCase
+class DateColumnTest extends ColumnCase
 {
     protected function setUp(): void
     {
@@ -42,9 +42,9 @@ class DateColumnTest extends BaseCase
             }
         };
         $entity->date = new DateTime('01-01-1970');
-        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($entity, null));
+        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($entity, $this->grid));
         $entity->date = '01-01-1970';
-        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($entity, null));
+        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($entity, $this->grid));
     }
 
     public function testGetCellContentNoFormat(): void
@@ -53,6 +53,6 @@ class DateColumnTest extends BaseCase
             'value' => function(){return '01-01-1970';},
             'dateFormat' => null
         ]);
-        $this->assertEquals('01-01-1970', $column->getCellContent(null, null));
+        $this->assertEquals('01-01-1970', $column->getCellContent(null, $this->grid));
     }
 }

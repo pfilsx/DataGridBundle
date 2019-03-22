@@ -22,6 +22,13 @@ class DataColumn extends AbstractColumn
     }
 
     /**
+     * @return null|string
+     */
+    public function getAttribute(){
+        return $this->attribute;
+    }
+
+    /**
      * @return string
      */
     public function getFormat(): string
@@ -62,16 +69,12 @@ class DataColumn extends AbstractColumn
         return '';
     }
 
-    public function getCellContent($entity, ?DataGrid $grid)
+    public function getCellContent($entity, DataGrid $grid)
     {
         $result = (string)$this->getCellValue($entity);
         return $this->format == 'html'
             ? $result
             : htmlspecialchars($result);
-    }
-
-    public function getAttribute(){
-        return $this->attribute;
     }
 
     protected function getCellValue($entity){
