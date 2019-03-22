@@ -69,7 +69,7 @@ class DataGridFactory implements DataGridFactoryInterface
     public function createGrid(string $gridType, ServiceEntityRepository $repository): DataGrid
     {
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
-            throw new InvalidArgumentException('Expected subclass of' . AbstractGridType::class);
+            throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
         $this->repository = $repository;
         /** @var AbstractGridType $type */

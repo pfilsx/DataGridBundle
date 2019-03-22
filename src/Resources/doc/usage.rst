@@ -80,6 +80,21 @@ Step 4: Display grid in your twig template
 
     {{ grid_view(dataGrid, {class: 'table'}) }}
 
+Additional step: Register assets for automating sorting and filtering
+----------------
+You need to include ``datagrid.min.css`` and ``datagrid.js`` from ``public/bundles/datagrid/`` for automatic
+filters and sorting
+
+.. block-code:: bash
+
+    $ php bin/console assets:install
+
+.. block-code:: html
+
+    <link rel="stylesheet" href="public/bundles/datagrid/datagrid.min.css">
+    <script src="public/bundles/datagrid/datagrid.js"></script>
+
+
 DataGridType reference
 ----------------------
 .. toctree::
