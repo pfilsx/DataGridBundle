@@ -14,7 +14,7 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property BooleanColumn $testColumn
  */
-class BooleanColumnTest extends BaseCase
+class BooleanColumnTest extends ColumnCase
 {
 
     protected function setUp(): void
@@ -55,19 +55,19 @@ class BooleanColumnTest extends BaseCase
                 return $this->enabled;
             }
         };
-        $this->assertEquals('yes', $this->testColumn->getCellContent($entity, null));
+        $this->assertEquals('yes', $this->testColumn->getCellContent($entity, $this->grid));
         $entity->enabled = false;
-        $this->assertEquals('no', $this->testColumn->getCellContent($entity, null));
+        $this->assertEquals('no', $this->testColumn->getCellContent($entity, $this->grid));
 
         $column = new BooleanColumn($this->container, ['value' => function () {
             return 'no';
         }]);
 
         $this->assertIsCallable($column->getValue());
-        $this->assertEquals('no', $column->getCellContent($entity, null));
+        $this->assertEquals('no', $column->getCellContent($entity, $this->grid));
 
         $column = new BooleanColumn($this->container, ['value' => false]);
-        $this->assertEquals('No', $column->getCellContent($entity, null));
+        $this->assertEquals('No', $column->getCellContent($entity, $this->grid));
 
     }
 }

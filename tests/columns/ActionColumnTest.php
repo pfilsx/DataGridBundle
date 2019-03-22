@@ -6,9 +6,6 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 use Exception;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
-use Pfilsx\DataGrid\Grid\DataGrid;
-use Pfilsx\DataGrid\tests\BaseCase;
-use Twig\Template;
 
 /**
  * Class ActionColumnTest
@@ -16,10 +13,8 @@ use Twig\Template;
  *
  * @property ActionColumn $testColumn
  */
-class ActionColumnTest extends BaseCase
+class ActionColumnTest extends ColumnCase
 {
-    private $grid;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,20 +34,6 @@ class ActionColumnTest extends BaseCase
                 'delete' => false
             ]
         ]);
-        $self = $this;
-        $this->grid = $this->createMock(DataGrid::class);
-        $this->grid->expects($this->any())
-            ->method('getTemplate')
-            ->will($this->returnCallback(function () use ($self) {
-                $mock = $self->createMock(Template::class);
-                return $mock;
-            }));
-
-        $this->grid->expects($this->any())
-            ->method('getRouter')
-            ->will($this->returnCallback(function () use ($self) {
-                return $self->container->get('router');
-            }));
     }
 
     public function testGetHeadContent(): void

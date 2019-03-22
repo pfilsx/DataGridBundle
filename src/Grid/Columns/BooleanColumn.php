@@ -11,7 +11,7 @@ class BooleanColumn extends DataColumn
     protected $trueValue = 'Yes';
     protected $falseValue = 'No';
 
-    function getCellContent($entity, ?DataGrid $grid)
+    function getCellContent($entity, DataGrid $grid)
     {
         if (is_callable($this->value)){
             $result = call_user_func_array($this->value, [$entity]);

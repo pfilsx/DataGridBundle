@@ -17,7 +17,7 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property DataColumn $testColumn
  */
-class DataColumnTest extends BaseCase
+class DataColumnTest extends ColumnCase
 {
     protected function setUp(): void
     {
@@ -108,24 +108,24 @@ class DataColumnTest extends BaseCase
                 return $this->data;
             }
         };
-        $this->assertEquals('test_data', $this->testColumn->getCellContent($entity, null));
+        $this->assertEquals('test_data', $this->testColumn->getCellContent($entity, $this->grid));
 
         $column = new DataColumn($this->container, ['value' => function () {
             return 'test_data';
         }]);
 
         $this->assertIsCallable($column->getValue());
-        $this->assertEquals('test_data', $column->getCellContent($entity, null));
+        $this->assertEquals('test_data', $column->getCellContent($entity, $this->grid));
 
         $column = new DataColumn($this->container, ['value' => 'test_data']);
-        $this->assertEquals('test_data', $column->getCellContent($entity, null));
+        $this->assertEquals('test_data', $column->getCellContent($entity, $this->grid));
     }
 
     public function testWrongAttribute(): void
     {
         $this->expectException(Exception::class);
         $entity = new class{};
-        $this->testColumn->getCellContent($entity, null);
+        $this->testColumn->getCellContent($entity, $this->grid);
     }
 
 }

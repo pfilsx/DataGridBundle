@@ -64,7 +64,7 @@ abstract class AbstractColumn
         $this->attributes = $attributes;
     }
     /**
-     * @return null
+     * @return mixed
      */
     public function getValue()
     {
@@ -72,7 +72,7 @@ abstract class AbstractColumn
     }
 
     /**
-     * @param null $value
+     * @param mixed $value
      */
     protected function setValue($value): void
     {
@@ -135,11 +135,11 @@ abstract class AbstractColumn
         $this->filterValue = $value;
     }
 
-    abstract function getHeadContent();
+    abstract public function getHeadContent();
 
-    abstract function getFilterContent();
+    abstract public function getFilterContent();
 
-    abstract function getCellContent($entity, ?DataGrid $grid);
+    abstract public function getCellContent($entity, DataGrid $grid);
 
     /**
      * @return mixed

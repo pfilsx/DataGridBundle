@@ -11,7 +11,7 @@ class DateColumn extends DataColumn
 {
     protected $dateFormat = 'd.m.Y';
 
-    public function getCellContent($entity, ?DataGrid $grid)
+    public function getCellContent($entity, DataGrid $grid)
     {
         $value = $this->getCellValue($entity);
         if ($value instanceof DateTime){
