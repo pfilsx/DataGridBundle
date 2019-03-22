@@ -15,7 +15,7 @@ class ImageColumn extends DataColumn
 
     protected $format = 'html';
 
-    protected $alt = '';
+    protected $alt;
 
     protected $noImageMessage = '-';
 
@@ -23,12 +23,12 @@ class ImageColumn extends DataColumn
     {
         $value = (string)$this->getCellValue($entity);
         if (!empty($value)){
-            if ($this->format !== 'raw'){
+            if ($this->format === 'html'){
                 return $grid->getTemplate()->renderBlock('grid_img', [
                     'src' => $value,
                     'width' => $this->width,
                     'height' => $this->height,
-                    'alt' => $this->alt
+                    'alt' => $this->getAlt($entity)
                 ]);
             }
             return htmlspecialchars($value);
@@ -70,17 +70,20 @@ class ImageColumn extends DataColumn
     }
 
     /**
+     * @param $entity
      * @return string
      */
-    public function getAlt(): string
+    public function getAlt($entity): string
     {
-        return $this->alt;
+        return $alt = is_callable($this->alt)
+            ? htmlspecialchars(call_user_func_array($this->alt, [$entity]))
+            : '';
     }
 
     /**
-     * @param string $alt
+     * @param callable $alt
      */
-    protected function setAlt(string $alt): void
+    protected function setAlt(callable $alt): void
     {
         $this->alt = $alt;
     }

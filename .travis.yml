@@ -11,3 +11,8 @@ install:
 script:
   - mkdir -p build/logs
   - php vendor/bin/phpunit -c phpunit.xml.dist
+
+after_success:
+  - wget https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar --output-document="${HOME}/bin/coveralls"
+  - chmod u+x "${HOME}/bin/coveralls"
+  - coveralls -v

@@ -34,7 +34,7 @@ class DataColumn extends AbstractColumn
      */
     protected function setFormat(string $format): void
     {
-        $this->format = $format;
+        $this->format = strtolower($format);
     }
 
     protected function checkConfiguration()
