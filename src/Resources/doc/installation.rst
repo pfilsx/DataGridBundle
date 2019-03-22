@@ -18,7 +18,9 @@ Step 2: Enable the Bundle
 -------------------------
 
 Then, enable the bundle by adding the following line in the ``app/AppKernel.php``
-file of your project::
+file of your project:
+
+.. code-block:: php
 
     <?php
     // app/AppKernel.php
@@ -39,5 +41,7 @@ file of your project::
 
         // ...
     }
+
+And make sure you have the twig engine turned on.
 
 .. _`installation chapter`: https://getcomposer.org/doc/00-intro.md
