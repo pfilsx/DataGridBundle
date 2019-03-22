@@ -16,7 +16,7 @@ interface DataGridFiltersBuilderInterface
 
     public function addCustomFilter(string $attribute, callable $callback): self;
 
-    public function addDateFilter(string $attribute): self;
+    public function addDateFilter(string $attribute, string $comparison = 'equal'): self;
 
     /**
      * @internal

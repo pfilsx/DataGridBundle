@@ -75,7 +75,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addDateFilter(string $attribute, string $comparison = 'equal'): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            $comparisonFunc = strtolower($comparison) . 'Date';
+            $comparisonFunc = lcfirst($comparison) . 'Date';
             if (method_exists($this, $comparisonFunc)) {
                 $this->$comparisonFunc($attribute);
             } else {
