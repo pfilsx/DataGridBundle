@@ -26,7 +26,9 @@ class ImageColumnTest extends BaseCase
             'attribute' => 'testAttribute',
             'width' => 20,
             'height' => 20,
-            'alt' => 'Test alt',
+            'alt' => function($entity){
+                return 'Test alt';
+            },
             'noImageMessage' => 'Empty'
         ]);
         $self = $this;
@@ -51,7 +53,7 @@ class ImageColumnTest extends BaseCase
 
     public function testGetAlt(): void
     {
-        $this->assertEquals('Test alt', $this->testColumn->getAlt());
+        $this->assertEquals('Test alt', $this->testColumn->getAlt(null));
     }
 
     public function testGetNoImageMessage(): void

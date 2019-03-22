@@ -13,9 +13,18 @@ Usage
 Configuration
 -------------
 
-alt - string(default: '')
+alt - callable(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-Alt attribute value.
+Alt attribute callback.
+
+.. code-block:: php
+
+    $builder->addColumn(self::IMAGE_COLUMN, [
+        'attribute' => 'entity_attribute',
+        'alt' => function($entity){
+            return $entity->getAlt();
+        }
+    ]);
 
 attribute - string(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
