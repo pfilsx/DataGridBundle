@@ -80,6 +80,12 @@ Step 4: Display grid in your twig template
 
     {{ grid_view(dataGrid, {class: 'table'}) }}
 
+DataGridType reference
+----------------------
+.. toctree::
+
+    grid/DataGridType
+
 
 DataGridType columns reference
 ------------------------------
