@@ -81,10 +81,15 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
-    public function enablePagination(array $options = []) : DataGridBuilderInterface
+    public function enablePagination($options = []) : DataGridBuilderInterface
     {
-        $this->options['pagination'] = true;
-        $this->options['paginationOptions'] = $options;
+        if (is_array($options) && !empty($options)){
+            $this->options['pagination'] = true;
+            $this->options['paginationOptions'] = $options;
+        } else {
+            $this->options['pagination'] = false;
+            $this->options['paginationOptions'] = [];
+        }
         return $this;
     }
     /**

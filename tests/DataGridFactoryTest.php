@@ -23,7 +23,7 @@ class DataGridFactoryTest extends BaseCase
         $configuration = new DataGridConfiguration([
             'template' => 'test_template',
             'noDataMessage' => 'empty',
-            'pagination' => ['limit' => 10]
+            'pagination' => []
         ]);
         $this->factory = new DataGridFactory($this->container, $this->container->get('request_stack'), $configuration);
     }
@@ -31,6 +31,12 @@ class DataGridFactoryTest extends BaseCase
     public function testWrongGridTypeException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->factory->createGrid('testClass', $this->createMock(ServiceEntityRepository::class));
+        $this->factory->createGrid('testType', $this->createMock(ServiceEntityRepository::class));
+    }
+
+    public function testCreateGrid(): void
+    {
+        $this->factory->createGrid(get_class($this->createMock(AbstractGridType::class)), $this->createMock(ServiceEntityRepository::class));
+        $this->assertTrue(true);
     }
 }
