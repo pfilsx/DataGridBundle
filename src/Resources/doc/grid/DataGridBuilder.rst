@@ -47,9 +47,9 @@ addDataColumn(string $attribute, array $columnOptions = [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Adds DataColumn to grid. Similar to ``addColumn(self::DATA_COLUMN, ['attribute' => ''])``
 
-enablePagination(array $options = [])
+enablePagination(array|false $options = [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Configures grid pagination options. Only one option available right now - ``limit``.
+Configures grid pagination options or disable pagination. Only one option available right now - ``limit``.
 ``limit`` - max count of rows on each page.
 
 setTemplate(string $path)
