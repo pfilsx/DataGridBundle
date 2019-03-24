@@ -42,5 +42,4 @@ class DataGridExtension extends AbstractExtension
             'request' => $this->container->get('request_stack')->getCurrentRequest()
         ]);
     }
-
 }

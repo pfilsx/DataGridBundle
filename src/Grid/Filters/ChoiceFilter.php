@@ -33,5 +33,4 @@ class ChoiceFilter extends AbstractFilter
     {
         $this->choices = $choices;
     }
-
 }

@@ -16,7 +16,7 @@ class DateColumn extends DataColumn
         $value = $this->getCellValue($entity);
         if ($value instanceof DateTime){
             return $value->format($this->dateFormat);
-        } elseif (is_string($value) && $this->dateFormat != null){
+        } elseif (is_string($value) && !empty($this->dateFormat)){
             return date($this->dateFormat, strtotime($value));
         }
         return (string)$value;

@@ -60,6 +60,4 @@ class EntityFilter extends AbstractFilter
             'choices' => $choices
         ];
     }
-
-
 }
