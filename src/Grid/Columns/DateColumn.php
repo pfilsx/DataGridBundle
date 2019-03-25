@@ -5,18 +5,17 @@ namespace Pfilsx\DataGrid\Grid\Columns;
 
 
 use DateTime;
-use Pfilsx\DataGrid\Grid\DataGrid;
 
 class DateColumn extends DataColumn
 {
     protected $dateFormat = 'd.m.Y';
 
-    public function getCellContent($entity, DataGrid $grid)
+    public function getCellContent($entity)
     {
         $value = $this->getCellValue($entity);
-        if ($value instanceof DateTime){
+        if ($value instanceof DateTime) {
             return $value->format($this->dateFormat);
-        } elseif (is_string($value) && !empty($this->dateFormat)){
+        } elseif (is_string($value) && !empty($this->dateFormat)) {
             return date($this->dateFormat, strtotime($value));
         }
         return (string)$value;

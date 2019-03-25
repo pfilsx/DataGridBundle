@@ -19,6 +19,7 @@ class ChoiceFilter extends AbstractFilter
             'choices' => $this->choices
         ];
     }
+
     /**
      * @return array
      */
@@ -26,6 +27,7 @@ class ChoiceFilter extends AbstractFilter
     {
         return $this->choices;
     }
+
     /**
      * @param array $choices
      */

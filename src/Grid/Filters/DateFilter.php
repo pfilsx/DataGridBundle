@@ -14,7 +14,7 @@ class DateFilter extends AbstractFilter
     /**
      * @return mixed
      */
-    public function getMinDate() : ?string
+    public function getMinDate(): ?string
     {
         return $this->minDate;
     }
@@ -30,7 +30,7 @@ class DateFilter extends AbstractFilter
     /**
      * @return mixed
      */
-    public function getMaxDate() : ?string
+    public function getMaxDate(): ?string
     {
         return $this->maxDate;
     }

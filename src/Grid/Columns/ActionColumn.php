@@ -3,9 +3,8 @@
 
 namespace Pfilsx\DataGrid\Grid\Columns;
 
-
-use Pfilsx\DataGrid\Grid\DataGrid;
 use Exception;
+use Twig\Template;
 
 class ActionColumn extends AbstractColumn
 {
@@ -38,18 +37,22 @@ class ActionColumn extends AbstractColumn
         return null;
     }
 
-    public function getCellContent($entity, DataGrid $grid)
+    public function getCellContent($entity)
     {
-        return preg_replace_callback('/\{(\w+)\}/', function($matches) use ($entity, $grid) {
-            if ($this->isButtonVisible($matches[1])){
-                if (array_key_exists($matches[1], $this->buttons) && is_callable($this->buttons[$matches[1]])){
+        return preg_replace_callback('/\{(\w+)\}/', function ($matches) use ($entity) {
+            if ($this->isButtonVisible($matches[1])) {
+                if (array_key_exists($matches[1], $this->buttons) && is_callable($this->buttons[$matches[1]])) {
                     return call_user_func_array($this->buttons[$matches[1]], [
                         $entity,
-                        $this->generateUrl($entity, $matches[1], $grid)
+                        $this->generateUrl($entity, $matches[1])
                     ]);
                 }
-                return $grid->getTemplate()->renderBlock('action_button', [
-                    'url' => $this->generateUrl($entity, $matches[1], $grid),
+                /**
+                 * @var Template $template
+                 */
+                $template = $this->container['twig']->loadTemplate($this->template);
+                return $template->renderBlock('action_button', [
+                    'url' => $this->generateUrl($entity, $matches[1]),
                     'action' => $matches[1],
                     'entity' => $entity
                 ]);
@@ -61,17 +64,17 @@ class ActionColumn extends AbstractColumn
     /**
      * @param $entity
      * @param string $action
-     * @param DataGrid $grid
      * @return mixed|string
      * @throws Exception
      */
-    protected function generateUrl($entity, $action, $grid){
-        if ($this->urlGenerator != null && is_callable($this->urlGenerator)){
-            return call_user_func_array($this->urlGenerator, [$entity, $action, $grid->getRouter()]);
+    protected function generateUrl($entity, $action)
+    {
+        if ($this->urlGenerator != null && is_callable($this->urlGenerator)) {
+            return call_user_func_array($this->urlGenerator, [$entity, $action, $this->container['router']]);
         } elseif (method_exists($entity, 'getId')) {
-            return $grid->getRouter()->generate($this->pathPrefix.$action, ['id' => $entity->getId()]);
+            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $entity->getId()]);
         } else {
-            throw new Exception('Could not generate url for action: '.$action);
+            throw new Exception('Could not generate url for action: ' . $action);
         }
     }
 

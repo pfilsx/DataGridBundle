@@ -49,11 +49,11 @@ class EntityFilter extends AbstractFilter
 
     protected function getParams(): array
     {
-        $manager = $this->container->get('doctrine')->getRepository($this->entityClass);
+        $manager = $this->container['doctrine']->getRepository($this->entityClass);
         $queryResult = $manager->createQueryBuilder('dgq')
-            ->select(['dgq.id', 'dgq.'.$this->label])->orderBy('dgq.id')->getQuery()->getArrayResult();
+            ->select(['dgq.id', 'dgq.' . $this->label])->orderBy('dgq.id')->getQuery()->getArrayResult();
         $choices = [];
-        array_walk($queryResult, function($val) use (&$choices){
+        array_walk($queryResult, function ($val) use (&$choices) {
             $choices[$val['id']] = $val[$this->label];
         });
         return [

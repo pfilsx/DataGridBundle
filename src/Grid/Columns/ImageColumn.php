@@ -4,7 +4,7 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Pfilsx\DataGrid\Grid\DataGrid;
+use Twig\Template;
 
 class ImageColumn extends DataColumn
 {
@@ -19,12 +19,16 @@ class ImageColumn extends DataColumn
 
     protected $noImageMessage = '-';
 
-    function getCellContent($entity, DataGrid $grid)
+    function getCellContent($entity)
     {
         $value = (string)$this->getCellValue($entity);
-        if (!empty($value)){
-            if ($this->format === 'html'){
-                return $grid->getTemplate()->renderBlock('grid_img', [
+        if (!empty($value)) {
+            if ($this->format === 'html') {
+                /**
+                 * @var Template $template
+                 */
+                $template = $this->container['twig']->loadTemplate($this->template);
+                return $template->renderBlock('grid_img', [
                     'src' => $value,
                     'width' => $this->width,
                     'height' => $this->height,

@@ -6,12 +6,11 @@ namespace Pfilsx\DataGrid\Grid;
 
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
 {
     /**
-     * @var ContainerInterface
+     * @var array
      */
     protected $container;
     /**
@@ -23,7 +22,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
      */
     protected $params = [];
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(array $container)
     {
         $this->container = $container;
         $this->criteria = Criteria::create();
@@ -52,7 +51,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addRelationFilter(string $attribute, string $relationClass): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            $repository = $this->container->get('doctrine')->getRepository($relationClass);
+            $repository = $this->container['doctrine']->getRepository($relationClass);
             $entity = $repository->findOneBy(['id' => $this->params[$attribute]]);
             $this->criteria->andWhere(Criteria::expr()->eq($attribute, $entity));
         }

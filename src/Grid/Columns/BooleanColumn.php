@@ -4,21 +4,21 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Pfilsx\DataGrid\Grid\DataGrid;
-
 class BooleanColumn extends DataColumn
 {
     protected $trueValue = 'Yes';
     protected $falseValue = 'No';
 
-    function getCellContent($entity, DataGrid $grid)
+    function getCellContent($entity)
     {
-        if (is_callable($this->value)){
+        if (is_callable($this->value)) {
             $result = call_user_func_array($this->value, [$entity]);
-        } elseif ($this->value !== null){
+        } elseif ($this->value !== null) {
             $result = $this->value == true ? $this->trueValue : $this->falseValue;
         } else {
-            $result = $this->getEntityAttribute($entity, $this->attribute) == true ? $this->trueValue : $this->falseValue;
+            $result = $this->getEntityAttribute($entity, $this->attribute) == true
+                ? $this->trueValue
+                : $this->falseValue;
         }
         return $this->format == 'html' ? $result : htmlspecialchars($result);
     }

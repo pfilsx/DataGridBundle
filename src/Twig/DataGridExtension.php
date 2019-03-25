@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\Twig;
 
 
 use Pfilsx\DataGrid\Grid\DataGrid;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -13,11 +13,11 @@ use Twig\TwigFunction;
 class DataGridExtension extends AbstractExtension
 {
     const DEFAULT_TEMPLATE = '@DataGrid/grid.blocks.html.twig';
-    protected $container;
+    protected $requestStack;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->container = $container;
+        $this->requestStack = $requestStack;
     }
 
     public function getFunctions(): array
@@ -39,7 +39,7 @@ class DataGridExtension extends AbstractExtension
         return $template->renderBlock('grid_table', [
             'attr' => $attributes,
             'data_grid' => $grid,
-            'request' => $this->container->get('request_stack')->getCurrentRequest()
+            'request' => $this->requestStack->getCurrentRequest()
         ]);
     }
 }
