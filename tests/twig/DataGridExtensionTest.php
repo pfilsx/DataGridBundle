@@ -19,7 +19,7 @@ class DataGridExtensionTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->extension = new DataGridExtension($this->container);
+        $this->extension = new DataGridExtension($this->container->get('request_stack'));
     }
 
     public function testClass():void {
@@ -33,6 +33,8 @@ class DataGridExtensionTest extends BaseCase
 
     /**
      * @dataProvider gridProvider
+     * @param Environment $env
+     * @param DataGrid $grid
      */
     public function testGenerateGrid($env, $grid):void {
         $this->assertEquals('', $this->extension->generateGrid($env, $grid));

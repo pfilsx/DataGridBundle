@@ -18,7 +18,7 @@ class DateFilterTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new DateFilter($this->container, [
+        $this->testFilter = new DateFilter($this->containerArray, [
             'minDate' => '01-01-1990',
             'maxDate' => 'now'
         ]);

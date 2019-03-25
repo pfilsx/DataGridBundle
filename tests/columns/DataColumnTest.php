@@ -9,7 +9,6 @@ use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
 
 /**
  * Class DataColumnTest
@@ -22,7 +21,7 @@ class DataColumnTest extends ColumnCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new DataColumn($this->container, [
+        $this->testColumn = new DataColumn($this->containerArray, [
             'attribute' => 'test_attribute',
             'format' => 'html',
             'label' => 'test',
@@ -44,7 +43,7 @@ class DataColumnTest extends ColumnCase
     public function testAttributeOrValueException(): void
     {
         $this->expectException(Exception::class);
-        new DataColumn($this->container);
+        new DataColumn($this->containerArray);
     }
 
     public function testGetAttribute(): void
@@ -93,7 +92,7 @@ class DataColumnTest extends ColumnCase
     public function testGetHeadContent(): void
     {
         $this->assertEquals('Test', $this->testColumn->getHeadContent());
-        $column = new DataColumn($this->container, ['attribute' => 'testAttribute']);
+        $column = new DataColumn($this->containerArray, ['attribute' => 'testAttribute']);
         $this->assertEquals('TestAttribute', $column->getHeadContent());
     }
 
@@ -108,24 +107,25 @@ class DataColumnTest extends ColumnCase
                 return $this->data;
             }
         };
-        $this->assertEquals('test_data', $this->testColumn->getCellContent($entity, $this->grid));
+        $this->assertEquals('test_data', $this->testColumn->getCellContent($entity));
 
-        $column = new DataColumn($this->container, ['value' => function () {
+        $column = new DataColumn($this->containerArray, ['value' => function () {
             return 'test_data';
         }]);
 
         $this->assertIsCallable($column->getValue());
-        $this->assertEquals('test_data', $column->getCellContent($entity, $this->grid));
+        $this->assertEquals('test_data', $column->getCellContent($entity));
 
-        $column = new DataColumn($this->container, ['value' => 'test_data']);
-        $this->assertEquals('test_data', $column->getCellContent($entity, $this->grid));
+        $column = new DataColumn($this->containerArray, ['value' => 'test_data']);
+        $this->assertEquals('test_data', $column->getCellContent($entity));
     }
 
     public function testWrongAttribute(): void
     {
         $this->expectException(Exception::class);
-        $entity = new class{};
-        $this->testColumn->getCellContent($entity, $this->grid);
+        $entity = new class
+        {
+        };
+        $this->testColumn->getCellContent($entity);
     }
-
 }

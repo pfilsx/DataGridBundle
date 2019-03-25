@@ -19,7 +19,7 @@ class EntityFilterTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new EntityFilter($this->container, [
+        $this->testFilter = new EntityFilter($this->containerArray, [
             'label' => 'title',
             'entityClass' => 'App\Entity\TestEntity'
         ]);

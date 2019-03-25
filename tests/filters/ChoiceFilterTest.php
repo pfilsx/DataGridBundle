@@ -18,14 +18,14 @@ class ChoiceFilterTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new ChoiceFilter($this->container, [
+        $this->testFilter = new ChoiceFilter($this->containerArray, [
             'choices' => [0, 1, 2, 3]
         ]);
     }
 
     public function testGetChoices(): void
     {
-        $this->assertEquals([0,1,2,3], $this->testFilter->getChoices());
+        $this->assertEquals([0, 1, 2, 3], $this->testFilter->getChoices());
     }
 
     public function testRender(): void
