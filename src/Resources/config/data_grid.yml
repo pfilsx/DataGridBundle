@@ -1,4 +1,4 @@
 services:
   Pfilsx\DataGrid\Grid\DataGridFactoryInterface:
     class: Pfilsx\DataGrid\Grid\DataGridFactory
-    arguments: ['@service_container', '@request_stack', '@data_grid.configuration']
+    arguments: ['@doctrine', '@router', '@twig', '@request_stack', '@data_grid.configuration']

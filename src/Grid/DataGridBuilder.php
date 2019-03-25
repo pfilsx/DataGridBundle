@@ -7,12 +7,11 @@ namespace Pfilsx\DataGrid\Grid;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use InvalidArgumentException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DataGridBuilder implements DataGridBuilderInterface
 {
     /**
-     * @var ContainerInterface
+     * @var array
      */
     protected $container;
 
@@ -29,9 +28,9 @@ class DataGridBuilder implements DataGridBuilderInterface
 
     /**
      * DataGridBuilder constructor.
-     * @param ContainerInterface $container
+     * @param array $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(array $container)
     {
         $this->container = $container;
     }

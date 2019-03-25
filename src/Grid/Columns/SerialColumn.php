@@ -4,8 +4,6 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Pfilsx\DataGrid\Grid\DataGrid;
-
 class SerialColumn extends AbstractColumn
 {
     protected static $counter = 1;
@@ -25,7 +23,7 @@ class SerialColumn extends AbstractColumn
         return '';
     }
 
-    public function getCellContent($entity, DataGrid $grid)
+    public function getCellContent($entity)
     {
         return static::$counter++;
     }

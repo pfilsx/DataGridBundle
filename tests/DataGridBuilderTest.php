@@ -30,7 +30,7 @@ class DataGridBuilderTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->builder = new DataGridBuilder($this->container);
+        $this->builder = new DataGridBuilder($this->containerArray);
     }
 
     public function testWrongColumnClass(): void

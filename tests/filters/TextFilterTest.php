@@ -12,7 +12,7 @@ class TextFilterTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new TextFilter($this->container);
+        $this->testFilter = new TextFilter($this->containerArray);
     }
 
     public function testGetBlockName(): void

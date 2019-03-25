@@ -6,7 +6,6 @@ namespace Pfilsx\DataGrid\Grid\Columns;
 
 use Pfilsx\DataGrid\Grid\DataGrid;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class AbstractColumn
 {
@@ -28,34 +27,44 @@ abstract class AbstractColumn
 
     protected $template;
     /**
-     * @var ContainerInterface
+     * @var array
+     *
      */
     protected $container;
 
-    public function __construct(ContainerInterface $container,array $config = [])
+    public function __construct(array $container, array $config = [])
     {
 
         $this->container = $container;
-        foreach ($config as $key => $value){
-            $setter = 'set'.ucfirst($key);
-            if (method_exists($this, $setter)){
-                $this->$setter($value);
-            }
-        }
+        $this->setConfiguration($config);
         $this->checkConfiguration();
     }
 
-    protected function checkConfiguration(){
+    protected function setConfiguration($config)
+    {
+        foreach ($config as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            if (method_exists($this, $setter)) {
+                $this->$setter($value);
+            }
+        }
+    }
+
+    protected function checkConfiguration()
+    {
 
     }
 
-    public function getAttributes(){
+    public function getAttributes()
+    {
         return $this->attributes;
     }
 
-    public function hasAttributes(){
+    public function hasAttributes()
+    {
         return !empty($this->attributes);
     }
+
     /**
      * @param mixed $attributes
      */
@@ -63,6 +72,7 @@ abstract class AbstractColumn
     {
         $this->attributes = $attributes;
     }
+
     /**
      * @return mixed
      */
@@ -94,15 +104,19 @@ abstract class AbstractColumn
     {
         $this->label = $label;
     }
-    public function hasFilter(){
+
+    public function hasFilter()
+    {
         return is_subclass_of($this->filter, AbstractFilter::class);
     }
 
-    public function getFilter(){
+    public function getFilter()
+    {
         return $this->filter;
     }
 
-    public function setFilter(array $filter){
+    public function setFilter(array $filter)
+    {
         $filterClass = $filter['class'];
         unset($filter['class']);
         $filter['template'] = $this->template;
@@ -111,27 +125,33 @@ abstract class AbstractColumn
     }
 
 
-
-    public function hasSort(){
+    public function hasSort()
+    {
         return $this->sort !== false && !empty($this->attribute);
     }
 
-    public function setSort($direction){
+    public function setSort($direction)
+    {
         $this->sort = $direction;
     }
 
-    public function getSort(){
+    public function getSort()
+    {
         return $this->sort;
     }
 
-    public function getAttribute(){
+    public function getAttribute()
+    {
         return null;
     }
 
-    public function getFilterValue(){
+    public function getFilterValue()
+    {
         return $this->filterValue;
     }
-    public function setFilterValue($value){
+
+    public function setFilterValue($value)
+    {
         $this->filterValue = $value;
     }
 
@@ -139,7 +159,7 @@ abstract class AbstractColumn
 
     abstract public function getFilterContent();
 
-    abstract public function getCellContent($entity, DataGrid $grid);
+    abstract public function getCellContent($entity);
 
     /**
      * @return mixed
@@ -155,7 +175,7 @@ abstract class AbstractColumn
     public function setTemplate($template): void
     {
         $this->template = $template;
-        if ($this->hasFilter()){
+        if ($this->hasFilter()) {
             $this->filter->setTemplate($template);
         }
     }

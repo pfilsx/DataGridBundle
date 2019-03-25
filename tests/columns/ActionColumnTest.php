@@ -18,7 +18,7 @@ class ActionColumnTest extends ColumnCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new ActionColumn($this->container, [
+        $this->testColumn = new ActionColumn($this->containerArray, [
             'buttonsTemplate' => '{show} {delete}',
             'buttons' => [
                 'show' => function ($entity, $url) {
@@ -26,7 +26,7 @@ class ActionColumnTest extends ColumnCase
                 }
             ],
             'pathPrefix' => 'test_prefix',
-            'urlGenerator' => function ($entity, $action, $router) {
+            'urlGenerator' => function ($entity, $action) {
                 return '_' . $action;
             },
             'buttonsVisibility' => [
@@ -83,21 +83,28 @@ class ActionColumnTest extends ColumnCase
                 return 1;
             }
         };
-        $this->assertEquals('_show ', $this->testColumn->getCellContent($entity, $this->grid));
+        $this->assertEquals('_show ', $this->testColumn->getCellContent($entity));
 
-        $column = new ActionColumn($this->container, [
+        $column = new ActionColumn($this->containerArray, [
             'pathPrefix' => 'test_prefix'
         ]);
-        $this->assertEquals('  ', $column->getCellContent($entity, $this->grid));
+        $buttons = explode(' ', $column->getCellContent($entity));
+        $this->assertEquals(3, count($buttons));
+        foreach ($buttons as $buttonJson) {
+            $button = json_decode($buttonJson, true);
+            $this->assertEquals('action_button', $button[0]);
+        }
     }
 
     public function testUrlGeneratorException(): void
     {
         $this->expectException(Exception::class);
-        $entity = new class(){};
-        $column = new ActionColumn($this->container, [
+        $entity = new class()
+        {
+        };
+        $column = new ActionColumn($this->containerArray, [
             'pathPrefix' => 'test_prefix'
         ]);
-        $column->getCellContent($entity, $this->grid);
+        $column->getCellContent($entity);
     }
 }

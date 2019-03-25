@@ -25,7 +25,11 @@ class DataGridFactoryTest extends BaseCase
             'noDataMessage' => 'empty',
             'pagination' => []
         ]);
-        $this->factory = new DataGridFactory($this->container, $this->container->get('request_stack'), $configuration);
+        $this->factory = new DataGridFactory(
+            $this->container->get('doctrine'),
+            $this->container->get('router'),
+            $this->container->get('twig'),
+            $this->container->get('request_stack'), $configuration);
     }
 
     public function testWrongGridTypeException(): void
