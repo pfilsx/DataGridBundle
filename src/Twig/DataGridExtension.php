@@ -30,9 +30,10 @@ class DataGridExtension extends AbstractExtension
         ];
     }
 
-    public function generateGrid(Environment $environment, DataGrid $grid, array $attributes = []){
+    public function generateGrid(Environment $environment, DataGrid $grid, array $attributes = [])
+    {
         $template = $grid->getTemplate();
-        if (!$template->hasBlock('grid_table', [])){
+        if (!$template->hasBlock('grid_table', [])) {
             $template = $environment->loadTemplate(self::DEFAULT_TEMPLATE);
             $grid->setTemplate($template);
         }

@@ -31,7 +31,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addEqualFilter(string $attribute): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            if ($this->params[$attribute] == null) {
+            if ($this->params[$attribute] === null) {
                 $this->criteria->andWhere(Criteria::expr()->isNull($attribute));
             } else {
                 $this->criteria->andWhere(Criteria::expr()->eq($attribute, $this->params[$attribute]));

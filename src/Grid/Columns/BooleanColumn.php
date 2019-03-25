@@ -9,14 +9,14 @@ class BooleanColumn extends DataColumn
     protected $trueValue = 'Yes';
     protected $falseValue = 'No';
 
-    function getCellContent($entity)
+    public function getCellContent($entity)
     {
         if (is_callable($this->value)) {
             $result = call_user_func_array($this->value, [$entity]);
         } elseif ($this->value !== null) {
-            $result = $this->value == true ? $this->trueValue : $this->falseValue;
+            $result = $this->value ? $this->trueValue : $this->falseValue;
         } else {
-            $result = $this->getEntityAttribute($entity, $this->attribute) == true
+            $result = $this->getEntityAttribute($entity, $this->attribute)
                 ? $this->trueValue
                 : $this->falseValue;
         }

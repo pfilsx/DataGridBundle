@@ -4,7 +4,6 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Pfilsx\DataGrid\Grid\DataGrid;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
 
 abstract class AbstractColumn
@@ -15,7 +14,7 @@ abstract class AbstractColumn
 
     protected $label = '';
     /**
-     * @var AbstractFilter|null
+     * @var AbstractFilter
      */
     protected $filter;
 
