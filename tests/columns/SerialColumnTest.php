@@ -5,7 +5,6 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Pfilsx\DataGrid\Grid\Columns\SerialColumn;
-use Pfilsx\DataGrid\tests\BaseCase;
 
 /**
  * Class SerialColumnTest
@@ -18,7 +17,7 @@ class SerialColumnTest extends ColumnCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new SerialColumn($this->container);
+        $this->testColumn = new SerialColumn($this->containerArray);
     }
 
     public function testGetHeadContent(): void
@@ -34,7 +33,7 @@ class SerialColumnTest extends ColumnCase
 
     public function testGetCellContent(): void
     {
-        $this->assertEquals(1, $this->testColumn->getCellContent(null, $this->grid));
-        $this->assertEquals(2, $this->testColumn->getCellContent(null, $this->grid));
+        $this->assertEquals(1, $this->testColumn->getCellContent(null));
+        $this->assertEquals(2, $this->testColumn->getCellContent(null));
     }
 }

@@ -21,6 +21,8 @@ abstract class BaseCase extends TestCase
      * @var Container
      */
     protected $container;
+
+    protected $containerArray;
     /**
      * @var AbstractColumn
      */
@@ -50,6 +52,13 @@ abstract class BaseCase extends TestCase
                 }
                 return null;
             }));
+
+        $this->containerArray = [
+            'twig' => $this->container->get('twig'),
+            'router' => $this->container->get('router'),
+            'doctrine' => $this->container->get('doctrine'),
+            'request' => $this->container->get('request_stack')->getCurrentRequest()
+        ];
     }
 
     private function createRequestStackMock(){

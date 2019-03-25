@@ -4,13 +4,11 @@
 namespace Pfilsx\DataGrid\Grid\Filters;
 
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 abstract class AbstractFilter
 {
     protected $defaultTemplate = '@DataGrid/grid.blocks.html.twig';
     /**
-     * @var ContainerInterface
+     * @var array
      */
     protected $container;
     /**
@@ -22,7 +20,7 @@ abstract class AbstractFilter
      */
     protected $options = [];
 
-    public function __construct(ContainerInterface $container, array $config = [])
+    public function __construct(array $container, array $config = [])
     {
         $this->container = $container;
         foreach ($config as $key => $value) {
@@ -40,7 +38,7 @@ abstract class AbstractFilter
 
     public function setTemplate(?string $template)
     {
-        $twig = $this->container->get('twig');
+        $twig = $this->container['twig'];
         $this->template = is_string($template) ? $twig->loadTemplate($template) : $twig->loadTemplate($this->defaultTemplate);
     }
 
@@ -69,7 +67,7 @@ abstract class AbstractFilter
     public function render($attribute, $value): string
     {
         if ($this->template == null || !$this->template->hasBlock('grid_filter', [])) {
-            $this->template = $this->container->get('twig')->loadTemplate($this->defaultTemplate);
+            $this->template = $this->container['twig']->loadTemplate($this->defaultTemplate);
         }
         $this->prepareValue($value);
         return $this->template->renderBlock('grid_filter', array_merge($this->getParams(), [

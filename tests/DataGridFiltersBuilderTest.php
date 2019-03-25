@@ -17,7 +17,7 @@ class DataGridFiltersBuilderTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->builder = new DataGridFiltersBuilder($this->container);
+        $this->builder = new DataGridFiltersBuilder($this->containerArray);
     }
 
     public function testAddEqualFilterOnEmptyData(): void

@@ -4,7 +4,6 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Pfilsx\DataGrid\Grid\DataGrid;
 use Exception;
 
 class DataColumn extends AbstractColumn
@@ -24,7 +23,8 @@ class DataColumn extends AbstractColumn
     /**
      * @return null|string
      */
-    public function getAttribute(){
+    public function getAttribute()
+    {
         return $this->attribute;
     }
 
@@ -46,7 +46,7 @@ class DataColumn extends AbstractColumn
 
     protected function checkConfiguration()
     {
-        if (!is_string($this->attribute) && $this->value === null){
+        if (!is_string($this->attribute) && $this->value === null) {
             throw new Exception('attribute or value property must be set for DataColumn');
         }
     }
@@ -63,13 +63,13 @@ class DataColumn extends AbstractColumn
 
     public function getFilterContent()
     {
-        if ($this->hasFilter()){
+        if ($this->hasFilter()) {
             return $this->filter->render($this->attribute, $this->filterValue);
         }
         return '';
     }
 
-    public function getCellContent($entity, DataGrid $grid)
+    public function getCellContent($entity)
     {
         $result = (string)$this->getCellValue($entity);
         return $this->format == 'html'
@@ -77,24 +77,26 @@ class DataColumn extends AbstractColumn
             : htmlspecialchars($result);
     }
 
-    protected function getCellValue($entity){
-        if (is_callable($this->value)){
+    protected function getCellValue($entity)
+    {
+        if (is_callable($this->value)) {
             return call_user_func_array($this->value, [$entity]);
-        } elseif ($this->value !== null){
+        } elseif ($this->value !== null) {
             return $this->value;
         } else {
             return $this->getEntityAttribute($entity, $this->attribute);
         }
     }
 
-    protected function getEntityAttribute($entity, $attribute){
-        $attribute = preg_replace_callback('/_([A-z]?)/', function($matches){
+    protected function getEntityAttribute($entity, $attribute)
+    {
+        $attribute = preg_replace_callback('/_([A-z]?)/', function ($matches) {
             return isset($matches[1]) ? strtoupper($matches[1]) : '';
         }, $attribute);
-        $getter = 'get'.ucfirst($attribute);
-        if (method_exists($entity, $getter)){
+        $getter = 'get' . ucfirst($attribute);
+        if (method_exists($entity, $getter)) {
             return $entity->$getter();
         }
-        throw new Exception('Unknown property '.$attribute.' in '.get_class($entity));
+        throw new Exception('Unknown property ' . $attribute . ' in ' . get_class($entity));
     }
 }

@@ -9,7 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
-use Twig_Template;
+use Twig\Template;
 
 /**
  * Class DataGrid
@@ -36,7 +36,7 @@ class DataGrid
     protected $repository;
 
     /**
-     * @var Twig_Template
+     * @var Template
      */
     protected $template;
     /**
@@ -126,7 +126,7 @@ class DataGrid
         return $this->repository->matching($this->filtersCriteria);
     }
     /**
-     * @return Twig_Template
+     * @return Template
      */
     public function getTemplate(){
         return $this->template;

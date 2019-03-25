@@ -18,14 +18,15 @@ class CustomFilterTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new CustomFilter($this->container, [
-            'value' => function($attr, $val){
+        $this->testFilter = new CustomFilter($this->containerArray, [
+            'value' => function () {
                 return 'test_filter';
             }
         ]);
     }
 
-    public function testBlockName():void {
+    public function testBlockName(): void
+    {
         $this->assertNull($this->testFilter->getBlockName());
     }
 

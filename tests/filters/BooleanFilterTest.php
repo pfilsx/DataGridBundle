@@ -16,7 +16,7 @@ class BooleanFilterTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new BooleanFilter($this->container, [
+        $this->testFilter = new BooleanFilter($this->containerArray, [
             'trueChoice' => 'yes',
             'falseChoice' => 'no'
         ]);
