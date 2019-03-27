@@ -123,10 +123,7 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function setPage($page)
     {
-        if (is_numeric($page))
-            $this->options['page'] = (int)$page;
-        else
-            $this->options['page'] = 1;
+        $this->options['page'] = is_numeric($page) ? (int)$page : 1;
     }
 
     protected function setDefaultTemplate($template)

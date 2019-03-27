@@ -235,7 +235,7 @@ class DataGrid
         $this->limit = $this->paginationOptions['limit'];
         $total = $this->repository->matching($this->filtersCriteria)->count();
         $this->maxPage = (int)ceil($total / $this->limit);
-        $this->page = $this->page != null && $this->page > 0 && $this->page <= $this->maxPage
+        $this->page = is_int($this->page) && $this->page > 0 && $this->page <= $this->maxPage
             ? $this->page : 1;
 
         $this->paginationOptions['pages'] = $this->calculatePages();
@@ -244,7 +244,7 @@ class DataGrid
 
     protected function calculatePages()
     {
-        if ($this->maxPage == 0) {
+        if ($this->maxPage === 0) {
             return [1];
         }
         if ($this->maxPage <= 10) {
