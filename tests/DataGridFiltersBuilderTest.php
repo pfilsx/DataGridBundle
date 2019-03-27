@@ -112,7 +112,8 @@ class DataGridFiltersBuilderTest extends BaseCase
     }
 
 
-    public function comparisonProvider(){
+    public function comparisonProvider()
+    {
         return [
             ['equal'],
             ['notEqual'],

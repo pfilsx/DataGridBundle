@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Criteria;
 
 interface DataGridFiltersBuilderInterface
 {
-    public function addEqualFilter(string $attribute) : self;
+    public function addEqualFilter(string $attribute): self;
 
     public function addLikeFilter(string $attribute): self;
 
@@ -27,5 +27,5 @@ interface DataGridFiltersBuilderInterface
     /**
      * @param array $params
      */
-    public function setParams(array $params):void;
+    public function setParams(array $params): void;
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Pfilsx\DataGrid\tests;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -61,23 +62,25 @@ abstract class BaseCase extends TestCase
         ];
     }
 
-    private function createRequestStackMock(){
+    private function createRequestStackMock()
+    {
         $request = new Request([], [], ['key' => 'value']);
         $requestStack = new RequestStack();
         $requestStack->push($request);
         return $requestStack;
     }
 
-    private function createTwigMock(){
+    private function createTwigMock()
+    {
         $self = $this;
         $mock = $self->createMock(Environment::class);
         $mock->expects($this->any())
             ->method('loadTemplate')
-            ->will($this->returnCallback(function($param) use ($self) {
+            ->will($this->returnCallback(function ($param) use ($self) {
                 $mock = $self->createMock(Template::class);
                 $mock->expects($this->any())
                     ->method('renderBlock')
-                    ->will($this->returnCallback(function($param, $options){
+                    ->will($this->returnCallback(function ($param, $options) {
                         return json_encode([$param, $options]);
                     }));
                 return $mock;
@@ -85,12 +88,13 @@ abstract class BaseCase extends TestCase
         return $mock;
     }
 
-    private function createDoctrineMock(){
+    private function createDoctrineMock()
+    {
         $self = $this;
         $mock = $self->createMock(ManagerRegistry::class);
         $mock->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnCallback(function($param) use ($self){
+            ->will($this->returnCallback(function ($param) use ($self) {
                 $mock = $self->createMock(ServiceEntityRepository::class);
                 $mock->expects($this->any())
                     ->method('createQueryBuilder')
@@ -100,7 +104,8 @@ abstract class BaseCase extends TestCase
         return $mock;
     }
 
-    private function createQueryBuilderMock(){
+    private function createQueryBuilderMock()
+    {
         $self = $this;
         $mock = $self->createMock(QueryBuilder::class);
         $mock->expects($this->any())
@@ -108,7 +113,7 @@ abstract class BaseCase extends TestCase
         $mock->expects($this->any())
             ->method('orderBy')->willReturnSelf();
         $mock->expects($this->any())
-            ->method('getQuery')->will($this->returnCallback(function() use ($self){
+            ->method('getQuery')->will($this->returnCallback(function () use ($self) {
                 $mock = $self->createMock(AbstractQuery::class);
                 $mock->expects($this->any())
                     ->method('getArrayResult')
@@ -119,7 +124,8 @@ abstract class BaseCase extends TestCase
         return $mock;
     }
 
-    private function createQueryArrayResult(){
+    private function createQueryArrayResult()
+    {
         return [
             ['id' => 1, 'title' => 'Test1'],
             ['id' => 2, 'title' => 'Test2'],

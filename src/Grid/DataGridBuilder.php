@@ -58,18 +58,20 @@ class DataGridBuilder implements DataGridBuilderInterface
     {
         return $this->addColumn(DataColumn::class, array_merge(['label' => $attribute], $config, ['attribute' => $attribute]));
     }
+
     /**
      * @param string $path
      * @return $this
      */
-    public function setTemplate(string $path) : DataGridBuilderInterface
+    public function setTemplate(string $path): DataGridBuilderInterface
     {
         $this->options['template'] = $path;
-        foreach ($this->columns as $column){
+        foreach ($this->columns as $column) {
             $column->setTemplate($path);
         }
         return $this;
     }
+
     /**
      * @param string $message
      * @return $this
@@ -80,9 +82,9 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
-    public function enablePagination($options = []) : DataGridBuilderInterface
+    public function enablePagination($options = []): DataGridBuilderInterface
     {
-        if (is_array($options) && !empty($options)){
+        if (is_array($options) && !empty($options)) {
             $this->options['pagination'] = true;
             $this->options['paginationOptions'] = $options;
         } else {
@@ -91,6 +93,7 @@ class DataGridBuilder implements DataGridBuilderInterface
         }
         return $this;
     }
+
     /**
      * @internal
      * @return array

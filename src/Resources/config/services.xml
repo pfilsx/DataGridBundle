@@ -10,12 +10,12 @@
 
     <services>
         <service id="data_grid.twig_extension" class="%data_grid.twig_extension.class%" public="false">
-            <tag name="twig.extension" />
+            <tag name="twig.extension"/>
             <argument type="service" id="request_stack"/>
         </service>
 
         <service id="data_grid.configuration" class="%data_grid.configuration.class%" public="false">
-            <argument type="collection" />
+            <argument type="collection"/>
         </service>
     </services>
 </container>

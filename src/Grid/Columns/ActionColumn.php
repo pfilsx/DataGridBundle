@@ -69,7 +69,7 @@ class ActionColumn extends AbstractColumn
      */
     protected function generateUrl($entity, $action)
     {
-        if ($this->urlGenerator != null && is_callable($this->urlGenerator)) {
+        if (is_callable($this->urlGenerator)) {
             return call_user_func_array($this->urlGenerator, [$entity, $action, $this->container['router']]);
         } elseif (method_exists($entity, 'getId')) {
             return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $entity->getId()]);

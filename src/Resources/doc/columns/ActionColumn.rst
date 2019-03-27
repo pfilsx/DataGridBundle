@@ -64,5 +64,3 @@ Can be used to override default url generation function.
             }
         ]
     ]);
-
-

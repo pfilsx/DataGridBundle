@@ -19,7 +19,7 @@ class ImageColumn extends DataColumn
 
     protected $noImageMessage = '-';
 
-    function getCellContent($entity)
+    public function getCellContent($entity)
     {
         $value = (string)$this->getCellValue($entity);
         if (!empty($value)) {

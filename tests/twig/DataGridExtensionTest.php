@@ -22,7 +22,8 @@ class DataGridExtensionTest extends BaseCase
         $this->extension = new DataGridExtension($this->container->get('request_stack'));
     }
 
-    public function testClass():void {
+    public function testClass(): void
+    {
         $this->assertInstanceOf(AbstractExtension::class, $this->extension);
     }
 
@@ -36,11 +37,13 @@ class DataGridExtensionTest extends BaseCase
      * @param Environment $env
      * @param DataGrid $grid
      */
-    public function testGenerateGrid($env, $grid):void {
+    public function testGenerateGrid($env, $grid): void
+    {
         $this->assertEquals('', $this->extension->generateGrid($env, $grid));
     }
 
-    public function gridProvider(){
+    public function gridProvider()
+    {
         $environment = $this->createMock(Environment::class);
         $environment->expects($this->any())
             ->method('loadTemplate')
@@ -53,7 +56,8 @@ class DataGridExtensionTest extends BaseCase
         ];
     }
 
-    private function createGridMock($withBlock = true){
+    private function createGridMock($withBlock = true)
+    {
 
         $template = $this->createMock(Template::class);
         $template->expects($this->any())

@@ -15,7 +15,7 @@ interface DataGridBuilderInterface
 
     public function setNoDataMessage(string $message): self;
 
-    public function enablePagination($options = []) : self;
+    public function enablePagination($options = []): self;
 
     /**
      * @internal

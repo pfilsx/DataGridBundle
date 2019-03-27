@@ -8,9 +8,9 @@
          bootstrap="./tests/bootstrap.php"
 >
     <php>
-        <ini name="error_reporting" value="-1" />
-        <env name="APP_ENV" value="test" />
-        <env name="SHELL_VERBOSITY" value="-1" />
+        <ini name="error_reporting" value="-1"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="SHELL_VERBOSITY" value="-1"/>
     </php>
 
     <testsuites>
@@ -20,7 +20,7 @@
     </testsuites>
 
     <filter>
-        <whitelist >
+        <whitelist>
             <directory>./src</directory>
             <exclude>
                 <directory suffix="Interface.php">./src</directory>

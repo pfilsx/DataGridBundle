@@ -30,7 +30,7 @@ abstract class AbstractGridType
 
     protected $router;
 
-    protected  $request;
+    protected $request;
 
     /**
      * AbstractGridType constructor.
@@ -44,9 +44,9 @@ abstract class AbstractGridType
     public function __construct(array $container)
     {
         $this->container = $container;
-        foreach ($this->container as $key => $value){
-            $setter = 'set'.ucfirst($key);
-            if (method_exists($this, $setter)){
+        foreach ($this->container as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            if (method_exists($this, $setter)) {
                 $this->$setter($value);
             }
         }
@@ -56,19 +56,23 @@ abstract class AbstractGridType
 
     public abstract function handleFilters(DataGridFiltersBuilderInterface $builder, array $filters): void;
 
-    protected function setDoctrine($value){
+    protected function setDoctrine($value)
+    {
         $this->doctrine = $value;
     }
 
-    protected function setTwig($value){
+    protected function setTwig($value)
+    {
         $this->environment = $value;
     }
 
-    protected function setRouter($value){
+    protected function setRouter($value)
+    {
         $this->router = $value;
     }
 
-    protected function setRequest($value){
+    protected function setRequest($value)
+    {
         $this->request = $value;
     }
 }

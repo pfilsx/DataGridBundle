@@ -4,6 +4,8 @@
 namespace Pfilsx\DataGrid\Grid\Filters;
 
 
+use Twig\Template;
+
 abstract class AbstractFilter
 {
     protected $defaultTemplate = '@DataGrid/grid.blocks.html.twig';
@@ -66,7 +68,7 @@ abstract class AbstractFilter
 
     public function render($attribute, $value): string
     {
-        if ($this->template == null || !$this->template->hasBlock('grid_filter', [])) {
+        if (!$this->template instanceof Template || !$this->template->hasBlock('grid_filter', [])) {
             $this->template = $this->container['twig']->loadTemplate($this->defaultTemplate);
         }
         $this->prepareValue($value);

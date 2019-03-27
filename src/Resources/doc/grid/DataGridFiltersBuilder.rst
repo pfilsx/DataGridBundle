@@ -61,5 +61,3 @@ Adds like filter handle for specific attribute('$attribute like %value%').
 addRelationFilter(string $attribute, string $relatedEntityFQN)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Adds relation filter handle for specific attribute. Should be used with EntityFilter.
-
-
