@@ -82,20 +82,31 @@ class DataGrid
         $this->repository = $repository;
         $this->columns = $columns;
         $this->twig = $options['twig'];
-        foreach ($options as $key => $value) {
-            $setter = 'set' . ucfirst($key);
-            if (method_exists($this, $setter)) {
-                $this->$setter($value);
-            }
-        }
+        $this->setConfigurationOptions($options);
+
         foreach ($columns as $column) {
             if ($column->hasFilter() && $column->isVisible()) {
                 $this->hasFilters = true;
                 break;
             }
         }
+
         if ($this->hasPagination()) {
             $this->rebuildPaginationOptions();
+        }
+    }
+
+    /**
+     * @internal
+     * @param $options
+     */
+    protected function setConfigurationOptions($options)
+    {
+        foreach ($options as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            if (method_exists($this, $setter)) {
+                $this->$setter($value);
+            }
         }
     }
 
@@ -226,17 +237,25 @@ class DataGrid
         $this->maxPage = (int)ceil($total / $this->limit);
         $this->page = $this->page != null && $this->page > 0 && $this->page <= $this->maxPage
             ? $this->page : 1;
-        if ($this->maxPage == 0) {
-            $this->paginationOptions['pages'] = [1];
-        } elseif ($this->maxPage <= 10) {
-            $this->paginationOptions['pages'] = range(1, $this->maxPage);
-        } elseif ($this->page < 5) {
-            $this->paginationOptions['pages'] = array_merge(range(1, 6), [null, $this->maxPage]);
-        } elseif ($this->page > $this->maxPage - 4) {
-            $this->paginationOptions['pages'] = array_merge([1, null], range($this->maxPage - 5, $this->maxPage));
-        } else {
-            $this->paginationOptions['pages'] = array_merge([1, null], range($this->page - 2, $this->page + 2), [null, $this->maxPage]);
-        }
+
+        $this->paginationOptions['pages'] = $this->calculatePages();
         $this->paginationOptions['currentPage'] = $this->page;
+    }
+
+    protected function calculatePages()
+    {
+        if ($this->maxPage == 0) {
+            return [1];
+        }
+        if ($this->maxPage <= 10) {
+            return range(1, $this->maxPage);
+        }
+        if ($this->page < 5) {
+            return array_merge(range(1, 6), [null, $this->maxPage]);
+        }
+        if ($this->page > $this->maxPage - 4) {
+            return array_merge([1, null], range($this->maxPage - 5, $this->maxPage));
+        }
+        return array_merge([1, null], range($this->page - 2, $this->page + 2), [null, $this->maxPage]);
     }
 }
