@@ -11,6 +11,7 @@ abstract class AbstractGridType
     const DATA_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\DataColumn';
     const SERIAL_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\SerialColumn';
     const DATE_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\DateColumn';
+    const RELATION_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\RelationColumn';
 
     const FILTER_TEXT = 'Pfilsx\DataGrid\Grid\Filters\TextFilter';
     const FILTER_BOOLEAN = 'Pfilsx\DataGrid\Grid\Filters\BooleanFilter';

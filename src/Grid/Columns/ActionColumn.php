@@ -4,6 +4,7 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 use Exception;
+use Pfilsx\DataGrid\DataGridException;
 use Twig\Template;
 
 class ActionColumn extends AbstractColumn
@@ -74,7 +75,7 @@ class ActionColumn extends AbstractColumn
         } elseif (method_exists($entity, 'getId')) {
             return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $entity->getId()]);
         } else {
-            throw new Exception('Could not generate url for action: ' . $action);
+            throw new DataGridException('Could not generate url for action: ' . $action);
         }
     }
 

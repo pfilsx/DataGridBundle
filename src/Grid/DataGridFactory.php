@@ -46,6 +46,10 @@ class DataGridFactory implements DataGridFactoryInterface
      * @var AbstractColumn[]
      */
     protected $columns;
+    /**
+     * @var array
+     */
+    protected $queryParams;
 
     public function __construct(
         ManagerRegistry $doctrine,
@@ -88,26 +92,44 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function handleRequest(): void
     {
-        $params = $this->request->query->has('data_grid') ? $this->request->query->get('data_grid') : [];
-        if (array_key_exists('sortBy', $params)) {
-            $this->setSort($params['sortBy']);
-            unset($params['sortBy']);
+        $this->queryParams = $this->request->query->has('data_grid') ? $this->request->query->get('data_grid') : [];
+
+        $this->handleSorting();
+
+        $this->handlePagination();
+
+        $this->handleFilters();
+    }
+
+    protected function handleSorting()
+    {
+        if (array_key_exists('sortBy', $this->queryParams)) {
+            $this->setSort($this->queryParams['sortBy']);
+            unset($this->queryParams['sortBy']);
         }
+    }
+
+    protected function handlePagination()
+    {
         if (array_key_exists('pagination', $this->options) && $this->options['pagination']) {
-            if (array_key_exists('page', $params)) {
-                $this->setPage($params['page']);
-                unset($params['page']);
+            if (array_key_exists('page', $this->queryParams)) {
+                $this->setPage($this->queryParams['page']);
+                unset($this->queryParams['page']);
             } else {
                 $this->setPage(1);
             }
         }
+    }
+
+    protected function handleFilters()
+    {
         foreach ($this->columns as $column) {
-            if ($column->hasFilter() && array_key_exists($column->getAttribute(), $params)) {
-                $column->setFilterValue($params[$column->getAttribute()]);
+            if ($column->hasFilter() && array_key_exists($column->getAttribute(), $this->queryParams)) {
+                $column->setFilterValue($this->queryParams[$column->getAttribute()]);
             }
         }
-        $this->filterBuilder->setParams($params);
-        $this->gridType->handleFilters($this->filterBuilder, $params);
+        $this->filterBuilder->setParams($this->queryParams);
+        $this->gridType->handleFilters($this->filterBuilder, $this->queryParams);
         $this->options['filtersCriteria'] = $this->filterBuilder->getCriteria();
     }
 

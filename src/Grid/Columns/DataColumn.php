@@ -4,7 +4,7 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Exception;
+use Pfilsx\DataGrid\DataGridException;
 
 class DataColumn extends AbstractColumn
 {
@@ -46,8 +46,8 @@ class DataColumn extends AbstractColumn
 
     protected function checkConfiguration()
     {
-        if (!is_string($this->attribute) && $this->value === null) {
-            throw new Exception('attribute or value property must be set for DataColumn');
+        if ((!is_string($this->attribute) || empty($this->attribute)) && $this->value === null) {
+            throw new DataGridException('attribute or value property must be set for ' . static::class);
         }
     }
 
@@ -72,7 +72,7 @@ class DataColumn extends AbstractColumn
     public function getCellContent($entity)
     {
         $result = (string)$this->getCellValue($entity);
-        return $this->format == 'html'
+        return $this->format === 'html'
             ? $result
             : htmlspecialchars($result);
     }
@@ -97,6 +97,6 @@ class DataColumn extends AbstractColumn
         if (method_exists($entity, $getter)) {
             return $entity->$getter();
         }
-        throw new Exception('Unknown property ' . $attribute . ' in ' . get_class($entity));
+        throw new DataGridException('Unknown property ' . $attribute . ' in ' . get_class($entity));
     }
 }

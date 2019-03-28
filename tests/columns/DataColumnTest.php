@@ -4,7 +4,7 @@
 namespace Pfilsx\DataGrid\tests\columns;
 
 
-use Exception;
+use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
@@ -42,7 +42,7 @@ class DataColumnTest extends ColumnCase
 
     public function testAttributeOrValueException(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(DataGridException::class);
         new DataColumn($this->containerArray);
     }
 
@@ -122,7 +122,7 @@ class DataColumnTest extends ColumnCase
 
     public function testWrongAttribute(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(DataGridException::class);
         $entity = new class
         {
         };
