@@ -81,7 +81,7 @@ class DataGridFactory implements DataGridFactoryInterface
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
-        $this->provider = DataProvider::create($dataProvider);
+        $this->provider = DataProvider::create($dataProvider, $this->container['doctrine']);
         /** @var AbstractGridType $type */
         $this->gridType = new $gridType($this->container);
         $this->gridType->buildGrid($this->gridBuilder);

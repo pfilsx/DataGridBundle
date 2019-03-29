@@ -4,21 +4,18 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Pfilsx\DataGrid\DataGridException;
 
 class DataGridItem
 {
     protected $entity;
+    /**
+     * @var ObjectManager
+     */
+    protected $entityManager;
 
     protected $row;
-
-    /**
-     * @return mixed
-     */
-    public function getEntity()
-    {
-        return $this->entity;
-    }
 
     /**
      * @param $entity
@@ -26,6 +23,11 @@ class DataGridItem
     public function setEntity($entity): void
     {
         $this->entity = $entity;
+    }
+
+    public function setEntityManager($manager)
+    {
+        $this->entityManager = $manager;
     }
 
     /**
@@ -42,6 +44,20 @@ class DataGridItem
     public function setRow(array $row): void
     {
         $this->row = $row;
+    }
+
+    public function has($name)
+    {
+        if ($this->entity !== null) {
+            return method_exists($this->entity, 'get' . ucfirst($name));
+        }
+        return false;
+        //TODO
+    }
+
+    public function get($name)
+    {
+        return $this->__get($name);
     }
 
     public function __get($name)
@@ -64,4 +80,21 @@ class DataGridItem
         }
         throw new DataGridException('Unknown property ' . $attribute . ' in ' . get_class($this->entity));
     }
+
+    public function getId()
+    {
+        if ($this->entity !== null) {
+            return $this->getEntityId();
+        }
+        return null;
+    }
+
+    public function getEntityId()
+    {
+        $metaData = $this->entityManager->getClassMetadata(get_class($this->entity));
+        $idAttr = $metaData->getIdentifier()[0];
+        //TODO surrogate pk
+        return $this->entity->$idAttr;
+    }
+
 }

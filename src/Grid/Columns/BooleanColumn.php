@@ -16,7 +16,8 @@ class BooleanColumn extends DataColumn
         } elseif ($this->value !== null) {
             $result = $this->value ? $this->trueValue : $this->falseValue;
         } else {
-            $result = $this->getEntityAttribute($entity, $this->attribute)
+
+            $result = $entity->{$this->attribute}
                 ? $this->trueValue
                 : $this->falseValue;
         }

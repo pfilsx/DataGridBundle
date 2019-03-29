@@ -64,7 +64,7 @@
                     {% else %}
                         {% set attr = [] %}
                     {% endif %}
-                    <td {{ block('attributes') }}>{{ column.getCellContent(entity, data_grid)|raw }}</td>
+                    <td {{ block('attributes') }}>{{ column.getCellContent(entity)|raw }}</td>
                 {% endif %}
             {% endfor %}
         </tr>

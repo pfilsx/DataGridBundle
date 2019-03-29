@@ -6,6 +6,8 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Pager;
 
@@ -16,6 +18,8 @@ class RepositoryDataProvider implements DataProviderInterface
      * @var ServiceEntityRepository
      */
     protected $repository;
+
+    protected $entityManager;
 
     /**
      * @var Criteria
@@ -29,9 +33,10 @@ class RepositoryDataProvider implements DataProviderInterface
 
     protected $pagerConfiguration = [];
 
-    public function __construct(ServiceEntityRepository $repository)
+    public function __construct(ServiceEntityRepository $repository, ManagerRegistry $manager)
     {
         $this->repository = $repository;
+        $this->entityManager = $manager->getManager();
     }
 
 
@@ -43,6 +48,7 @@ class RepositoryDataProvider implements DataProviderInterface
         return array_map(function ($entity) {
             $item = new DataGridItem();
             $item->setEntity($entity);
+            $item->setEntityManager($this->entityManager);
             return $item;
         }, $this->repository->matching($this->criteria)->toArray());
     }
