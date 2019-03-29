@@ -5,8 +5,8 @@ namespace Pfilsx\DataGrid\Grid;
 
 
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Template;
@@ -31,9 +31,9 @@ class DataGrid
      */
     protected $showTitles = true;
     /**
-     * @var ServiceEntityRepository
+     * @var DataProviderInterface
      */
-    protected $repository;
+    protected $provider;
 
     /**
      * @var Template
@@ -49,8 +49,6 @@ class DataGrid
     protected $twig;
 
     protected $noDataMessage = 'No data found';
-
-    protected $sort = [];
 
     protected $limit = null;
 
@@ -72,14 +70,14 @@ class DataGrid
 
     /**
      * DataGrid constructor.
-     * @param ServiceEntityRepository $repository
+     * @param DataProviderInterface $provider
      * @param array $columns
      * @param array $options
      * @internal
      */
-    public function __construct(ServiceEntityRepository $repository, array $columns, array $options = [])
+    public function __construct(DataProviderInterface $provider, array $columns, array $options = [])
     {
-        $this->repository = $repository;
+        $this->provider = $provider;
         $this->columns = $columns;
         $this->twig = $options['twig'];
         $this->setConfigurationOptions($options);
@@ -90,7 +88,6 @@ class DataGrid
                 break;
             }
         }
-
         if ($this->hasPagination()) {
             $this->rebuildPaginationOptions();
         }
@@ -120,9 +117,9 @@ class DataGrid
         $this->showTitles = (bool)$value;
     }
 
-    public function getRepository()
+    public function getProvider()
     {
-        return $this->repository;
+        return $this->provider;
     }
 
     public function getColumns()
@@ -137,11 +134,7 @@ class DataGrid
 
     public function getData()
     {
-        $this->filtersCriteria
-            ->orderBy($this->sort)
-            ->setMaxResults($this->hasPagination() ? $this->limit : null)
-            ->setFirstResult($this->hasPagination() ? ($this->page - 1) * $this->limit : null);
-        return $this->repository->matching($this->filtersCriteria);
+        return $this->provider->getItems();
     }
 
     /**
@@ -191,7 +184,7 @@ class DataGrid
         foreach ($this->columns as $column) {
             if ($column->hasSort() && $column->getAttribute() == $attribute) {
                 $column->setSort($direction);
-                $this->sort = [$attribute => $direction];
+                $this->provider->setSort([$attribute => $direction]);
                 break;
             }
         }
@@ -219,43 +212,21 @@ class DataGrid
 
     public function getPaginationOptions()
     {
-        return $this->paginationOptions;
+        return $this->provider->getPager()->getPaginationOptions();
     }
 
     protected function setFiltersCriteria(Criteria $criteria)
     {
-        $this->filtersCriteria = $criteria;
+        $this->provider->setCriteria($criteria);
     }
-
     /**
      * @internal
      */
     protected function rebuildPaginationOptions()
     {
-        $this->limit = $this->paginationOptions['limit'];
-        $total = $this->repository->matching($this->filtersCriteria)->count();
-        $this->maxPage = (int)ceil($total / $this->limit);
-        $this->page = is_int($this->page) && $this->page > 0 && $this->page <= $this->maxPage
-            ? $this->page : 1;
-
-        $this->paginationOptions['pages'] = $this->calculatePages();
-        $this->paginationOptions['currentPage'] = $this->page;
-    }
-
-    protected function calculatePages()
-    {
-        if ($this->maxPage === 0) {
-            return [1];
-        }
-        if ($this->maxPage <= 10) {
-            return range(1, $this->maxPage);
-        }
-        if ($this->page < 5) {
-            return array_merge(range(1, 6), [null, $this->maxPage]);
-        }
-        if ($this->page > $this->maxPage - 4) {
-            return array_merge([1, null], range($this->maxPage - 5, $this->maxPage));
-        }
-        return array_merge([1, null], range($this->page - 2, $this->page + 2), [null, $this->maxPage]);
+        $this->provider->setPagerConfiguration([
+            'page' => $this->page,
+            'limit' => $this->paginationOptions['limit']
+        ]);
     }
 }

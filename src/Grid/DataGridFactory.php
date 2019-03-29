@@ -6,8 +6,9 @@ namespace Pfilsx\DataGrid\Grid;
 
 use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,9 +30,9 @@ class DataGridFactory implements DataGridFactoryInterface
     protected $filterBuilder;
 
     /**
-     * @var ServiceEntityRepository
+     * @var DataProviderInterface
      */
-    protected $repository;
+    protected $provider;
     /**
      * @var AbstractGridType
      */
@@ -75,19 +76,19 @@ class DataGridFactory implements DataGridFactoryInterface
     }
 
 
-    public function createGrid(string $gridType, ServiceEntityRepository $repository): DataGrid
+    public function createGrid(string $gridType, $dataProvider): DataGrid
     {
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
-        $this->repository = $repository;
+        $this->provider = DataProvider::create($dataProvider);
         /** @var AbstractGridType $type */
         $this->gridType = new $gridType($this->container);
         $this->gridType->buildGrid($this->gridBuilder);
         $this->columns = $this->gridBuilder->getColumns();
         $this->options = array_merge($this->options, $this->gridBuilder->getOptions());
         $this->handleRequest();
-        return new DataGrid($this->repository, $this->columns, $this->options);
+        return new DataGrid($this->provider, $this->columns, $this->options);
     }
 
     protected function handleRequest(): void

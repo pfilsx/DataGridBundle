@@ -84,7 +84,8 @@ class DataColumn extends AbstractColumn
         } elseif ($this->value !== null) {
             return $this->value;
         } else {
-            return $this->getEntityAttribute($entity, $this->attribute);
+            $attr = $this->attribute;
+            return $entity->$attr;
         }
     }
 
