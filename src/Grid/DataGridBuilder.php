@@ -7,6 +7,8 @@ namespace Pfilsx\DataGrid\Grid;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 class DataGridBuilder implements DataGridBuilderInterface
 {
@@ -14,6 +16,10 @@ class DataGridBuilder implements DataGridBuilderInterface
      * @var array
      */
     protected $container;
+    /**
+     * @var DataProvider
+     */
+    protected $provider;
 
     /**
      * @var AbstractColumn[]
@@ -25,6 +31,8 @@ class DataGridBuilder implements DataGridBuilderInterface
     protected $options = [
         'template' => '@DataGrid/grid.blocks.html.twig'
     ];
+
+    protected $hasFilters = false;
 
     /**
      * DataGridBuilder constructor.
@@ -45,7 +53,14 @@ class DataGridBuilder implements DataGridBuilderInterface
         if (!is_subclass_of($columnClass, AbstractColumn::class)) {
             throw new InvalidArgumentException('Expected subclass of' . AbstractColumn::class);
         }
-        $this->columns[] = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config));
+        /**
+         * @var AbstractColumn $column
+         */
+        $column = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config));
+        $this->columns[] = $column;
+        if ($column->hasFilter() && $column->isVisible()) {
+            $this->hasFilters = true;
+        }
         return $this;
     }
 
@@ -110,5 +125,51 @@ class DataGridBuilder implements DataGridBuilderInterface
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function getProvider(): DataProvider
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @internal
+     * @param DataProviderInterface $provider
+     */
+    public function setProvider(DataProviderInterface $provider): void
+    {
+        $this->provider = $provider;
+    }
+
+    public function setSort(string $attribute, string $direction)
+    {
+        foreach ($this->columns as $column) {
+            if ($column->hasSort() && $column->getAttribute() == $attribute) {
+                $column->setSort($direction);
+                $this->provider->setSort([$attribute => $direction]);
+                break;
+            }
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFilters(): bool
+    {
+        return $this->hasFilters;
+    }
+
+    /**
+     * @internal
+     * @param array $filters
+     */
+    public function setFiltersValues(array $filters): void
+    {
+        foreach ($this->columns as $column) {
+            if ($column->hasFilter() && array_key_exists($column->getAttribute(), $filters)) {
+                $column->setFilterValue($filters[$column->getAttribute()]);
+            }
+        }
     }
 }

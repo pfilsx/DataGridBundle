@@ -4,6 +4,9 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
+
 interface DataGridBuilderInterface
 {
 
@@ -28,4 +31,20 @@ interface DataGridBuilderInterface
      * @return array
      */
     public function getOptions(): array;
+
+    public function getProvider(): DataProvider;
+
+    /**
+     * @internal
+     * @param DataProviderInterface $provider
+     */
+    public function setProvider(DataProviderInterface $provider): void;
+
+    public function hasFilters(): bool;
+
+    /**
+     * @internal
+     * @param array $filters
+     */
+    public function setFiltersValues(array $filters): void;
 }

@@ -93,8 +93,12 @@ class DataGridItem
     {
         $metaData = $this->entityManager->getClassMetadata(get_class($this->entity));
         $idAttr = $metaData->getIdentifier()[0];
+        $getter = 'get' . ucfirst($idAttr);
+        if (method_exists($this->entity, $getter)) {
+            return $this->entity->$getter();
+        }
+        throw new DataGridException('Cannot find identifier in ' . get_class($this->entity));
         //TODO surrogate pk
-        return $this->entity->$idAttr;
     }
 
 }

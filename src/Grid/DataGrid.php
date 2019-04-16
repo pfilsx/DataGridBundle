@@ -4,9 +4,7 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Doctrine\Common\Collections\Criteria;
-use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Template;
@@ -19,21 +17,9 @@ use Twig\Template;
 class DataGrid
 {
     /**
-     * @var AbstractColumn[]
-     */
-    protected $columns = [];
-    /**
-     * @var bool
-     */
-    protected $hasFilters = false;
-    /**
      * @var bool
      */
     protected $showTitles = true;
-    /**
-     * @var DataProviderInterface
-     */
-    protected $provider;
 
     /**
      * @var Template
@@ -67,27 +53,23 @@ class DataGrid
      * @var Criteria
      */
     protected $filtersCriteria;
+    /**
+     * @var DataGridBuilderInterface
+     */
+    protected $builder;
 
     /**
      * DataGrid constructor.
-     * @param DataProviderInterface $provider
-     * @param array $columns
-     * @param array $options
+     * @param DataGridBuilderInterface $builder
+     * @param array $defaultOptions
      * @internal
      */
-    public function __construct(DataProviderInterface $provider, array $columns, array $options = [])
+    public function __construct(DataGridBuilderInterface $builder, array $defaultOptions = [])
     {
-        $this->provider = $provider;
-        $this->columns = $columns;
-        $this->twig = $options['twig'];
-        $this->setConfigurationOptions($options);
+        $this->builder = $builder;
+        $this->twig = $defaultOptions['twig'];
+        $this->setConfigurationOptions(array_merge($defaultOptions, $builder->getOptions()));
 
-        foreach ($columns as $column) {
-            if ($column->hasFilter() && $column->isVisible()) {
-                $this->hasFilters = true;
-                break;
-            }
-        }
         if ($this->hasPagination()) {
             $this->rebuildPaginationOptions();
         }
@@ -119,22 +101,22 @@ class DataGrid
 
     public function getProvider()
     {
-        return $this->provider;
+        return $this->builder->getProvider();
     }
 
     public function getColumns()
     {
-        return $this->columns;
+        return $this->builder->getColumns();
     }
 
     public function hasFilters()
     {
-        return $this->hasFilters;
+        return $this->builder->hasFilters();
     }
 
     public function getData()
     {
-        return $this->provider->getItems();
+        return $this->getProvider()->getItems();
     }
 
     /**
@@ -178,17 +160,6 @@ class DataGrid
         $this->noDataMessage = $message;
     }
 
-    protected function setSort(array $sort)
-    {
-        list($attribute, $direction) = $sort;
-        foreach ($this->columns as $column) {
-            if ($column->hasSort() && $column->getAttribute() == $attribute) {
-                $column->setSort($direction);
-                $this->provider->setSort([$attribute => $direction]);
-                break;
-            }
-        }
-    }
 
     protected function setPage(int $page)
     {
@@ -212,19 +183,14 @@ class DataGrid
 
     public function getPaginationOptions()
     {
-        return $this->provider->getPager()->getPaginationOptions();
-    }
-
-    protected function setFiltersCriteria(Criteria $criteria)
-    {
-        $this->provider->setCriteria($criteria);
+        return $this->getProvider()->getPager()->getPaginationOptions();
     }
     /**
      * @internal
      */
     protected function rebuildPaginationOptions()
     {
-        $this->provider->setPagerConfiguration([
+        $this->getProvider()->setPagerConfiguration([
             'page' => $this->page,
             'limit' => $this->paginationOptions['limit']
         ]);

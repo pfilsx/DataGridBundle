@@ -21,4 +21,14 @@ interface DataProviderInterface
 
     public function setCriteria(Criteria $criteria): self;
 
+
+    public function addEqualFilter(string $attribute, $value): self;
+
+    public function addLikeFilter(string $attribute, $value): self;
+
+    public function addRelationFilter(string $attribute, $value, string $relationClass): self;
+
+    public function addCustomFilter(string $attribute, $value, callable $callback): self;
+
+    public function addDateFilter(string $attribute, $value, string $comparison = 'equal'): self;
 }
