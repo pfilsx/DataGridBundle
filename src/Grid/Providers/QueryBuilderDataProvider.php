@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
+use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Hydrators\DataGridHydrator;
 use ReflectionClass;
@@ -47,8 +48,11 @@ class QueryBuilderDataProvider extends DataProvider
 
     public function getTotalCount(): int
     {
+        if (empty($this->countFieldName)) {
+            throw new DataGridException("countableFieldName must be set for " . static::class);
+        }
         $countQueryBuilder = clone($this->builder);
-        $countQueryBuilder->select("count(article.id)");
+        $countQueryBuilder->select("count({$this->countFieldName})");
         $countQueryBuilder->setMaxResults(null);
         $countQueryBuilder->setFirstResult(null);
         $countQueryBuilder->resetDQLPart('groupBy');

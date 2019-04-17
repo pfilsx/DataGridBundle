@@ -20,6 +20,8 @@ interface DataGridBuilderInterface
 
     public function enablePagination($options = []): self;
 
+    public function setCountFieldName(string $name): self;
+
     /**
      * @internal
      * @return array

@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\RelationColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 
 class RelationColumnTest extends ColumnCase
 {
@@ -50,14 +51,17 @@ class RelationColumnTest extends ColumnCase
                 };
             }
         };
-        $this->assertEquals('test_data', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
-        $this->assertEquals('', $this->testColumn->getCellContent(new class
+        $item->setEntity(new class
         {
             public function getTestAttribute()
             {
                 return null;
             }
-        }));
+        });
+        $this->assertEquals('', $this->testColumn->getCellContent($item));
     }
 }

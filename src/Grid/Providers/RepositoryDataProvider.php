@@ -54,7 +54,7 @@ class RepositoryDataProvider extends DataProvider
     /**
      * @return Criteria
      */
-    protected function getCriteria()
+    public function getCriteria()
     {
         return $this->criteria ?? ($this->criteria = Criteria::create());
     }

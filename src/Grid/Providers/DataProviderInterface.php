@@ -35,4 +35,8 @@ interface DataProviderInterface
     public function addCustomFilter(string $attribute, $value, callable $callback): self;
 
     public function addDateFilter(string $attribute, $value, string $comparison = 'equal'): self;
+
+    public function setCountFieldName(string $name): self;
+    
+    public function getCountFieldName(): string;
 }

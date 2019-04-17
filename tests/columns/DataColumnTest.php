@@ -8,6 +8,7 @@ use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
 
 /**
@@ -107,17 +108,19 @@ class DataColumnTest extends ColumnCase
                 return $this->data;
             }
         };
-        $this->assertEquals('test_data', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
         $column = new DataColumn($this->containerArray, ['value' => function () {
             return 'test_data';
         }]);
 
         $this->assertIsCallable($column->getValue());
-        $this->assertEquals('test_data', $column->getCellContent($entity));
+        $this->assertEquals('test_data', $column->getCellContent($item));
 
         $column = new DataColumn($this->containerArray, ['value' => 'test_data']);
-        $this->assertEquals('test_data', $column->getCellContent($entity));
+        $this->assertEquals('test_data', $column->getCellContent($item));
     }
 
     public function testWrongAttribute(): void
@@ -126,6 +129,8 @@ class DataColumnTest extends ColumnCase
         $entity = new class
         {
         };
-        $this->testColumn->getCellContent($entity);
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->testColumn->getCellContent($item);
     }
 }

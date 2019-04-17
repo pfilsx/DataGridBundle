@@ -5,6 +5,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 
 /**
  * Class ImageColumnTest
@@ -54,7 +55,9 @@ class ImageColumnTest extends ColumnCase
                 return null;
             }
         };
-        $this->assertEquals('Empty', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('Empty', $this->testColumn->getCellContent($item));
     }
 
     public function testGetCellContent(): void
@@ -66,13 +69,15 @@ class ImageColumnTest extends ColumnCase
                 return '/path/to/image.jpg';
             }
         };
-        $content = json_decode($this->testColumn->getCellContent($entity), true);
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $content = json_decode($this->testColumn->getCellContent($item), true);
         $this->assertEquals('grid_img', $content[0]);
 
         $column = new ImageColumn($this->containerArray, [
             'format' => 'raw',
             'attribute' => 'testAttribute'
         ]);
-        $this->assertEquals('/path/to/image.jpg', $column->getCellContent($entity));
+        $this->assertEquals('/path/to/image.jpg', $column->getCellContent($item));
     }
 }

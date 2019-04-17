@@ -14,6 +14,8 @@ abstract class DataProvider implements DataProviderInterface
 {
     protected $pager;
 
+    protected $countFieldName;
+
     /**
      * @internal
      * @return Pager
@@ -30,6 +32,17 @@ abstract class DataProvider implements DataProviderInterface
     public function setPager(Pager $pager): void
     {
         $this->pager = $pager;
+    }
+
+    public function setCountFieldName(string $name): DataProviderInterface
+    {
+        $this->countFieldName = $name;
+        return $this;
+    }
+
+    public function getCountFieldName(): string
+    {
+        return $this->countFieldName;
     }
 
     public static function create($data, ManagerRegistry $doctrine): DataProviderInterface

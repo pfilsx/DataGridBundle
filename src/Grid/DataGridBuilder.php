@@ -113,6 +113,12 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
+    public function setCountFieldName(string $name): DataGridBuilderInterface
+    {
+        $this->provider->setCountFieldName($name);
+        return $this;
+    }
+
     /**
      * @internal
      * @return array

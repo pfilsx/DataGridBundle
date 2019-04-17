@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\BooleanColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 
 /**
  * Class BooleanColumnTest
@@ -54,19 +55,21 @@ class BooleanColumnTest extends ColumnCase
                 return $this->enabled;
             }
         };
-        $this->assertEquals('yes', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('yes', $this->testColumn->getCellContent($item));
         $entity->enabled = false;
-        $this->assertEquals('no', $this->testColumn->getCellContent($entity));
+        $this->assertEquals('no', $this->testColumn->getCellContent($item));
 
         $column = new BooleanColumn($this->containerArray, ['value' => function () {
             return 'no';
         }]);
 
         $this->assertIsCallable($column->getValue());
-        $this->assertEquals('no', $column->getCellContent($entity));
+        $this->assertEquals('no', $column->getCellContent($item));
 
         $column = new BooleanColumn($this->containerArray, ['value' => false]);
-        $this->assertEquals('No', $column->getCellContent($entity));
+        $this->assertEquals('No', $column->getCellContent($item));
 
     }
 }

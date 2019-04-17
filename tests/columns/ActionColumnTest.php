@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 use Exception;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 
 /**
  * Class ActionColumnTest
@@ -83,12 +84,25 @@ class ActionColumnTest extends ColumnCase
                 return 1;
             }
         };
-        $this->assertEquals('_show ', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('_show ', $this->testColumn->getCellContent($item));
+
+        $column = new ActionColumn($this->containerArray, [
+            'pathPrefix' => 'test_prefix',
+            'identifier' => 'id'
+        ]);
+        $buttons = explode(' ', $column->getCellContent($item));
+        $this->assertEquals(3, count($buttons));
+        foreach ($buttons as $buttonJson) {
+            $button = json_decode($buttonJson, true);
+            $this->assertEquals('action_button', $button[0]);
+        }
 
         $column = new ActionColumn($this->containerArray, [
             'pathPrefix' => 'test_prefix'
         ]);
-        $buttons = explode(' ', $column->getCellContent($entity));
+        $buttons = explode(' ', $column->getCellContent($item));
         $this->assertEquals(3, count($buttons));
         foreach ($buttons as $buttonJson) {
             $button = json_decode($buttonJson, true);
@@ -102,9 +116,11 @@ class ActionColumnTest extends ColumnCase
         $entity = new class()
         {
         };
+        $item = new DataGridItem();
+        $item->setEntity($entity);
         $column = new ActionColumn($this->containerArray, [
             'pathPrefix' => 'test_prefix'
         ]);
-        $column->getCellContent($entity);
+        $column->getCellContent($item);
     }
 }

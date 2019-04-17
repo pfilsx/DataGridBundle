@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 use DateTime;
 use Pfilsx\DataGrid\Grid\Columns\DateColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 
 /**
  * Class DateColumnTest
@@ -40,10 +41,12 @@ class DateColumnTest extends ColumnCase
                 return $this->date;
             }
         };
+        $item = new DataGridItem();
+        $item->setEntity($entity);
         $entity->date = new DateTime('01-01-1970');
-        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($entity));
+        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($item));
         $entity->date = '01-01-1970';
-        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($entity));
+        $this->assertEquals('01-01-1970', $this->testColumn->getCellContent($item));
     }
 
     public function testGetCellContentNoFormat(): void

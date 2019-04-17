@@ -3,6 +3,7 @@
 namespace Pfilsx\DataGrid\tests;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
@@ -99,6 +100,30 @@ abstract class BaseCase extends TestCase
                 $mock->expects($this->any())
                     ->method('createQueryBuilder')
                     ->willReturn($self->createQueryBuilderMock());
+                return $mock;
+            }));
+        $mock->expects($this->any())
+            ->method('getManager')
+            ->will($this->returnCallback(function ($param) use ($self) {
+                $mock = $self->createMock(ObjectManager::class);
+                $mock->expects($this->any())
+                    ->method('getClassMetadata')
+                    ->willReturn(new class
+                    {
+                        public function getIdentifier()
+                        {
+                            return ['id'];
+                        }
+                    });
+                $mock->expects($this->any())
+                    ->method('getRepository')
+                    ->will($this->returnCallback(function ($param) use ($self) {
+                        $mock = $self->createMock(ServiceEntityRepository::class);
+                        $mock->expects($this->any())
+                            ->method('createQueryBuilder')
+                            ->willReturn($self->createQueryBuilderMock());
+                        return $mock;
+                    }));
                 return $mock;
             }));
         return $mock;
