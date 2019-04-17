@@ -86,18 +86,21 @@ class Pager
     public function setTotalCount(int $totalCount): void
     {
         $this->totalCount = $totalCount;
+        $this->rebuildPaginationOptions();
     }
 
     public function getPaginationOptions()
     {
-        $this->rebuildPaginationOptions();
         return [
             'currentPage' => $this->page,
             'pages' => $this->pages
         ];
     }
 
-    protected function rebuildPaginationOptions()
+    /**
+     * @internal
+     */
+    public function rebuildPaginationOptions()
     {
         if (is_int($this->limit) && is_int($this->totalCount)) {
             $this->maxPage = (int)ceil($this->totalCount / $this->limit);

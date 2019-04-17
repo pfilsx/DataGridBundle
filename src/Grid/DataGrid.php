@@ -36,8 +36,6 @@ class DataGrid
 
     protected $noDataMessage = 'No data found';
 
-    protected $paginationOptions;
-
 
     /**
      * @var Criteria
@@ -153,9 +151,6 @@ class DataGrid
 
     public function getPaginationOptions()
     {
-        if ($this->paginationOptions == null) {
-            $this->paginationOptions = $this->builder->getPager()->getPaginationOptions();
-        }
-        return $this->paginationOptions;
+        return $this->builder->getPager()->getPaginationOptions();
     }
 }

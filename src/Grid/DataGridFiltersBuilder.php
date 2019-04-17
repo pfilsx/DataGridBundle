@@ -67,10 +67,12 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     /**
      * @internal
      * @param array $params
+     * @return DataGridFiltersBuilderInterface
      */
-    public function setParams(array $params): void
+    public function setParams(array $params): DataGridFiltersBuilderInterface
     {
         $this->params = $params;
+        return $this;
     }
 
     public function getProvider(): DataProviderInterface

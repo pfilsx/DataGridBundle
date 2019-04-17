@@ -108,6 +108,7 @@ class DataGridBuilder implements DataGridBuilderInterface
             $this->getPager()->setOptions($options);
         } else {
             $this->getPager()->disable();
+            $this->getPager()->setLimit(null);
         }
         return $this;
     }

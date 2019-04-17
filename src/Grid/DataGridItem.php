@@ -51,8 +51,10 @@ class DataGridItem
         if ($this->entity !== null) {
             return method_exists($this->entity, 'get' . ucfirst($name));
         }
+        if ($this->row !== null) {
+            return array_key_exists($name, $this->row);
+        }
         return false;
-        //TODO
     }
 
     public function get($name)
@@ -65,8 +67,13 @@ class DataGridItem
         if ($this->entity !== null) {
             return $this->getEntityAttribute($name);
         }
+        if ($this->row !== null) {
+            if (array_key_exists($name, $this->row)) {
+                return $this->row[$name];
+            }
+            throw new DataGridException('Unknown property ' . $name);
+        }
         return null;
-        //TODO
     }
 
     protected function getEntityAttribute($name)

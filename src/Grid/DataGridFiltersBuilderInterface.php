@@ -20,8 +20,9 @@ interface DataGridFiltersBuilderInterface
 
     /**
      * @param array $params
+     * @return DataGridFiltersBuilderInterface
      */
-    public function setParams(array $params): void;
+    public function setParams(array $params): self;
 
 
     public function getProvider(): DataProviderInterface;

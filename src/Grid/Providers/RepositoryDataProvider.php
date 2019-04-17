@@ -52,10 +52,9 @@ class RepositoryDataProvider extends DataProvider
     }
 
     /**
-     * @internal
      * @return Criteria
      */
-    public function getCriteria()
+    protected function getCriteria()
     {
         return $this->criteria ?? ($this->criteria = Criteria::create());
     }
@@ -120,15 +119,6 @@ class RepositoryDataProvider extends DataProvider
         $this->getCriteria()
             ->andWhere(Criteria::expr()->gte($attribute, $date))
             ->andWhere(Criteria::expr()->lt($attribute, $nextDate));
-    }
-
-    protected function notEqualDate($attribute, $value): void
-    {
-        $date = new DateTime($value);
-        $nextDate = (clone $date)->modify('+1 day');
-        $this->getCriteria()
-            ->andWhere(Criteria::expr()->lt($attribute, $date))
-            ->andWhere(Criteria::expr()->gte($attribute, $nextDate));
     }
 
     protected function ltDate($attribute, $value): void
