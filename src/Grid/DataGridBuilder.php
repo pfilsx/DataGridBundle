@@ -13,6 +13,10 @@ use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 class DataGridBuilder implements DataGridBuilderInterface
 {
     /**
+     * @var Pager
+     */
+    protected $pager;
+    /**
      * @var array
      */
     protected $container;
@@ -100,11 +104,10 @@ class DataGridBuilder implements DataGridBuilderInterface
     public function enablePagination($options = []): DataGridBuilderInterface
     {
         if (is_array($options) && !empty($options)) {
-            $this->options['pagination'] = true;
-            $this->options['paginationOptions'] = $options;
+            $this->getPager()->enable();
+            $this->getPager()->setOptions($options);
         } else {
-            $this->options['pagination'] = false;
-            $this->options['paginationOptions'] = [];
+            $this->getPager()->disable();
         }
         return $this;
     }
@@ -138,6 +141,7 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     public function setProvider(DataProviderInterface $provider): void
     {
+        $provider->setPager($this->getPager());
         $this->provider = $provider;
     }
 
@@ -153,6 +157,7 @@ class DataGridBuilder implements DataGridBuilderInterface
     }
 
     /**
+     * @internal
      * @return bool
      */
     public function hasFilters(): bool
@@ -171,5 +176,24 @@ class DataGridBuilder implements DataGridBuilderInterface
                 $column->setFilterValue($filters[$column->getAttribute()]);
             }
         }
+    }
+
+
+    /**
+     * @internal
+     * @return Pager
+     */
+    public function getPager(): Pager
+    {
+        return $this->pager ?? ($this->pager = new Pager());
+    }
+
+    /**
+     * @internal
+     * @return bool
+     */
+    public function hasPagination(): bool
+    {
+        return $this->getPager()->isEnabled() && is_integer($this->getPager()->getLimit());
     }
 }

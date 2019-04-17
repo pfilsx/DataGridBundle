@@ -12,12 +12,7 @@ use Pfilsx\DataGrid\Grid\Pager;
 
 abstract class DataProvider implements DataProviderInterface
 {
-    /**
-     * @var Pager
-     */
     protected $pager;
-
-    protected $pagerConfiguration = [];
 
     /**
      * @internal
@@ -25,22 +20,17 @@ abstract class DataProvider implements DataProviderInterface
      */
     public function getPager(): Pager
     {
-        return $this->pager ?? ($this->pager = new Pager(array_merge($this->pagerConfiguration, [
-                'totalCount' => $this->getTotalCount()
-            ])));
+        return $this->pager;
     }
 
     /**
      * @internal
-     * @param array $pagerConfiguration
-     * @return DataProviderInterface
+     * @param Pager $pager
      */
-    public function setPagerConfiguration(array $pagerConfiguration): DataProviderInterface
+    public function setPager(Pager $pager): void
     {
-        $this->pagerConfiguration = $pagerConfiguration;
-        return $this;
+        $this->pager = $pager;
     }
-
 
     public static function create($data, ManagerRegistry $doctrine): DataProviderInterface
     {

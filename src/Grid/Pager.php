@@ -14,25 +14,34 @@ class Pager
 
     protected $maxPage;
 
-    protected $pages;
+    protected $pages = [];
 
-    public function __construct(array $config)
+    protected $isEnabled;
+
+
+    public function isEnabled()
     {
-        foreach ($config as $key => $value) {
+        return $this->isEnabled;
+    }
+
+    public function enable()
+    {
+        $this->isEnabled = true;
+    }
+
+    public function disable()
+    {
+        $this->isEnabled = false;
+    }
+
+    public function setOptions(array $options)
+    {
+        foreach ($options as $key => $value) {
             $setter = 'set' . ucfirst($key);
             if (method_exists($this, $setter)) {
                 $this->$setter($value);
             }
         }
-        $this->buildPaginationOptions();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPage()
-    {
-        return $this->page;
     }
 
     public function getFirst()
@@ -41,11 +50,18 @@ class Pager
     }
 
     /**
-     * @param mixed $page
+     * @return int
      */
-    protected function setPage($page): void
+    public function getPage(): int
     {
-        $this->page = intval($page);
+        return $this->page;
+    }
+    /**
+     * @param int $page
+     */
+    public function setPage(int $page): void
+    {
+        $this->page = $page;
     }
 
     /**
@@ -57,30 +73,31 @@ class Pager
     }
 
     /**
-     * @param mixed $limit
+     * @param $limit
      */
-    protected function setLimit($limit): void
+    public function setLimit($limit): void
     {
         $this->limit = $limit;
     }
 
     /**
-     * @param mixed $totalCount
+     * @param int $totalCount
      */
-    protected function setTotalCount($totalCount): void
+    public function setTotalCount(int $totalCount): void
     {
         $this->totalCount = $totalCount;
     }
 
     public function getPaginationOptions()
     {
+        $this->rebuildPaginationOptions();
         return [
             'currentPage' => $this->page,
             'pages' => $this->pages
         ];
     }
 
-    protected function buildPaginationOptions()
+    protected function rebuildPaginationOptions()
     {
         if (is_int($this->limit) && is_int($this->totalCount)) {
             $this->maxPage = (int)ceil($this->totalCount / $this->limit);

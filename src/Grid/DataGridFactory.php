@@ -78,6 +78,9 @@ class DataGridFactory implements DataGridFactoryInterface
         $this->gridType = new $gridType($this->container);
         $this->gridType->buildGrid($this->gridBuilder);
         $this->handleRequest();
+        if ($this->gridBuilder->hasPagination()) {
+            $this->gridBuilder->getPager()->setTotalCount($provider->getTotalCount());
+        }
 
         return new DataGrid($this->gridBuilder, $this->defaultOptions);
     }
@@ -103,7 +106,7 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function handlePagination()
     {
-        if (array_key_exists('pagination', $this->defaultOptions) && $this->defaultOptions['pagination']) {
+        if ($this->gridBuilder->hasPagination()) {
             if (array_key_exists('page', $this->queryParams)) {
                 $this->setPage($this->queryParams['page']);
                 unset($this->queryParams['page']);
@@ -132,7 +135,7 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function setPage($page)
     {
-        $this->defaultOptions['page'] = is_numeric($page) ? (int)$page : 1;
+        $this->gridBuilder->getPager()->setPage(is_numeric($page) ? (int)$page : 1);
     }
 
     protected function setDefaultTemplate($template)

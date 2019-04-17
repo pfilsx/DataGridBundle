@@ -36,17 +36,7 @@ class DataGrid
 
     protected $noDataMessage = 'No data found';
 
-    protected $limit = null;
-
-    protected $page = 1;
-
-    protected $maxPage;
-
-    protected $pagination = false;
-
-    protected $paginationOptions = [
-        'limit' => 10
-    ];
+    protected $paginationOptions;
 
 
     /**
@@ -69,10 +59,6 @@ class DataGrid
         $this->builder = $builder;
         $this->twig = $defaultOptions['twig'];
         $this->setConfigurationOptions(array_merge($defaultOptions, $builder->getOptions()));
-
-        if ($this->hasPagination()) {
-            $this->rebuildPaginationOptions();
-        }
     }
 
     /**
@@ -160,39 +146,16 @@ class DataGrid
         $this->noDataMessage = $message;
     }
 
-
-    protected function setPage(int $page)
-    {
-        $this->page = $page;
-    }
-
-    protected function setPagination(bool $value)
-    {
-        $this->pagination = $value;
-    }
-
     public function hasPagination()
     {
-        return $this->pagination && is_numeric($this->paginationOptions['limit']);
-    }
-
-    protected function setPaginationOptions(array $options)
-    {
-        $this->paginationOptions = array_merge($this->paginationOptions, $options);
+        return $this->builder->hasPagination();
     }
 
     public function getPaginationOptions()
     {
-        return $this->getProvider()->getPager()->getPaginationOptions();
-    }
-    /**
-     * @internal
-     */
-    protected function rebuildPaginationOptions()
-    {
-        $this->getProvider()->setPagerConfiguration([
-            'page' => $this->page,
-            'limit' => $this->paginationOptions['limit']
-        ]);
+        if ($this->paginationOptions == null) {
+            $this->paginationOptions = $this->builder->getPager()->getPaginationOptions();
+        }
+        return $this->paginationOptions;
     }
 }

@@ -7,7 +7,6 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 
@@ -61,21 +60,6 @@ class RepositoryDataProvider extends DataProvider
         return $this->criteria ?? ($this->criteria = Criteria::create());
     }
 
-    /**
-     * @internal
-     * @param Criteria $criteria
-     * @return DataProviderInterface
-     */
-    public function setCriteria(Criteria $criteria): DataProviderInterface
-    {
-        if ($this->criteria === null)
-            $this->criteria = $criteria;
-        elseif ($criteria->getWhereExpression() instanceof Expression) {
-            $this->criteria->andWhere($criteria->getWhereExpression()); //TODO
-        }
-        return $this;
-    }
-
     public function setSort(array $sort): DataProviderInterface
     {
         $this->getCriteria()->orderBy($sort);
@@ -100,9 +84,14 @@ class RepositoryDataProvider extends DataProvider
 
     public function addRelationFilter(string $attribute, $value, string $relationClass): DataProviderInterface
     {
-        $repository = $this->entityManager->getRepository($relationClass);
-        $entity = $repository->findOneBy(['id' => $value]); //TODO primary key from metadata
-        $this->getCriteria()->andWhere(Criteria::expr()->eq($attribute, $entity));
+        $metaData = $this->entityManager->getClassMetadata($relationClass);
+        if (!empty($metaData->getIdentifier())) {
+            $identifier = $metaData->getIdentifier()[0];
+            $repository = $this->entityManager->getRepository($relationClass);
+            $entity = $repository->findOneBy([$identifier => $value]);
+            $this->getCriteria()->andWhere(Criteria::expr()->eq($attribute, $entity));
+        }
+
         return $this;
     }
 

@@ -47,4 +47,16 @@ interface DataGridBuilderInterface
      * @param array $filters
      */
     public function setFiltersValues(array $filters): void;
+
+    /**
+     * @internal
+     * @return Pager
+     */
+    public function getPager(): Pager;
+
+    /**
+     * @internal
+     * @return bool
+     */
+    public function hasPagination(): bool;
 }

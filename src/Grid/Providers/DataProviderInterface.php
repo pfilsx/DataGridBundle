@@ -4,23 +4,27 @@
 namespace Pfilsx\DataGrid\Grid\Providers;
 
 
-use Doctrine\Common\Collections\Criteria;
 use Pfilsx\DataGrid\Grid\Pager;
 
 interface DataProviderInterface
 {
     public function getItems(): array;
 
+    /**
+     * @internal
+     * @param Pager $pager
+     */
+    public function setPager(Pager $pager): void;
+
+    /**
+     * @internal
+     * @return Pager
+     */
     public function getPager(): Pager;
 
     public function getTotalCount(): int;
 
     public function setSort(array $sort): self;
-
-    public function setPagerConfiguration(array $pagerConfiguration): self;
-
-    public function setCriteria(Criteria $criteria): self;
-
 
     public function addEqualFilter(string $attribute, $value): self;
 
