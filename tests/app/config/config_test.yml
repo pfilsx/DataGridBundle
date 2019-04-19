@@ -2,7 +2,6 @@ framework:
   trusted_hosts: ~
   secret: "test"
   csrf_protection: false
-  translator:      { fallback: "en" }
   test: ~
   templating:
     engines: ['twig']
