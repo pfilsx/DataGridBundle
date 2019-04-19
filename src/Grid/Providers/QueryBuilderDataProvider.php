@@ -5,13 +5,12 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 
 use DateTime;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Hydrators\DataGridHydrator;
 use ReflectionClass;
-use Symfony\Component\Lock\Exception\NotSupportedException;
 
 class QueryBuilderDataProvider extends DataProvider
 {
@@ -21,10 +20,10 @@ class QueryBuilderDataProvider extends DataProvider
     protected $builder;
     protected $entityManager;
 
-    public function __construct(QueryBuilder $builder, ManagerRegistry $manager)
+    public function __construct(QueryBuilder $builder, EntityManager $manager)
     {
         $this->builder = $builder;
-        $this->entityManager = $manager->getManager();
+        $this->entityManager = $manager;
     }
 
     public function getItems(): array

@@ -5,16 +5,16 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 
 use DateTime;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 
 class RepositoryDataProvider extends DataProvider
 {
 
     /**
-     * @var ServiceEntityRepository
+     * @var EntityRepository
      */
     protected $repository;
 
@@ -26,10 +26,10 @@ class RepositoryDataProvider extends DataProvider
     protected $criteria;
 
 
-    public function __construct(ServiceEntityRepository $repository, ManagerRegistry $manager)
+    public function __construct(EntityRepository $repository, EntityManager $manager)
     {
         $this->repository = $repository;
-        $this->entityManager = $manager->getManager();
+        $this->entityManager = $manager;
     }
 
 

@@ -1,0 +1,25 @@
+framework:
+  trusted_hosts: ~
+  secret: "test"
+  csrf_protection: false
+  translator:      { fallback: "en" }
+  test: ~
+  templating:
+    engines: ['twig']
+  router:
+    resource: "%kernel.root_dir%/config/routing.yml"
+twig:
+  paths:
+    "%kernel.root_dir%/app/Resources/views/": __main__
+doctrine:
+  dbal:
+    driver:   'pdo_sqlite'
+    memory:   true
+  orm:
+    entity_managers:
+      default:
+        mappings:
+          Pfilsx\tests\TestEntities\Node:
+            type: xml
+            dir: "%kernel.root_dir%/app/Resources/config/doctrine"
+            prefix: Pfilsx\tests\TestEntities

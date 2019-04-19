@@ -70,7 +70,7 @@ class DataGridFactory implements DataGridFactoryInterface
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
-        $provider = DataProvider::create($dataProvider, $this->container['doctrine']);
+        $provider = DataProvider::create($dataProvider, $this->container['doctrine']->getManager());
         $this->gridBuilder->setProvider($provider);
         $this->filterBuilder->setProvider($provider);
 
@@ -87,7 +87,7 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function handleRequest(): void
     {
-        $this->queryParams = $this->request->query->has('data_grid') ? $this->request->query->get('data_grid') : [];
+        $this->queryParams = $this->request !== null && $this->request->query->has('data_grid') ? $this->request->query->get('data_grid') : [];
 
         $this->handleSorting();
 

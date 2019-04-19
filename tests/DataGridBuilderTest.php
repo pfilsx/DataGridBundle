@@ -15,8 +15,9 @@ use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
 use Pfilsx\DataGrid\Grid\Columns\SerialColumn;
 use Pfilsx\DataGrid\Grid\DataGridBuilder;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\tests\OrmTestCase;
 
-class DataGridBuilderTest extends BaseCase
+class DataGridBuilderTest extends OrmTestCase
 {
     /**
      * @var DataGridBuilder
@@ -34,7 +35,7 @@ class DataGridBuilderTest extends BaseCase
     {
         parent::setUp();
         $this->builder = new DataGridBuilder($this->containerArray);
-        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->containerArray['doctrine']);
+        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->getEntityManager());
         $this->builder->setProvider($provider);
     }
 

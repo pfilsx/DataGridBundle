@@ -4,9 +4,9 @@
 namespace Pfilsx\DataGrid\Grid\Providers;
 
 
-use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Pager;
@@ -84,9 +84,9 @@ abstract class DataProvider implements DataProviderInterface
     }
 
 
-    public static function create($data, ManagerRegistry $doctrine): DataProviderInterface
+    public static function create($data, EntityManager $doctrine): DataProviderInterface
     {
-        if ($data instanceof ServiceEntityRepository) {
+        if ($data instanceof EntityRepository) {
             return new RepositoryDataProvider($data, $doctrine);
         }
         if ($data instanceof QueryBuilder) {
@@ -95,10 +95,10 @@ abstract class DataProvider implements DataProviderInterface
         if (is_array($data)) {
             return new ArrayDataProvider($data);
         }
-        throw new DataGridException('Provided data must be one of: ' . implode(',', [
+        throw new DataGridException('Provided data must be one of: ' . implode(', ', [
                 ServiceEntityRepository::class,
                 QueryBuilder::class,
                 'Array'
-            ]));
+            ]) . ', ' . (($type = gettype($data)) == 'object' ? get_class($data) : $type) . ' given');
     }
 }

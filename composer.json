@@ -30,6 +30,13 @@
         "phpunit/php-code-coverage": "^7.0"
     },
     "autoload": {
-        "psr-4": { "Pfilsx\\DataGrid\\": "src" }
+      "psr-4": {
+        "Pfilsx\\DataGrid\\": "src"
+      }
+    },
+  "autoload-dev": {
+    "psr-4": {
+      "Pfilsx\\tests\\": "tests"
+    }
     }
 }

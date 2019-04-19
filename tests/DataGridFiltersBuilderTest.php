@@ -3,13 +3,15 @@
 
 namespace Pfilsx\DataGrid\tests;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
 use Pfilsx\DataGrid\Grid\DataGridFiltersBuilder;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\tests\OrmTestCase;
+use Pfilsx\tests\TestEntities\Node;
+use Pfilsx\tests\TestEntities\NodeAssoc;
 
-class DataGridFiltersBuilderTest extends BaseCase
+class DataGridFiltersBuilderTest extends OrmTestCase
 {
     /**
      * @var DataGridFiltersBuilder
@@ -20,7 +22,7 @@ class DataGridFiltersBuilderTest extends BaseCase
     {
         parent::setUp();
         $this->builder = new DataGridFiltersBuilder();
-        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->containerArray['doctrine']);
+        $provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class), $this->getEntityManager());
         $this->builder->setProvider($provider);
     }
 
@@ -65,15 +67,15 @@ class DataGridFiltersBuilderTest extends BaseCase
     public function testAddRelationFilterOnEmptyData(): void
     {
         $this->assertNull($this->builder->getProvider()->getCriteria()->getWhereExpression());
-        $this->builder->addRelationFilter('fid', 'App\Entity\TestEntity');
+        $this->builder->addRelationFilter('assoc', NodeAssoc::class);
         $this->assertNull($this->builder->getProvider()->getCriteria()->getWhereExpression());
     }
 
     public function testAddRelationFilter(): void
     {
         $this->assertNull($this->builder->getProvider()->getCriteria()->getWhereExpression());
-        $this->builder->setParams(['fid' => '1']);
-        $this->builder->addRelationFilter('fid', 'App\Entity\TestEntity');
+        $this->builder->setParams(['assoc' => '1']);
+        $this->builder->addRelationFilter('assoc', NodeAssoc::class);
         $this->assertInstanceOf(Expression::class, $this->builder->getProvider()->getCriteria()->getWhereExpression());
     }
 

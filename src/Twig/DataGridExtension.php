@@ -27,6 +27,16 @@ class DataGridExtension extends AbstractExtension
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ]),
+            new TwigFunction('grid_function_exists', function (Environment $env, $func) {
+                return $env->getFunction($func) !== false;
+            }, [
+                'needs_environment' => true
+            ]),
+            new TwigFunction('grid_call_function', function (Environment $env, $func, $params = []) {
+                return call_user_func_array($env->getFunction($func)->getCallable(), $params);
+            }, [
+                'needs_environment' => true
+            ])
         ];
     }
 
