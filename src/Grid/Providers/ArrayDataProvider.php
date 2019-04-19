@@ -85,9 +85,9 @@ class ArrayDataProvider extends DataProvider
                 return 0;
             }
             if ($type1 == 'string') {
-                return strcmp($attrValueA, $attrValueB);
+                return $order == 'ASC' ? strcmp($attrValueA, $attrValueB) : -strcmp($attrValueA, $attrValueB);
             }
-            return $attrValueA < $attrValueB ? -1 : 1;
+            return $attrValueA < $attrValueB ? ($order == 'ASC' ? -1 : 1) : ($order == 'ASC' ? 1 : -1);
         };
     }
 
