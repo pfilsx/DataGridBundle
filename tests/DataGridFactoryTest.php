@@ -26,10 +26,10 @@ class DataGridFactoryTest extends BaseCase
             'pagination' => []
         ]);
         $this->factory = new DataGridFactory(
-            $this->container->get('doctrine'),
-            $this->container->get('router'),
-            $this->container->get('twig'),
-            $this->container->get('request_stack'), $configuration);
+            $this->containerMock->get('doctrine'),
+            $this->containerMock->get('router'),
+            $this->containerMock->get('twig'),
+            $this->containerMock->get('request_stack'), $configuration);
     }
 
     public function testWrongGridTypeException(): void

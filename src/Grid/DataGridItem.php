@@ -25,7 +25,7 @@ class DataGridItem
         $this->entity = $entity;
     }
 
-    public function setEntityManager($manager)
+    public function setEntityManager(ObjectManager $manager)
     {
         $this->entityManager = $manager;
     }

@@ -4,11 +4,13 @@
 namespace Pfilsx\DataGrid\Grid\Providers;
 
 
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Pager;
+use Symfony\Component\Lock\Exception\NotSupportedException;
 
 abstract class DataProvider implements DataProviderInterface
 {
@@ -44,6 +46,43 @@ abstract class DataProvider implements DataProviderInterface
     {
         return $this->countFieldName;
     }
+
+    public function addEqualFilter(string $attribute, $value): DataProviderInterface
+    {
+        throw new NotSupportedException("Method addEqualFilter() is not supported in " . static::class);
+    }
+
+    public function addLikeFilter(string $attribute, $value): DataProviderInterface
+    {
+        throw new NotSupportedException("Method addLikeFilter() is not supported in " . static::class);
+    }
+
+    public function addRelationFilter(string $attribute, $value, string $relationClass): DataProviderInterface
+    {
+        throw new NotSupportedException("Method addRelationFilter() is not supported in " . static::class);
+    }
+
+    public function addCustomFilter(string $attribute, $value, callable $callback): DataProviderInterface
+    {
+        throw new NotSupportedException("Method addCustomFilter() is not supported in " . static::class);
+    }
+
+    public function addDateFilter(string $attribute, $value, string $comparison = 'equal'): DataProviderInterface
+    {
+        $comparisonFunc = lcfirst($comparison) . 'Date';
+        if (method_exists($this, $comparisonFunc)) {
+            $this->$comparisonFunc($attribute, $value);
+        } else {
+            $this->equalDate($attribute, $value);
+        }
+        return $this;
+    }
+
+    protected function equalDate($attribute, $value): void
+    {
+        throw new NotSupportedException("Method equalDate() is not supported in " . static::class);
+    }
+
 
     public static function create($data, ManagerRegistry $doctrine): DataProviderInterface
     {

@@ -3,8 +3,11 @@
 namespace Pfilsx\DataGrid\tests;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\EventManager;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
@@ -22,7 +25,7 @@ abstract class BaseCase extends TestCase
     /**
      * @var Container
      */
-    protected $container;
+    protected $containerMock;
 
     protected $containerArray;
     /**
@@ -38,8 +41,8 @@ abstract class BaseCase extends TestCase
     {
         $self = $this;
 
-        $this->container = $this->createMock(Container::class);
-        $this->container->expects($this->any())
+        $this->containerMock = $this->createMock(Container::class);
+        $this->containerMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function ($param) use ($self) {
                 switch ($param) {
@@ -56,10 +59,10 @@ abstract class BaseCase extends TestCase
             }));
 
         $this->containerArray = [
-            'twig' => $this->container->get('twig'),
-            'router' => $this->container->get('router'),
-            'doctrine' => $this->container->get('doctrine'),
-            'request' => $this->container->get('request_stack')->getCurrentRequest()
+            'twig' => $this->containerMock->get('twig'),
+            'router' => $this->containerMock->get('router'),
+            'doctrine' => $this->containerMock->get('doctrine'),
+            'request' => $this->containerMock->get('request_stack')->getCurrentRequest()
         ];
     }
 
@@ -105,7 +108,7 @@ abstract class BaseCase extends TestCase
         $mock->expects($this->any())
             ->method('getManager')
             ->will($this->returnCallback(function ($param) use ($self) {
-                $mock = $self->createMock(ObjectManager::class);
+                $mock = $self->createMock(EntityManagerInterface::class);
                 $mock->expects($this->any())
                     ->method('getClassMetadata')
                     ->willReturn(new class

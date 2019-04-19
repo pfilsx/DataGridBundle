@@ -5,12 +5,12 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 
 use DateTime;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Hydrators\DataGridHydrator;
 use ReflectionClass;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Lock\Exception\NotSupportedException;
 
 class QueryBuilderDataProvider extends DataProvider
@@ -89,26 +89,10 @@ class QueryBuilderDataProvider extends DataProvider
         return $this;
     }
 
-    public function addRelationFilter(string $attribute, $value, string $relationClass): DataProviderInterface
-    {
-        throw new NotSupportedException("Method addRelationFilter() is not supported in " . get_called_class());
-    }
-
     public function addCustomFilter(string $attribute, $value, callable $callback): DataProviderInterface
     {
         $builder = $this->builder;
         call_user_func_array($callback, [&$builder, $attribute, $value]);
-        return $this;
-    }
-
-    public function addDateFilter(string $attribute, $value, string $comparison = 'equal'): DataProviderInterface
-    {
-        $comparisonFunc = lcfirst($comparison) . 'Date';
-        if (method_exists($this, $comparisonFunc)) {
-            $this->$comparisonFunc($attribute, $value);
-        } else {
-            $this->equalDate($attribute, $value);
-        }
         return $this;
     }
 

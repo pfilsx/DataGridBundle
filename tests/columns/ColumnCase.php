@@ -30,7 +30,7 @@ class ColumnCase extends BaseCase
         $this->grid->expects($this->any())
             ->method('getRouter')
             ->will($this->returnCallback(function () use ($self) {
-                return $self->container->get('router');
+                return $self->containerMock->get('router');
             }));
     }
 }

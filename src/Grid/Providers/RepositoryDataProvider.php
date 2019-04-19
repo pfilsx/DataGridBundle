@@ -101,17 +101,6 @@ class RepositoryDataProvider extends DataProvider
         return $this;
     }
 
-    public function addDateFilter(string $attribute, $value, string $comparison = 'equal'): DataProviderInterface
-    {
-        $comparisonFunc = lcfirst($comparison) . 'Date';
-        if (method_exists($this, $comparisonFunc)) {
-            $this->$comparisonFunc($attribute, $value);
-        } else {
-            $this->equalDate($attribute, $value);
-        }
-        return $this;
-    }
-
     protected function equalDate($attribute, $value): void
     {
         $date = new DateTime($value);

@@ -19,7 +19,7 @@ class DataGridExtensionTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->extension = new DataGridExtension($this->container->get('request_stack'));
+        $this->extension = new DataGridExtension($this->containerMock->get('request_stack'));
     }
 
     public function testClass(): void
