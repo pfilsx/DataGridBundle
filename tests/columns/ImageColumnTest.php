@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
 use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class ImageColumnTest
@@ -13,7 +14,7 @@ use Pfilsx\DataGrid\Grid\DataGridItem;
  *
  * @property ImageColumn $testColumn
  */
-class ImageColumnTest extends ColumnCase
+class ImageColumnTest extends OrmTestCase
 {
 
     protected function setUp(): void
@@ -26,7 +27,8 @@ class ImageColumnTest extends ColumnCase
             'alt' => function () {
                 return 'Test alt';
             },
-            'noImageMessage' => 'Empty'
+            'noImageMessage' => 'Empty',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -71,12 +73,12 @@ class ImageColumnTest extends ColumnCase
         };
         $item = new DataGridItem();
         $item->setEntity($entity);
-        $content = json_decode($this->testColumn->getCellContent($item), true);
-        $this->assertEquals('grid_img', $content[0]);
+        $this->assertEquals('<img src="/path/to/image.jpg" height="20" width="20" alt="Test alt"/>', trim($this->testColumn->getCellContent($item)));
 
         $column = new ImageColumn($this->containerArray, [
             'format' => 'raw',
-            'attribute' => 'testAttribute'
+            'attribute' => 'testAttribute',
+            'template' => 'test_template.html.twig'
         ]);
         $this->assertEquals('/path/to/image.jpg', $column->getCellContent($item));
     }

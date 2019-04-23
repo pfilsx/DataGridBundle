@@ -1,0 +1,6 @@
+test_prefix_show:
+  path: '/{id}/show'
+test_prefix_edit:
+  path: '/{id}/edit'
+test_prefix_delete:
+  path: '/{id}/delete'

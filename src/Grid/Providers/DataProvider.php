@@ -84,7 +84,7 @@ abstract class DataProvider implements DataProviderInterface
     }
 
 
-    public static function create($data, EntityManager $doctrine): DataProviderInterface
+    public static function create($data, EntityManager $doctrine = null): DataProviderInterface
     {
         if ($data instanceof EntityRepository) {
             return new RepositoryDataProvider($data, $doctrine);

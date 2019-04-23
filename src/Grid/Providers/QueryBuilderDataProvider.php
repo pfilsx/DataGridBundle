@@ -83,8 +83,8 @@ class QueryBuilderDataProvider extends DataProvider
     public function addLikeFilter(string $attribute, $value): DataProviderInterface
     {
         $placeholderName = str_replace('.', '_', $attribute);
-        $this->builder->andWhere($this->builder->expr()->like($attribute, ':' . $placeholderName));
-        $this->builder->setParameter($placeholderName, $value);
+        $this->builder->andWhere($this->builder->expr()->like('lower(' . $attribute . ')', ':' . $placeholderName));
+        $this->builder->setParameter($placeholderName, '%' . mb_strtolower($value) . '%');
         return $this;
     }
 

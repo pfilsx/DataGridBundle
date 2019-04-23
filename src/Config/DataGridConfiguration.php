@@ -14,6 +14,8 @@ class DataGridConfiguration implements DataGridConfigurationInterface
 
     protected $paginationOptions;
 
+    protected $showTitles;
+
     public function __construct(array $config)
     {
         foreach ($config as $key => $value) {
@@ -44,12 +46,18 @@ class DataGridConfiguration implements DataGridConfigurationInterface
         }
     }
 
+    protected function setShowTitles(bool $showTitles)
+    {
+        $this->showTitles = $showTitles;
+    }
+
     public function getConfigs(): array
     {
         return [
             'template' => $this->template,
             'pagination' => ['enabled' => $this->pagination, 'options' => $this->paginationOptions],
-            'noDataMessage' => $this->noDataMessage
+            'noDataMessage' => $this->noDataMessage,
+            'showTitles' => $this->showTitles
         ];
     }
 }

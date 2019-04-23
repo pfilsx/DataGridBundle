@@ -3,13 +3,13 @@
 namespace Pfilsx\DataGrid\tests\twig;
 
 use Pfilsx\DataGrid\Grid\DataGrid;
-use Pfilsx\DataGrid\tests\BaseCase;
 use Pfilsx\DataGrid\Twig\DataGridExtension;
+use Pfilsx\tests\OrmTestCase;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Template;
 
-class DataGridExtensionTest extends BaseCase
+class DataGridExtensionTest extends OrmTestCase
 {
     /**
      * @var DataGridExtension
@@ -19,7 +19,7 @@ class DataGridExtensionTest extends BaseCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->extension = new DataGridExtension($this->containerMock->get('request_stack'));
+        $this->extension = new DataGridExtension(static::$kernel->getContainer()->get('request_stack'));
     }
 
     public function testClass(): void
@@ -30,6 +30,7 @@ class DataGridExtensionTest extends BaseCase
     public function testGetFunctions(): void
     {
         $this->assertIsArray($this->extension->getFunctions());
+        $this->assertCount(3, $this->extension->getFunctions());
     }
 
     /**
@@ -40,6 +41,18 @@ class DataGridExtensionTest extends BaseCase
     public function testGenerateGrid($env, $grid): void
     {
         $this->assertEquals('', $this->extension->generateGrid($env, $grid));
+    }
+
+    public function testFunctionExists(): void
+    {
+        $this->assertTrue($this->extension->functionExists(static::$kernel->getContainer()->get('twig'), 'max'));
+        $this->assertFalse($this->extension->functionExists(static::$kernel->getContainer()->get('twig'), 'grid_test'));
+    }
+
+    public function testCallFunction(): void
+    {
+        $this->assertEquals(3, $this->extension->callFunction(static::$kernel->getContainer()->get('twig'), 'max', [1, 3, 2, -4]));
+        $this->assertNull($this->extension->callFunction(static::$kernel->getContainer()->get('twig'), 'grid_test'));
     }
 
     public function gridProvider()

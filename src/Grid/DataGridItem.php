@@ -96,7 +96,7 @@ class DataGridItem
         return null;
     }
 
-    public function getEntityId()
+    protected function getEntityId()
     {
         $metaData = $this->entityManager->getClassMetadata(get_class($this->entity));
         $idAttr = $metaData->getIdentifier()[0];

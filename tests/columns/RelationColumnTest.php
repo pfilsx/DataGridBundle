@@ -7,8 +7,12 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\RelationColumn;
 use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\tests\OrmTestCase;
 
-class RelationColumnTest extends ColumnCase
+/**
+ * @property RelationColumn testColumn
+ */
+class RelationColumnTest extends OrmTestCase
 {
     protected function setUp(): void
     {
@@ -17,7 +21,8 @@ class RelationColumnTest extends ColumnCase
             'attribute' => 'test_attribute',
             'labelAttribute' => 'title',
             'format' => 'html',
-            'label' => 'test'
+            'label' => 'test',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -25,7 +30,8 @@ class RelationColumnTest extends ColumnCase
     {
         $this->expectException(DataGridException::class);
         new RelationColumn($this->containerArray, [
-            'attribute' => 'test_attribute'
+            'attribute' => 'test_attribute',
+            'template' => 'test_template.html.twig'
         ]);
     }
 

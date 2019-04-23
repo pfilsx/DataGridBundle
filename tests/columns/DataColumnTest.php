@@ -10,6 +10,7 @@ use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class DataColumnTest
@@ -17,7 +18,7 @@ use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
  *
  * @property DataColumn $testColumn
  */
-class DataColumnTest extends ColumnCase
+class DataColumnTest extends OrmTestCase
 {
     protected function setUp(): void
     {
@@ -30,7 +31,8 @@ class DataColumnTest extends ColumnCase
             'attributes' => [
                 'class' => 'test_class',
                 'data_row' => false
-            ]
+            ],
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -86,14 +88,16 @@ class DataColumnTest extends ColumnCase
         ]);
         $this->assertTrue($this->testColumn->hasFilter());
         $this->assertInstanceOf(AbstractFilter::class, $this->testColumn->getFilter());
-        $filterContent = json_decode($this->testColumn->getFilterContent(), true);
-        $this->assertEquals('grid_filter', $filterContent[0]);
+        $this->assertEquals('<input type="text"  class="data_grid_filter" name="test_attribute" value="">', trim($this->testColumn->getFilterContent()));
     }
 
     public function testGetHeadContent(): void
     {
         $this->assertEquals('Test', $this->testColumn->getHeadContent());
-        $column = new DataColumn($this->containerArray, ['attribute' => 'testAttribute']);
+        $column = new DataColumn($this->containerArray, [
+            'attribute' => 'testAttribute',
+            'template' => 'test_template.html.twig'
+        ]);
         $this->assertEquals('TestAttribute', $column->getHeadContent());
     }
 
@@ -112,14 +116,20 @@ class DataColumnTest extends ColumnCase
         $item->setEntity($entity);
         $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
-        $column = new DataColumn($this->containerArray, ['value' => function () {
-            return 'test_data';
-        }]);
+        $column = new DataColumn($this->containerArray, [
+            'value' => function () {
+                return 'test_data';
+            },
+            'template' => 'test_template.html.twig'
+        ]);
 
         $this->assertIsCallable($column->getValue());
         $this->assertEquals('test_data', $column->getCellContent($item));
 
-        $column = new DataColumn($this->containerArray, ['value' => 'test_data']);
+        $column = new DataColumn($this->containerArray, [
+            'value' => 'test_data',
+            'template' => 'test_template.html.twig'
+        ]);
         $this->assertEquals('test_data', $column->getCellContent($item));
     }
 

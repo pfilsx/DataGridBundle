@@ -3,7 +3,7 @@
 namespace Pfilsx\DataGrid\tests\filters;
 
 use Pfilsx\DataGrid\Grid\Filters\BooleanFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class BooleanFilterTest
@@ -11,14 +11,15 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property BooleanFilter $testFilter
  */
-class BooleanFilterTest extends BaseCase
+class BooleanFilterTest extends OrmTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
         $this->testFilter = new BooleanFilter($this->containerArray, [
             'trueChoice' => 'yes',
-            'falseChoice' => 'no'
+            'falseChoice' => 'no',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -34,7 +35,6 @@ class BooleanFilterTest extends BaseCase
 
     public function testRender(): void
     {
-        $renderResult = json_decode($this->testFilter->render('testAttribute', '1'), true);
-        $this->assertEquals('grid_filter', $renderResult[0]);
+        $this->assertEquals('select>option>1:yes option>0:no', trim($this->testFilter->render('testAttribute', '1')));
     }
 }

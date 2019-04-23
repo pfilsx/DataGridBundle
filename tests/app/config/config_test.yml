@@ -1,3 +1,8 @@
+data_grid:
+  template: 'grid.blocks.html.twig'
+  noDataMessage: 'Записей не найдено'
+  pagination:
+    limit: 10
 framework:
   trusted_hosts: ~
   secret: "test"
@@ -6,7 +11,7 @@ framework:
   templating:
     engines: ['twig']
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
+    resource: "%kernel.root_dir%/app/config/routing.yml"
 twig:
   paths:
     "%kernel.root_dir%/app/Resources/views/": __main__

@@ -154,4 +154,9 @@ class DataGridFactory implements DataGridFactoryInterface
             $this->gridBuilder->enablePagination($pagination['options']);
         }
     }
+
+    protected function setDefaultShowTitles($showTitles)
+    {
+        $this->gridBuilder->setShowTitles($showTitles);
+    }
 }

@@ -7,6 +7,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 use DateTime;
 use Pfilsx\DataGrid\Grid\Columns\DateColumn;
 use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class DateColumnTest
@@ -14,14 +15,15 @@ use Pfilsx\DataGrid\Grid\DataGridItem;
  *
  * @property DateColumn $testColumn
  */
-class DateColumnTest extends ColumnCase
+class DateColumnTest extends OrmTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
         $this->testColumn = new DateColumn($this->containerArray, [
             'attribute' => 'testAttribute',
-            'dateFormat' => 'm-d-Y'
+            'dateFormat' => 'm-d-Y',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -55,7 +57,8 @@ class DateColumnTest extends ColumnCase
             'value' => function () {
                 return '01-01-1970';
             },
-            'dateFormat' => null
+            'dateFormat' => null,
+            'template' => 'test_template.html.twig'
         ]);
         $this->assertEquals('01-01-1970', $column->getCellContent(null));
     }

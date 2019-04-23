@@ -101,6 +101,12 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
+    public function setShowTitles(bool $flag): DataGridBuilderInterface
+    {
+        $this->options['showTitles'] = $flag;
+        return $this;
+    }
+
     public function enablePagination($options = []): DataGridBuilderInterface
     {
         if (is_array($options) && !empty($options)) {

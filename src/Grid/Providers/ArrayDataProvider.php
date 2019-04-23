@@ -65,8 +65,9 @@ class ArrayDataProvider extends DataProvider
 
     public function addCustomFilter(string $attribute, $value, callable $callback): DataProviderInterface
     {
-        $data = $this->data;
-        call_user_func_array($callback, [&$data, $attribute, $value]);
+        $this->data = array_filter($this->data, function ($row) use ($attribute, $value, $callback) {
+            return call_user_func_array($callback, [$row, $attribute, $value]);
+        });
         return $this;
     }
 

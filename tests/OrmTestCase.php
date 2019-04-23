@@ -11,7 +11,6 @@ use Pfilsx\tests\TestEntities\NodeAssoc;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class OrmTestCase extends KernelTestCase
 {

@@ -3,14 +3,16 @@
 
 namespace Pfilsx\DataGrid\tests;
 
-
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
 use Pfilsx\DataGrid\Config\DataGridConfiguration;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
 use Pfilsx\tests\OrmTestCase;
 use Pfilsx\tests\TestEntities\Node;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
+use Twig\Template;
 
 class DataGridFactoryTest extends OrmTestCase
 {
@@ -19,19 +21,33 @@ class DataGridFactoryTest extends OrmTestCase
      */
     private $factory;
 
+    private $configuration;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $configuration = new DataGridConfiguration([
+        $this->configuration = new DataGridConfiguration([
             'template' => 'test_template.html.twig',
             'noDataMessage' => 'empty',
-            'pagination' => []
+            'showTitles' => false,
+            'pagination' => [
+                'limit' => 5
+            ]
         ]);
+        $request = new Request();
+        $request->query->add([
+            'data_grid' => [
+                'sortBy' => 'id',
+                'page' => 1
+            ]
+        ]);
+        $stack = new RequestStack();
+        $stack->push($request);
         $this->factory = new DataGridFactory(
             static::$kernel->getContainer()->get('doctrine'),
             static::$kernel->getContainer()->get('router'),
             static::$kernel->getContainer()->get('twig'),
-            static::$kernel->getContainer()->get('request_stack'), $configuration);
+            $stack, $this->configuration);
     }
 
     public function testWrongGridTypeException(): void
@@ -42,7 +58,38 @@ class DataGridFactoryTest extends OrmTestCase
 
     public function testCreateGrid(): void
     {
-        $this->factory->createGrid(get_class($this->createMock(AbstractGridType::class)), $this->getEntityManager()->getRepository(Node::class));
-        $this->assertTrue(true);
+        $grid = $this->factory->createGrid(get_class($this->createMock(AbstractGridType::class)), $this->getEntityManager()->getRepository(Node::class));
+        $this->assertEquals('empty', $grid->getNoDataMessage());
+        $this->assertTrue($grid->hasPagination());
+        $this->assertInstanceOf(RouterInterface::class, $grid->getRouter());
+        $this->assertInstanceOf(Template::class, $grid->getTemplate());
+        $this->assertIsArray($grid->getData());
+        $this->assertNotEmpty($grid->getData());
+        $this->assertFalse($grid->hasFilters());
+        $this->assertEmpty($grid->getColumns());
+        $this->assertFalse($grid->getShowTitles());
+        $this->assertEquals([
+            'currentPage' => 1,
+            'pages' => [1, 2, 3]
+        ], $grid->getPaginationOptions());
+
+        $request = new Request();
+        $request->query->add([
+            'data_grid' => [
+                'sortBy' => '-id'
+            ]
+        ]);
+        $stack = new RequestStack();
+        $stack->push($request);
+        $factory2 = new DataGridFactory(static::$kernel->getContainer()->get('doctrine'),
+            static::$kernel->getContainer()->get('router'),
+            static::$kernel->getContainer()->get('twig'),
+            $stack, $this->configuration);
+        $grid2 = $factory2->createGrid(get_class($this->createMock(AbstractGridType::class)), $this->getEntityManager()->getRepository(Node::class));
+
+        $this->assertEquals([
+            'currentPage' => 1,
+            'pages' => [1, 2, 3]
+        ], $grid2->getPaginationOptions());
     }
 }

@@ -18,6 +18,8 @@ interface DataGridBuilderInterface
 
     public function setNoDataMessage(string $message): self;
 
+    public function setShowTitles(bool $flag): self;
+
     public function enablePagination($options = []): self;
 
     public function setCountFieldName(string $name): self;

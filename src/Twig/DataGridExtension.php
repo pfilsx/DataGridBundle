@@ -27,14 +27,10 @@ class DataGridExtension extends AbstractExtension
                 'needs_environment' => true,
                 'is_safe' => ['html']
             ]),
-            new TwigFunction('grid_function_exists', function (Environment $env, $func) {
-                return $env->getFunction($func) !== false;
-            }, [
+            new TwigFunction('grid_function_exists', [$this, 'functionExists'], [
                 'needs_environment' => true
             ]),
-            new TwigFunction('grid_call_function', function (Environment $env, $func, $params = []) {
-                return call_user_func_array($env->getFunction($func)->getCallable(), $params);
-            }, [
+            new TwigFunction('grid_call_function', [$this, 'callFunction'], [
                 'needs_environment' => true
             ])
         ];
@@ -52,5 +48,18 @@ class DataGridExtension extends AbstractExtension
             'data_grid' => $grid,
             'request' => $this->requestStack->getCurrentRequest()
         ]);
+    }
+
+    public function functionExists(Environment $env, string $func)
+    {
+        return $env->getFunction($func) !== false;
+    }
+
+    public function callFunction(Environment $env, string $func, array $params = [])
+    {
+        if ($this->functionExists($env, $func)) {
+            return $env->getFunction($func)->getCallable()($params);
+        }
+        return null;
     }
 }

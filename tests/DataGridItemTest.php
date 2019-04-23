@@ -6,9 +6,10 @@ namespace Pfilsx\DataGrid\tests;
 
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\DataGridItem;
-use PHPUnit\Framework\TestCase;
+use Pfilsx\tests\OrmTestCase;
+use Pfilsx\tests\TestEntities\Node;
 
-class DataGridItemTest extends TestCase
+class DataGridItemTest extends OrmTestCase
 {
 
 
@@ -49,12 +50,26 @@ class DataGridItemTest extends TestCase
      * @dataProvider itemsProvider
      * @param DataGridItem $item
      */
-    public function testGet(DataGridItem $item)
+    public function testGet(DataGridItem $item): void
     {
         $this->assertEquals(1, $item->get('id'));
 
         $this->expectException(DataGridException::class);
         $item->get('test');
+    }
+
+    public function testGetId(): void
+    {
+        $item = new DataGridItem();
+        $this->assertNull($item->getId());
+
+        $item->setEntityManager($this->getEntityManager());
+        $entity = new Node();
+        $entity->setId(13);
+        $item->setEntity($entity);
+
+        $this->assertEquals(13, $item->getId());
+
     }
 
     public function itemsProvider()

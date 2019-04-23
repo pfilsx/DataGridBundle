@@ -28,6 +28,7 @@
                 <directory suffix="Interface.php">./src</directory>
                 <directory prefix="Abstract">./src</directory>
                 <directory>./src/Resources</directory>
+                <file>./src/Grid/Providers/DataProvider.php</file>
             </exclude>
         </whitelist>
     </filter>
