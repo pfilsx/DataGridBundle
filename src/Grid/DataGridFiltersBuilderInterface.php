@@ -4,7 +4,7 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Doctrine\Common\Collections\Criteria;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 interface DataGridFiltersBuilderInterface
 {
@@ -19,13 +19,17 @@ interface DataGridFiltersBuilderInterface
     public function addDateFilter(string $attribute, string $comparison = 'equal'): self;
 
     /**
-     * @internal
-     * @return Criteria
+     * @param array $params
+     * @return DataGridFiltersBuilderInterface
      */
-    public function getCriteria(): Criteria;
+    public function setParams(array $params): self;
+
+
+    public function getProvider(): DataProviderInterface;
 
     /**
-     * @param array $params
+     * @internal
+     * @param DataProviderInterface $provider
      */
-    public function setParams(array $params): void;
+    public function setProvider(DataProviderInterface $provider): void;
 }

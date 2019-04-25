@@ -5,7 +5,11 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Exception;
+use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\tests\OrmTestCase;
+use Pfilsx\tests\TestEntities\Node;
 
 /**
  * Class ActionColumnTest
@@ -13,7 +17,7 @@ use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
  *
  * @property ActionColumn $testColumn
  */
-class ActionColumnTest extends ColumnCase
+class ActionColumnTest extends OrmTestCase
 {
     protected function setUp(): void
     {
@@ -32,7 +36,8 @@ class ActionColumnTest extends ColumnCase
             'buttonsVisibility' => [
                 'show' => true,
                 'delete' => false
-            ]
+            ],
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -76,35 +81,45 @@ class ActionColumnTest extends ColumnCase
 
     public function testGetCellContent(): void
     {
-        $entity = new class()
-        {
-            public function getId()
-            {
-                return 1;
-            }
-        };
-        $this->assertEquals('_show ', $this->testColumn->getCellContent($entity));
+        $entity = new Node();
+        $entity->setId(1);
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $item->setEntityManager($this->getEntityManager());
+        $this->assertEquals('_show ', $this->testColumn->getCellContent($item));
 
         $column = new ActionColumn($this->containerArray, [
-            'pathPrefix' => 'test_prefix'
+            'pathPrefix' => 'test_prefix_',
+            'identifier' => 'id',
+            'template' => 'test_template.html.twig',
+            'buttonsTemplate' => '{show} {edit} {delete}'
         ]);
-        $buttons = explode(' ', $column->getCellContent($entity));
-        $this->assertEquals(3, count($buttons));
-        foreach ($buttons as $buttonJson) {
-            $button = json_decode($buttonJson, true);
-            $this->assertEquals('action_button', $button[0]);
-        }
+        $buttons = explode(' ', $column->getCellContent($item));
+        $this->assertCount(3, $buttons);
+        $this->assertEquals(['show', 'edit', 'delete'], $buttons);
+
+        $column = new ActionColumn($this->containerArray, [
+            'pathPrefix' => 'test_prefix_',
+            'template' => 'test_template.html.twig',
+            'buttonsTemplate' => '{show} {edit} {delete}'
+        ]);
+        $buttons = explode(' ', $column->getCellContent($item));
+        $this->assertCount(3, $buttons);
+        $this->assertEquals(['show', 'edit', 'delete'], $buttons);
     }
 
     public function testUrlGeneratorException(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(DataGridException::class);
         $entity = new class()
         {
         };
+        $item = new DataGridItem();
+        $item->setEntity($entity);
         $column = new ActionColumn($this->containerArray, [
-            'pathPrefix' => 'test_prefix'
+            'pathPrefix' => 'test_prefix_',
+            'template' => 'test_template.html.twig',
         ]);
-        $column->getCellContent($entity);
+        $column->getCellContent($item);
     }
 }

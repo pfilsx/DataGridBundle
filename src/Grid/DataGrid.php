@@ -4,8 +4,6 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -19,21 +17,9 @@ use Twig\Template;
 class DataGrid
 {
     /**
-     * @var AbstractColumn[]
-     */
-    protected $columns = [];
-    /**
-     * @var bool
-     */
-    protected $hasFilters = false;
-    /**
      * @var bool
      */
     protected $showTitles = true;
-    /**
-     * @var ServiceEntityRepository
-     */
-    protected $repository;
 
     /**
      * @var Template
@@ -50,50 +36,27 @@ class DataGrid
 
     protected $noDataMessage = 'No data found';
 
-    protected $sort = [];
-
-    protected $limit = null;
-
-    protected $page = 1;
-
-    protected $maxPage;
-
-    protected $pagination = false;
-
-    protected $paginationOptions = [
-        'limit' => 10
-    ];
-
 
     /**
      * @var Criteria
      */
     protected $filtersCriteria;
+    /**
+     * @var DataGridBuilderInterface
+     */
+    protected $builder;
 
     /**
      * DataGrid constructor.
-     * @param ServiceEntityRepository $repository
-     * @param array $columns
-     * @param array $options
+     * @param DataGridBuilderInterface $builder
+     * @param array $defaultOptions
      * @internal
      */
-    public function __construct(ServiceEntityRepository $repository, array $columns, array $options = [])
+    public function __construct(DataGridBuilderInterface $builder, array $defaultOptions = [])
     {
-        $this->repository = $repository;
-        $this->columns = $columns;
-        $this->twig = $options['twig'];
-        $this->setConfigurationOptions($options);
-
-        foreach ($columns as $column) {
-            if ($column->hasFilter() && $column->isVisible()) {
-                $this->hasFilters = true;
-                break;
-            }
-        }
-
-        if ($this->hasPagination()) {
-            $this->rebuildPaginationOptions();
-        }
+        $this->builder = $builder;
+        $this->twig = $defaultOptions['twig'];
+        $this->setConfigurationOptions(array_merge($defaultOptions, $builder->getOptions()));
     }
 
     /**
@@ -120,28 +83,24 @@ class DataGrid
         $this->showTitles = (bool)$value;
     }
 
-    public function getRepository()
+    public function getProvider()
     {
-        return $this->repository;
+        return $this->builder->getProvider();
     }
 
     public function getColumns()
     {
-        return $this->columns;
+        return $this->builder->getColumns();
     }
 
     public function hasFilters()
     {
-        return $this->hasFilters;
+        return $this->builder->hasFilters();
     }
 
     public function getData()
     {
-        $this->filtersCriteria
-            ->orderBy($this->sort)
-            ->setMaxResults($this->hasPagination() ? $this->limit : null)
-            ->setFirstResult($this->hasPagination() ? ($this->page - 1) * $this->limit : null);
-        return $this->repository->matching($this->filtersCriteria);
+        return $this->getProvider()->getItems();
     }
 
     /**
@@ -185,77 +144,13 @@ class DataGrid
         $this->noDataMessage = $message;
     }
 
-    protected function setSort(array $sort)
-    {
-        list($attribute, $direction) = $sort;
-        foreach ($this->columns as $column) {
-            if ($column->hasSort() && $column->getAttribute() == $attribute) {
-                $column->setSort($direction);
-                $this->sort = [$attribute => $direction];
-                break;
-            }
-        }
-    }
-
-    protected function setPage(int $page)
-    {
-        $this->page = $page;
-    }
-
-    protected function setPagination(bool $value)
-    {
-        $this->pagination = $value;
-    }
-
     public function hasPagination()
     {
-        return $this->pagination && is_numeric($this->paginationOptions['limit']);
-    }
-
-    protected function setPaginationOptions(array $options)
-    {
-        $this->paginationOptions = array_merge($this->paginationOptions, $options);
+        return $this->builder->hasPagination();
     }
 
     public function getPaginationOptions()
     {
-        return $this->paginationOptions;
-    }
-
-    protected function setFiltersCriteria(Criteria $criteria)
-    {
-        $this->filtersCriteria = $criteria;
-    }
-
-    /**
-     * @internal
-     */
-    protected function rebuildPaginationOptions()
-    {
-        $this->limit = $this->paginationOptions['limit'];
-        $total = $this->repository->matching($this->filtersCriteria)->count();
-        $this->maxPage = (int)ceil($total / $this->limit);
-        $this->page = is_int($this->page) && $this->page > 0 && $this->page <= $this->maxPage
-            ? $this->page : 1;
-
-        $this->paginationOptions['pages'] = $this->calculatePages();
-        $this->paginationOptions['currentPage'] = $this->page;
-    }
-
-    protected function calculatePages()
-    {
-        if ($this->maxPage === 0) {
-            return [1];
-        }
-        if ($this->maxPage <= 10) {
-            return range(1, $this->maxPage);
-        }
-        if ($this->page < 5) {
-            return array_merge(range(1, 6), [null, $this->maxPage]);
-        }
-        if ($this->page > $this->maxPage - 4) {
-            return array_merge([1, null], range($this->maxPage - 5, $this->maxPage));
-        }
-        return array_merge([1, null], range($this->page - 2, $this->page + 2), [null, $this->maxPage]);
+        return $this->builder->getPager()->getPaginationOptions();
     }
 }

@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\ChoiceFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class ChoiceFilterTest
@@ -13,13 +13,14 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property ChoiceFilter $testFilter
  */
-class ChoiceFilterTest extends BaseCase
+class ChoiceFilterTest extends OrmTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
         $this->testFilter = new ChoiceFilter($this->containerArray, [
-            'choices' => [0, 1, 2, 3]
+            'choices' => [0, 1, 2, 3],
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -30,7 +31,6 @@ class ChoiceFilterTest extends BaseCase
 
     public function testRender(): void
     {
-        $renderResult = json_decode($this->testFilter->render('testAttribute', '1'), true);
-        $this->assertEquals('grid_filter', $renderResult[0]);
+        $this->assertEquals('select>option>0:0 option>1:1 option>2:2 option>3:3', trim($this->testFilter->render('testAttribute', '1')));
     }
 }

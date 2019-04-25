@@ -35,7 +35,8 @@ class DataGridConfigurationTest extends TestCase
                     'pagination' => [
                         'enabled' => false,
                         'options' => null
-                    ]
+                    ],
+                    'showTitles' => null
                 ]
             ],
             [
@@ -44,7 +45,8 @@ class DataGridConfigurationTest extends TestCase
                     'noDataMessage' => 'empty',
                     'pagination' => [
                         'limit' => 10
-                    ]
+                    ],
+                    'showTitles' => true
                 ],
                 [
                     'template' => 'test_template',
@@ -54,7 +56,8 @@ class DataGridConfigurationTest extends TestCase
                         'options' => [
                             'limit' => 10
                         ]
-                    ]
+                    ],
+                    'showTitles' => true
                 ]
             ]
         ];

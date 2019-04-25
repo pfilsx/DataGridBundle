@@ -32,7 +32,7 @@ class RelationColumn extends DataColumn
     {
         $obj = $this->getCellValue($entity);
         if (is_object($obj)) {
-            $result = $this->getEntityAttribute($obj, $this->labelAttribute);
+            $result = $obj->{'get' . ucfirst($this->labelAttribute)}();
             return $this->format === 'html'
                 ? $result
                 : htmlspecialchars($result);

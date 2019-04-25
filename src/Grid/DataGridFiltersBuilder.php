@@ -4,38 +4,24 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use DateTime;
-use Doctrine\Common\Collections\Criteria;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
 {
     /**
      * @var array
      */
-    protected $container;
-    /**
-     * @var Criteria
-     */
-    protected $criteria;
-    /**
-     * @var array
-     */
     protected $params = [];
+    /**
+     * @var DataProviderInterface
+     */
+    protected $provider;
 
-    public function __construct(array $container)
-    {
-        $this->container = $container;
-        $this->criteria = Criteria::create();
-    }
 
     public function addEqualFilter(string $attribute): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            if ($this->params[$attribute] === null) {
-                $this->criteria->andWhere(Criteria::expr()->isNull($attribute));
-            } else {
-                $this->criteria->andWhere(Criteria::expr()->eq($attribute, $this->params[$attribute]));
-            }
+            $this->provider->addEqualFilter($attribute, $this->params[$attribute]);
         }
         return $this;
     }
@@ -43,7 +29,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addLikeFilter(string $attribute): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            $this->criteria->andWhere(Criteria::expr()->contains($attribute, $this->params[$attribute]));
+            $this->provider->addLikeFilter($attribute, $this->params[$attribute]);
         }
         return $this;
     }
@@ -51,9 +37,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addRelationFilter(string $attribute, string $relationClass): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            $repository = $this->container['doctrine']->getRepository($relationClass);
-            $entity = $repository->findOneBy(['id' => $this->params[$attribute]]);
-            $this->criteria->andWhere(Criteria::expr()->eq($attribute, $entity));
+            $this->provider->addRelationFilter($attribute, $this->params[$attribute], $relationClass);
         }
         return $this;
     }
@@ -66,7 +50,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addCustomFilter(string $attribute, callable $callback): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            call_user_func_array($callback, [&$this->criteria, $attribute, $this->params[$attribute]]);
+            $this->provider->addCustomFilter($attribute, $this->params[$attribute], $callback);
         }
         return $this;
     }
@@ -74,77 +58,35 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
     public function addDateFilter(string $attribute, string $comparison = 'equal'): DataGridFiltersBuilderInterface
     {
         if (array_key_exists($attribute, $this->params)) {
-            $comparisonFunc = lcfirst($comparison) . 'Date';
-            if (method_exists($this, $comparisonFunc)) {
-                $this->$comparisonFunc($attribute);
-            } else {
-                $this->equalDate($attribute);
-            }
+            $this->provider->addDateFilter($attribute, $this->params[$attribute], $comparison);
         }
         return $this;
     }
 
     /**
      * @internal
-     * @return Criteria
+     * @param array $params
+     * @return DataGridFiltersBuilderInterface
      */
-    public function getCriteria(): Criteria
+    public function setParams(array $params): DataGridFiltersBuilderInterface
     {
-        return $this->criteria;
+        $this->params = $params;
+        return $this;
+    }
+
+    public function getProvider(): DataProviderInterface
+    {
+        return $this->provider;
     }
 
     /**
      * @internal
-     * @param array $params
+     * @param DataProviderInterface $provider
      */
-    public function setParams(array $params): void
+    public function setProvider(DataProviderInterface $provider): void
     {
-        $this->params = $params;
+        $this->provider = $provider;
     }
 
-    protected function equalDate($attribute): void
-    {
-        $date = new DateTime($this->params[$attribute]);
-        $nextDate = (clone $date)->modify('+1 day');
-        $this->criteria
-            ->andWhere(Criteria::expr()->gte($attribute, $date))
-            ->andWhere(Criteria::expr()->lt($attribute, $nextDate));
-    }
 
-    protected function notEqualDate($attribute): void
-    {
-        $date = new DateTime($this->params[$attribute]);
-        $nextDate = (clone $date)->modify('+1 day');
-        $this->criteria
-            ->andWhere(Criteria::expr()->lt($attribute, $date))
-            ->andWhere(Criteria::expr()->gte($attribute, $nextDate));
-    }
-
-    protected function ltDate($attribute): void
-    {
-        $date = new DateTime($this->params[$attribute]);
-        $this->criteria
-            ->andWhere(Criteria::expr()->lt($attribute, $date));
-    }
-
-    protected function lteDate($attribute): void
-    {
-        $date = (new DateTime($this->params[$attribute]))->modify('+1 day');
-        $this->criteria
-            ->andWhere(Criteria::expr()->lt($attribute, $date));
-    }
-
-    protected function gtDate($attribute): void
-    {
-        $date = (new DateTime($this->params[$attribute]))->modify('+1 day');
-        $this->criteria
-            ->andWhere(Criteria::expr()->gte($attribute, $date));
-    }
-
-    protected function gteDate($attribute): void
-    {
-        $date = new DateTime($this->params[$attribute]);
-        $this->criteria
-            ->andWhere(Criteria::expr()->gte($attribute, $date));
-    }
 }

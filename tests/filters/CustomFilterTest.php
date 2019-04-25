@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\CustomFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class CustomFilterTest
@@ -13,7 +13,7 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property CustomFilter $testFilter
  */
-class CustomFilterTest extends BaseCase
+class CustomFilterTest extends OrmTestCase
 {
     protected function setUp(): void
     {
@@ -21,7 +21,8 @@ class CustomFilterTest extends BaseCase
         $this->testFilter = new CustomFilter($this->containerArray, [
             'value' => function () {
                 return 'test_filter';
-            }
+            },
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -32,7 +33,6 @@ class CustomFilterTest extends BaseCase
 
     public function testRender(): void
     {
-        $renderResult = $this->testFilter->render('testAttribute', '1');
-        $this->assertEquals('test_filter', $renderResult);
+        $this->assertEquals('test_filter', $this->testFilter->render('testAttribute', '1'));
     }
 }

@@ -5,6 +5,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Pfilsx\DataGrid\Grid\Columns\SerialColumn;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class SerialColumnTest
@@ -12,7 +13,7 @@ use Pfilsx\DataGrid\Grid\Columns\SerialColumn;
  *
  * @property SerialColumn $testColumn
  */
-class SerialColumnTest extends ColumnCase
+class SerialColumnTest extends OrmTestCase
 {
     protected function setUp(): void
     {

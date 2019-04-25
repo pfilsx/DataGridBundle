@@ -84,19 +84,7 @@ class DataColumn extends AbstractColumn
         } elseif ($this->value !== null) {
             return $this->value;
         } else {
-            return $this->getEntityAttribute($entity, $this->attribute);
+            return $entity->{$this->attribute};
         }
-    }
-
-    protected function getEntityAttribute($entity, $attribute)
-    {
-        $attribute = preg_replace_callback('/_([A-z]?)/', function ($matches) {
-            return isset($matches[1]) ? strtoupper($matches[1]) : '';
-        }, $attribute);
-        $getter = 'get' . ucfirst($attribute);
-        if (method_exists($entity, $getter)) {
-            return $entity->$getter();
-        }
-        throw new DataGridException('Unknown property ' . $attribute . ' in ' . get_class($entity));
     }
 }

@@ -7,13 +7,22 @@ namespace Pfilsx\DataGrid\Grid;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 class DataGridBuilder implements DataGridBuilderInterface
 {
     /**
+     * @var Pager
+     */
+    protected $pager;
+    /**
      * @var array
      */
     protected $container;
+    /**
+     * @var DataProviderInterface
+     */
+    protected $provider;
 
     /**
      * @var AbstractColumn[]
@@ -25,6 +34,8 @@ class DataGridBuilder implements DataGridBuilderInterface
     protected $options = [
         'template' => '@DataGrid/grid.blocks.html.twig'
     ];
+
+    protected $hasFilters = false;
 
     /**
      * DataGridBuilder constructor.
@@ -45,7 +56,14 @@ class DataGridBuilder implements DataGridBuilderInterface
         if (!is_subclass_of($columnClass, AbstractColumn::class)) {
             throw new InvalidArgumentException('Expected subclass of' . AbstractColumn::class);
         }
-        $this->columns[] = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config));
+        /**
+         * @var AbstractColumn $column
+         */
+        $column = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config));
+        $this->columns[] = $column;
+        if ($column->hasFilter() && $column->isVisible()) {
+            $this->hasFilters = true;
+        }
         return $this;
     }
 
@@ -82,15 +100,27 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
+    public function setShowTitles(bool $flag): DataGridBuilderInterface
+    {
+        $this->options['showTitles'] = $flag;
+        return $this;
+    }
+
     public function enablePagination($options = []): DataGridBuilderInterface
     {
         if (is_array($options) && !empty($options)) {
-            $this->options['pagination'] = true;
-            $this->options['paginationOptions'] = $options;
+            $this->getPager()->enable();
+            $this->getPager()->setOptions($options);
         } else {
-            $this->options['pagination'] = false;
-            $this->options['paginationOptions'] = [];
+            $this->getPager()->disable();
+            $this->getPager()->setLimit(null);
         }
+        return $this;
+    }
+
+    public function setCountFieldName(string $name): DataGridBuilderInterface
+    {
+        $this->provider->setCountFieldName($name);
         return $this;
     }
 
@@ -110,5 +140,72 @@ class DataGridBuilder implements DataGridBuilderInterface
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function getProvider(): DataProviderInterface
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @internal
+     * @param DataProviderInterface $provider
+     */
+    public function setProvider(DataProviderInterface $provider): void
+    {
+        $provider->setPager($this->getPager());
+        $this->provider = $provider;
+    }
+
+    public function setSort(string $attribute, string $direction)
+    {
+        foreach ($this->columns as $column) {
+            if ($column->hasSort() && $column->getAttribute() == $attribute) {
+                $column->setSort($direction);
+                $this->provider->setSort([$attribute => $direction]);
+                break;
+            }
+        }
+    }
+
+    /**
+     * @internal
+     * @return bool
+     */
+    public function hasFilters(): bool
+    {
+        return $this->hasFilters;
+    }
+
+    /**
+     * @internal
+     * @param array $filters
+     */
+    public function setFiltersValues(array $filters): void
+    {
+        foreach ($this->columns as $column) {
+            if ($column->hasFilter() && array_key_exists($column->getAttribute(), $filters)) {
+                $column->setFilterValue($filters[$column->getAttribute()]);
+            }
+        }
+    }
+
+
+    /**
+     * @internal
+     * @return Pager
+     */
+    public function getPager(): Pager
+    {
+        return $this->pager ?? ($this->pager = new Pager());
+    }
+
+    /**
+     * @internal
+     * @return bool
+     */
+    public function hasPagination(): bool
+    {
+        return $this->getPager()->isEnabled() && is_integer($this->getPager()->getLimit());
     }
 }
