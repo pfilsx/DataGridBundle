@@ -6,6 +6,7 @@ namespace Pfilsx\tests\providers;
 
 use DateTime;
 use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Pager;
 use Pfilsx\DataGrid\Grid\Providers\ArrayDataProvider;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +29,7 @@ class ArrayDataProviderTest extends TestCase
             $itemsSets[2],
             $itemsSets[4]
         ]);
+        $this->provider->setPager(new Pager());
     }
 
     public function testType(): void
@@ -113,6 +115,7 @@ class ArrayDataProviderTest extends TestCase
                 'created' => 1
             ]
         ]);
+        $provider->setPager(new Pager());
         $this->assertCount(0, $provider->addDateFilter('created', '01.01.1990', $comparer)->getItems());
     }
 

@@ -78,7 +78,7 @@ class ActionColumn extends AbstractColumn
         } elseif (!empty($this->identifier) && $item->has($this->identifier)) {
             return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get($this->identifier)]);
         } elseif ($item->has('id')) {
-            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->id]);
+            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get('id')]);
         } else {
             throw new DataGridException('Could not generate url for action: ' . $action);
         }

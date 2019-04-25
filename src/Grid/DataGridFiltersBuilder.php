@@ -4,7 +4,6 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
@@ -14,7 +13,7 @@ class DataGridFiltersBuilder implements DataGridFiltersBuilderInterface
      */
     protected $params = [];
     /**
-     * @var DataProvider
+     * @var DataProviderInterface
      */
     protected $provider;
 

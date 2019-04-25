@@ -7,7 +7,6 @@ namespace Pfilsx\DataGrid\Grid;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use InvalidArgumentException;
-use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 class DataGridBuilder implements DataGridBuilderInterface
@@ -21,7 +20,7 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     protected $container;
     /**
-     * @var DataProvider
+     * @var DataProviderInterface
      */
     protected $provider;
 
@@ -143,7 +142,7 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this->options;
     }
 
-    public function getProvider(): DataProvider
+    public function getProvider(): DataProviderInterface
     {
         return $this->provider;
     }

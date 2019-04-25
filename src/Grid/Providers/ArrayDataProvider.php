@@ -18,6 +18,9 @@ class ArrayDataProvider extends DataProvider
 
     public function getItems(): array
     {
+        if ($this->getPager()->isEnabled()){
+            $this->data = array_slice($this->data, $this->getPager()->getFirst(), $this->getPager()->getLimit());
+        }
         return array_map(function ($row) {
             $item = new DataGridItem();
             $item->setRow($row);
@@ -82,13 +85,13 @@ class ArrayDataProvider extends DataProvider
             if ($attrValueA == $attrValueB) {
                 return 0;
             }
-            if (($type1 = gettype($attrValueA)) != ($type2 = gettype($attrValueB))) {
+            if (($type1 = gettype($attrValueA)) != gettype($attrValueB)) {
                 return 0;
             }
             if ($type1 == 'string') {
                 return $order == 'ASC' ? strcmp($attrValueA, $attrValueB) : -strcmp($attrValueA, $attrValueB);
             }
-            return $attrValueA < $attrValueB ? ($order == 'ASC' ? -1 : 1) : ($order == 'ASC' ? 1 : -1);
+            return $order == 'ASC' ? $attrValueA <=> $attrValueB : $attrValueB <=> $attrValueA;
         };
     }
 

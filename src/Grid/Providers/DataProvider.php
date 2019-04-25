@@ -10,10 +10,12 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Pager;
-use Symfony\Component\Lock\Exception\NotSupportedException;
 
 abstract class DataProvider implements DataProviderInterface
 {
+    /**
+     * @var Pager
+     */
     protected $pager;
 
     protected $countFieldName;
@@ -49,22 +51,22 @@ abstract class DataProvider implements DataProviderInterface
 
     public function addEqualFilter(string $attribute, $value): DataProviderInterface
     {
-        throw new NotSupportedException("Method addEqualFilter() is not supported in " . static::class);
+        throw new DataGridException("Method addEqualFilter() is not supported in " . static::class);
     }
 
     public function addLikeFilter(string $attribute, $value): DataProviderInterface
     {
-        throw new NotSupportedException("Method addLikeFilter() is not supported in " . static::class);
+        throw new DataGridException("Method addLikeFilter() is not supported in " . static::class);
     }
 
     public function addRelationFilter(string $attribute, $value, string $relationClass): DataProviderInterface
     {
-        throw new NotSupportedException("Method addRelationFilter() is not supported in " . static::class);
+        throw new DataGridException("Method addRelationFilter() is not supported in " . static::class);
     }
 
     public function addCustomFilter(string $attribute, $value, callable $callback): DataProviderInterface
     {
-        throw new NotSupportedException("Method addCustomFilter() is not supported in " . static::class);
+        throw new DataGridException("Method addCustomFilter() is not supported in " . static::class);
     }
 
     public function addDateFilter(string $attribute, $value, string $comparison = 'equal'): DataProviderInterface
@@ -78,18 +80,22 @@ abstract class DataProvider implements DataProviderInterface
         return $this;
     }
 
+    /**
+     * @param $attribute
+     * @param $value
+     */
     protected function equalDate($attribute, $value): void
     {
-        throw new NotSupportedException("Method equalDate() is not supported in " . static::class);
+        throw new DataGridException("Method equalDate() is not supported in " . static::class);
     }
 
 
     public static function create($data, EntityManager $doctrine = null): DataProviderInterface
     {
-        if ($data instanceof EntityRepository) {
+        if ($data instanceof EntityRepository && $doctrine !== null) {
             return new RepositoryDataProvider($data, $doctrine);
         }
-        if ($data instanceof QueryBuilder) {
+        if ($data instanceof QueryBuilder && $doctrine !== null) {
             return new QueryBuilderDataProvider($data, $doctrine);
         }
         if (is_array($data)) {

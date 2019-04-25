@@ -44,6 +44,9 @@ class Pager
         }
     }
 
+    /**
+     * @return int
+     */
     public function getFirst()
     {
         return ($this->page - 1) * $this->limit;
