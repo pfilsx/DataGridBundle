@@ -5,9 +5,8 @@ namespace Pfilsx\DataGrid\Grid;
 
 
 use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
-use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,13 +24,10 @@ class DataGridFactory implements DataGridFactoryInterface
      * @var DataGridBuilder
      */
     protected $gridBuilder;
-
-    protected $filterBuilder;
-
     /**
-     * @var ServiceEntityRepository
+     * @var DataGridFiltersBuilder
      */
-    protected $repository;
+    protected $filterBuilder;
     /**
      * @var AbstractGridType
      */
@@ -39,13 +35,11 @@ class DataGridFactory implements DataGridFactoryInterface
     /**
      * @var array
      */
-    protected $options = [
-        'filters' => []
-    ];
+    protected $defaultOptions = [];
     /**
-     * @var AbstractColumn[]
+     * @var array
      */
-    protected $columns;
+    protected $queryParams;
 
     public function __construct(
         ManagerRegistry $doctrine,
@@ -56,12 +50,12 @@ class DataGridFactory implements DataGridFactoryInterface
     )
     {
         $this->request = $this->container['request'] = $requestStack->getCurrentRequest();
-        $this->options['twig'] = $this->container['twig'] = $twig;
-        $this->options['router'] = $this->container['router'] = $router;
+        $this->defaultOptions['twig'] = $this->container['twig'] = $twig;
+        $this->defaultOptions['router'] = $this->container['router'] = $router;
         $this->container['doctrine'] = $doctrine;
         $this->gridBuilder = new DataGridBuilder($this->container);
-        $this->filterBuilder = new DataGridFiltersBuilder($this->container);
-        $this->options['filtersCriteria'] = $this->filterBuilder->getCriteria();
+        $this->filterBuilder = new DataGridFiltersBuilder();
+
         foreach ($configs->getConfigs() as $key => $value) {
             $setter = 'setDefault' . ucfirst($key);
             if (method_exists($this, $setter)) {
@@ -71,62 +65,77 @@ class DataGridFactory implements DataGridFactoryInterface
     }
 
 
-    public function createGrid(string $gridType, ServiceEntityRepository $repository): DataGrid
+    public function createGrid(string $gridType, $dataProvider): DataGrid
     {
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
-        $this->repository = $repository;
+        $provider = DataProvider::create($dataProvider, $this->container['doctrine']->getManager());
+        $this->gridBuilder->setProvider($provider);
+        $this->filterBuilder->setProvider($provider);
+
         /** @var AbstractGridType $type */
         $this->gridType = new $gridType($this->container);
         $this->gridType->buildGrid($this->gridBuilder);
-        $this->columns = $this->gridBuilder->getColumns();
-        $this->options = array_merge($this->options, $this->gridBuilder->getOptions());
         $this->handleRequest();
-        return new DataGrid($this->repository, $this->columns, $this->options);
+        if ($this->gridBuilder->hasPagination()) {
+            $this->gridBuilder->getPager()->setTotalCount($provider->getTotalCount());
+        }
+
+        return new DataGrid($this->gridBuilder, $this->defaultOptions);
     }
 
     protected function handleRequest(): void
     {
-        $params = $this->request->query->has('data_grid') ? $this->request->query->get('data_grid') : [];
-        if (array_key_exists('sortBy', $params)) {
-            $this->setSort($params['sortBy']);
-            unset($params['sortBy']);
+        $this->queryParams = $this->request !== null && $this->request->query->has('data_grid') ? $this->request->query->get('data_grid') : [];
+
+        $this->handleSorting();
+
+        $this->handlePagination();
+
+        $this->handleFilters();
+    }
+
+    protected function handleSorting()
+    {
+        if (array_key_exists('sortBy', $this->queryParams)) {
+            $this->setSort($this->queryParams['sortBy']);
+            unset($this->queryParams['sortBy']);
         }
-        if (array_key_exists('pagination', $this->options) && $this->options['pagination']) {
-            if (array_key_exists('page', $params)) {
-                $this->setPage($params['page']);
-                unset($params['page']);
+    }
+
+    protected function handlePagination()
+    {
+        if ($this->gridBuilder->hasPagination()) {
+            if (array_key_exists('page', $this->queryParams)) {
+                $this->setPage($this->queryParams['page']);
+                unset($this->queryParams['page']);
             } else {
                 $this->setPage(1);
             }
         }
-        foreach ($this->columns as $column) {
-            if ($column->hasFilter() && array_key_exists($column->getAttribute(), $params)) {
-                $column->setFilterValue($params[$column->getAttribute()]);
-            }
-        }
-        $this->filterBuilder->setParams($params);
-        $this->gridType->handleFilters($this->filterBuilder, $params);
-        $this->options['filtersCriteria'] = $this->filterBuilder->getCriteria();
+    }
+
+    protected function handleFilters()
+    {
+        $this->gridBuilder->setFiltersValues($this->queryParams);
+        $this->filterBuilder->setParams($this->queryParams);
+        $this->gridType->handleFilters($this->filterBuilder, $this->queryParams);
     }
 
     protected function setSort($attribute)
     {
         $first = substr($attribute, 0, 1);
         if ($first == '-') {
-            $this->options['sort'] = [substr($attribute, 1), 'DESC'];
+            $this->gridBuilder->setSort(substr($attribute, 1), 'DESC');
         } else {
-            $this->options['sort'] = [$attribute, 'ASC'];
+            $this->gridBuilder->setSort($attribute, 'ASC');
         }
     }
 
     protected function setPage($page)
     {
-        if (is_numeric($page))
-            $this->options['page'] = (int)$page;
-        else
-            $this->options['page'] = 1;
+        $this->gridBuilder->getPager()->setPage(is_numeric($page) ? (int)$page : 1);
     }
 
     protected function setDefaultTemplate($template)
@@ -144,5 +153,10 @@ class DataGridFactory implements DataGridFactoryInterface
         if ($pagination['enabled']) {
             $this->gridBuilder->enablePagination($pagination['options']);
         }
+    }
+
+    protected function setDefaultShowTitles($showTitles)
+    {
+        $this->gridBuilder->setShowTitles($showTitles);
     }
 }

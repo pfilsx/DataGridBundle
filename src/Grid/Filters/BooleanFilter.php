@@ -12,7 +12,7 @@ class BooleanFilter extends AbstractFilter
 
     protected function prepareValue(&$value)
     {
-        $value = empty($value) ? 0 : (int)(bool)$value;
+        $value = $value === null ? null : (int)(bool)$value;
     }
 
     public function getBlockName(): ?string

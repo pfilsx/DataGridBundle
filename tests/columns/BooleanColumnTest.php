@@ -6,6 +6,8 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\BooleanColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class BooleanColumnTest
@@ -13,7 +15,7 @@ use Pfilsx\DataGrid\Grid\Columns\DataColumn;
  *
  * @property BooleanColumn $testColumn
  */
-class BooleanColumnTest extends ColumnCase
+class BooleanColumnTest extends OrmTestCase
 {
 
     protected function setUp(): void
@@ -22,7 +24,8 @@ class BooleanColumnTest extends ColumnCase
         $this->testColumn = new BooleanColumn($this->containerArray, [
             'attribute' => 'testAttribute',
             'trueValue' => 'yes',
-            'falseValue' => 'no'
+            'falseValue' => 'no',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -54,19 +57,24 @@ class BooleanColumnTest extends ColumnCase
                 return $this->enabled;
             }
         };
-        $this->assertEquals('yes', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('yes', $this->testColumn->getCellContent($item));
         $entity->enabled = false;
-        $this->assertEquals('no', $this->testColumn->getCellContent($entity));
+        $this->assertEquals('no', $this->testColumn->getCellContent($item));
 
-        $column = new BooleanColumn($this->containerArray, ['value' => function () {
-            return 'no';
-        }]);
+        $column = new BooleanColumn($this->containerArray, [
+            'value' => function () {
+                return 'no';
+            },
+            'template' => 'test_template.html.twig'
+        ]);
 
         $this->assertIsCallable($column->getValue());
-        $this->assertEquals('no', $column->getCellContent($entity));
+        $this->assertEquals('no', $column->getCellContent($item));
 
         $column = new BooleanColumn($this->containerArray, ['value' => false]);
-        $this->assertEquals('No', $column->getCellContent($entity));
+        $this->assertEquals('No', $column->getCellContent($item));
 
     }
 }

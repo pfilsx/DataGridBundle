@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\DateFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class DateFilterTest
@@ -13,14 +13,15 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property DateFilter $testFilter
  */
-class DateFilterTest extends BaseCase
+class DateFilterTest extends OrmTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
         $this->testFilter = new DateFilter($this->containerArray, [
             'minDate' => '01-01-1990',
-            'maxDate' => 'now'
+            'maxDate' => 'now',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -36,7 +37,6 @@ class DateFilterTest extends BaseCase
 
     public function testRender(): void
     {
-        $renderResult = json_decode($this->testFilter->render('testAttribute', '1'), true);
-        $this->assertEquals('grid_filter', $renderResult[0]);
+        $this->assertEquals('<input type="date"  class="data_grid_filter" name="testAttribute" value="01-01-1991"/>', trim($this->testFilter->render('testAttribute', '01-01-1991')));
     }
 }

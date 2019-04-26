@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->scalarNode('template')->defaultValue('@DataGrid/grid.blocks.html.twig')->end()
             ->scalarNode('noDataMessage')->defaultValue('No data found')->end()
+            ->scalarNode('showTitles')->defaultValue(true)->end()
             ->arrayNode('pagination')
             ->children()
             ->integerNode('limit')->defaultValue(10)->end()

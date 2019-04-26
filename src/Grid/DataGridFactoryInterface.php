@@ -4,7 +4,6 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -18,5 +17,5 @@ interface DataGridFactoryInterface
                                 Environment $twig,
                                 RequestStack $requestStack, DataGridConfigurationInterface $configs);
 
-    public function createGrid(string $gridType, ServiceEntityRepository $repository): DataGrid;
+    public function createGrid(string $gridType, $dataProvider): DataGrid;
 }

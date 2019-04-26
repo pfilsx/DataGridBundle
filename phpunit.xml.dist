@@ -11,6 +11,8 @@
         <ini name="error_reporting" value="-1"/>
         <env name="APP_ENV" value="test"/>
         <env name="SHELL_VERBOSITY" value="-1"/>
+        <server name="KERNEL_DIR" value="./tests/app/"/>
+        <server name="KERNEL_CLASS" value="Pfilsx\tests\AppKernel"/>
     </php>
 
     <testsuites>
@@ -26,6 +28,7 @@
                 <directory suffix="Interface.php">./src</directory>
                 <directory prefix="Abstract">./src</directory>
                 <directory>./src/Resources</directory>
+                <file>./src/Grid/Providers/DataProvider.php</file>
             </exclude>
         </whitelist>
     </filter>

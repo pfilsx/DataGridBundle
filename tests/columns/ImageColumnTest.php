@@ -5,6 +5,8 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
+use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\tests\OrmTestCase;
 
 /**
  * Class ImageColumnTest
@@ -12,7 +14,7 @@ use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
  *
  * @property ImageColumn $testColumn
  */
-class ImageColumnTest extends ColumnCase
+class ImageColumnTest extends OrmTestCase
 {
 
     protected function setUp(): void
@@ -25,7 +27,8 @@ class ImageColumnTest extends ColumnCase
             'alt' => function () {
                 return 'Test alt';
             },
-            'noImageMessage' => 'Empty'
+            'noImageMessage' => 'Empty',
+            'template' => 'test_template.html.twig'
         ]);
     }
 
@@ -54,7 +57,9 @@ class ImageColumnTest extends ColumnCase
                 return null;
             }
         };
-        $this->assertEquals('Empty', $this->testColumn->getCellContent($entity));
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('Empty', $this->testColumn->getCellContent($item));
     }
 
     public function testGetCellContent(): void
@@ -66,13 +71,15 @@ class ImageColumnTest extends ColumnCase
                 return '/path/to/image.jpg';
             }
         };
-        $content = json_decode($this->testColumn->getCellContent($entity), true);
-        $this->assertEquals('grid_img', $content[0]);
+        $item = new DataGridItem();
+        $item->setEntity($entity);
+        $this->assertEquals('<img src="/path/to/image.jpg" height="20" width="20" alt="Test alt"/>', trim($this->testColumn->getCellContent($item)));
 
         $column = new ImageColumn($this->containerArray, [
             'format' => 'raw',
-            'attribute' => 'testAttribute'
+            'attribute' => 'testAttribute',
+            'template' => 'test_template.html.twig'
         ]);
-        $this->assertEquals('/path/to/image.jpg', $column->getCellContent($entity));
+        $this->assertEquals('/path/to/image.jpg', $column->getCellContent($item));
     }
 }

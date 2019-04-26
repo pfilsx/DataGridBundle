@@ -5,14 +5,19 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\TextFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
+use Pfilsx\tests\OrmTestCase;
 
-class TextFilterTest extends BaseCase
+/**
+ * @property TextFilter testFilter
+ */
+class TextFilterTest extends OrmTestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new TextFilter($this->containerArray);
+        $this->testFilter = new TextFilter($this->containerArray, [
+            'template' => 'test_template.html.twig'
+        ]);
     }
 
     public function testGetBlockName(): void

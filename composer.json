@@ -1,35 +1,52 @@
 {
-    "name": "pfilsx/data-grid-bundle",
-    "type": "symfony-bundle",
-    "license": "MIT",
-    "description": "Symfony 4 Data Grid rendering bundle.",
-    "keywords": [
-        "datagrid", "symfony4", "bundle", "data-table", "pagination", "sort", "filters", "table"
-    ],
-    "authors": [
-        {
-            "name": "Filimonov Pavel",
-            "email": "pfilsx@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=7.1",
-        "symfony/framework-bundle": "^4.0",
-        "symfony/orm-pack": "*",
-        "symfony/twig-bundle": "^4.0",
-        "symfony/dependency-injection": "^4.0",
-        "symfony/config": "^4.0",
-        "symfony/http-foundation": "^4.0",
-        "symfony/http-kernel": "^4.0",
-        "symfony/routing": "^4.0",
-        "doctrine/doctrine-bundle": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^8.0",
-        "phpunit/php-code-coverage": "^7.0"
-    },
-    "autoload": {
-        "psr-4": { "Pfilsx\\DataGrid\\": "src" }
+  "name": "pfilsx/data-grid-bundle",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "description": "Symfony 4 Data Grid rendering bundle.",
+  "keywords": [
+    "datagrid",
+    "symfony4",
+    "bundle",
+    "data-table",
+    "pagination",
+    "sort",
+    "filters",
+    "table"
+  ],
+  "authors": [
+    {
+      "name": "Filimonov Pavel",
+      "email": "pfilsx@gmail.com"
     }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.1",
+    "symfony/framework-bundle": "^4.0",
+    "symfony/orm-pack": "*",
+    "symfony/twig-bundle": "^4.0",
+    "symfony/dependency-injection": "^4.0",
+    "symfony/config": "^4.0",
+    "symfony/http-foundation": "^4.0",
+    "symfony/http-kernel": "^4.0",
+    "symfony/routing": "^4.0",
+    "doctrine/doctrine-bundle": "*",
+    "symfony/templating": "^4.0",
+    "symfony/asset": "^4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.0",
+    "phpunit/php-code-coverage": "^7.0",
+    "symfony/yaml": "^4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pfilsx\\DataGrid\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pfilsx\\tests\\": "tests"
+    }
+  }
 }

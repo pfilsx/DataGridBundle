@@ -4,6 +4,8 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 use Exception;
+use Pfilsx\DataGrid\DataGridException;
+use Pfilsx\DataGrid\Grid\DataGridItem;
 use Twig\Template;
 
 class ActionColumn extends AbstractColumn
@@ -15,6 +17,8 @@ class ActionColumn extends AbstractColumn
     protected $urlGenerator;
 
     protected $pathPrefix;
+
+    protected $identifier;
 
     protected $buttonsVisibility = [
         'show' => true,
@@ -62,19 +66,21 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @param $entity
+     * @param DataGridItem $item
      * @param string $action
      * @return mixed|string
      * @throws Exception
      */
-    protected function generateUrl($entity, $action)
+    protected function generateUrl($item, $action)
     {
         if (is_callable($this->urlGenerator)) {
-            return call_user_func_array($this->urlGenerator, [$entity, $action, $this->container['router']]);
-        } elseif (method_exists($entity, 'getId')) {
-            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $entity->getId()]);
+            return call_user_func_array($this->urlGenerator, [$item, $action, $this->container['router']]);
+        } elseif (!empty($this->identifier) && $item->has($this->identifier)) {
+            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get($this->identifier)]);
+        } elseif ($item->has('id')) {
+            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get('id')]);
         } else {
-            throw new Exception('Could not generate url for action: ' . $action);
+            throw new DataGridException('Could not generate url for action: ' . $action);
         }
     }
 
@@ -157,5 +163,10 @@ class ActionColumn extends AbstractColumn
     public function setButtonsVisibility(array $buttonsVisibility): void
     {
         $this->buttonsVisibility = array_merge($this->buttonsVisibility, $buttonsVisibility);
+    }
+
+    protected function setIdentifier(string $identifier)
+    {
+        $this->identifier = $identifier;
     }
 }

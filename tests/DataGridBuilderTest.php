@@ -4,7 +4,9 @@
 namespace Pfilsx\DataGrid\tests;
 
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Columns\BooleanColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
@@ -12,8 +14,10 @@ use Pfilsx\DataGrid\Grid\Columns\DateColumn;
 use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
 use Pfilsx\DataGrid\Grid\Columns\SerialColumn;
 use Pfilsx\DataGrid\Grid\DataGridBuilder;
+use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\tests\OrmTestCase;
 
-class DataGridBuilderTest extends BaseCase
+class DataGridBuilderTest extends OrmTestCase
 {
     /**
      * @var DataGridBuilder
@@ -31,6 +35,8 @@ class DataGridBuilderTest extends BaseCase
     {
         parent::setUp();
         $this->builder = new DataGridBuilder($this->containerArray);
+        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->getEntityManager());
+        $this->builder->setProvider($provider);
     }
 
     public function testWrongColumnClass(): void
@@ -63,10 +69,14 @@ class DataGridBuilderTest extends BaseCase
         $this->assertInstanceOf(ImageColumn::class, $this->builder->getColumns()[3]);
 
         $this->builder->addColumn(self::DATE_COLUMN, [
-            'attribute' => 'creationDate'
+            'attribute' => 'creationDate',
+            'filter' => [
+                'class' => 'Pfilsx\DataGrid\Grid\Filters\DateFilter'
+            ]
         ]);
         $this->assertCount(5, $this->builder->getColumns());
         $this->assertInstanceOf(DateColumn::class, $this->builder->getColumns()[4]);
+        $this->assertTrue($this->builder->hasFilters());
 
         $this->builder->addColumn(self::ACTION_COLUMN, [
             'pathPrefix' => 'category_'
@@ -90,10 +100,58 @@ class DataGridBuilderTest extends BaseCase
     public function testSetPagination(): void
     {
         $this->builder->enablePagination(['limit' => 10]);
-        $this->assertTrue($this->builder->getOptions()['pagination']);
-        $this->assertEquals(10, $this->builder->getOptions()['paginationOptions']['limit']);
+        $this->assertTrue($this->builder->hasPagination());
+        $this->assertEquals(10, $this->builder->getPager()->getLimit());
 
         $this->builder->enablePagination(false);
-        $this->assertFalse($this->builder->getOptions()['pagination']);
+        $this->assertFalse($this->builder->hasPagination());
+    }
+
+    /**
+     * @depends testAddColumn
+     * @param DataGridBuilder $builder
+     */
+    public function testSetSort($builder): void
+    {
+        $builder->setSort('creationDate', 'DESC');
+        foreach ($builder->getColumns() as $column) {
+            /**
+             * @var $column AbstractColumn
+             */
+            if ($column->hasSort()) {
+                if ($column->getAttribute() == 'creationDate') {
+                    $this->assertEquals('DESC', $column->getSort());
+                } else {
+                    $this->assertTrue($column->getSort());
+                }
+            } else {
+                $this->assertFalse($column->getSort());
+            }
+        }
+    }
+
+    public function testSetCountFieldName(): void
+    {
+        $this->builder->setCountFieldName('id');
+        $this->assertEquals('id', $this->builder->getProvider()->getCountFieldName());
+    }
+
+    /**
+     * @depends testAddColumn
+     * @param DataGridBuilder $builder
+     */
+    public function testSetFiltersValues($builder): void
+    {
+        $builder->setFiltersValues(['creationDate' => '01.01.1990']);
+        foreach ($builder->getColumns() as $column) {
+            /**
+             * @var $column AbstractColumn
+             */
+            if ($column->hasFilter()) {
+                $this->assertEquals('01.01.1990', $column->getFilterValue());
+            } else {
+                $this->assertNull($column->getFilterValue());
+            }
+        }
     }
 }

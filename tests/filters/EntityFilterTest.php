@@ -5,7 +5,8 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\EntityFilter;
-use Pfilsx\DataGrid\tests\BaseCase;
+use Pfilsx\tests\OrmTestCase;
+use Pfilsx\tests\TestEntities\Node;
 
 /**
  * Class EntityFilterTest
@@ -13,31 +14,32 @@ use Pfilsx\DataGrid\tests\BaseCase;
  *
  * @property EntityFilter $testFilter
  */
-class EntityFilterTest extends BaseCase
+class EntityFilterTest extends OrmTestCase
 {
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->testFilter = new EntityFilter($this->containerArray, [
-            'label' => 'title',
-            'entityClass' => 'App\Entity\TestEntity'
+            'label' => 'user',
+            'entityClass' => Node::class,
+            'template' => 'test_template.html.twig'
         ]);
+        $this->createEntityManager();
     }
 
     public function testGetLabel(): void
     {
-        $this->assertEquals('title', $this->testFilter->getLabel());
+        $this->assertEquals('user', $this->testFilter->getLabel());
     }
 
     public function testGetEntityClass(): void
     {
-        $this->assertEquals('App\Entity\TestEntity', $this->testFilter->getEntityClass());
+        $this->assertEquals(Node::class, $this->testFilter->getEntityClass());
     }
 
     public function testRender(): void
     {
-        $renderResult = json_decode($this->testFilter->render('testAttribute', '1'), true);
-        $this->assertEquals('grid_filter', $renderResult[0]);
+        $this->assertEquals('select>option>1:joe option>2:toto option>3:toto option>4:toto option>5:toto option>6:foouser option>7:fös option>8:foouser option>9:foo option>10:bar option>11:toto', trim($this->testFilter->render('testAttribute', '1')));
     }
 }
