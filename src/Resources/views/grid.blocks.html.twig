@@ -94,10 +94,6 @@
         <form method="post" style="display: inline-block" action="{{ url }}"
               onsubmit="return confirm('{% trans %}are you sure you want to delete this item?{% endtrans %}');">
             <input type="hidden" name="_method" value="DELETE">
-            {% if grid_function_exists('csrf_token') %}
-                <input type="hidden" name="_token"
-                       value="{{ grid_call_function('csrf_token', ['delete' ~ entity.id]) }}">
-            {% endif %}
             <input type="submit" style="{{ block('action_button_styles') }}" value="{{ action }}">
         </form>
     {% else %}
