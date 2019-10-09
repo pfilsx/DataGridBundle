@@ -30,7 +30,7 @@ class DataGridExtensionTest extends OrmTestCase
     public function testGetFunctions(): void
     {
         $this->assertIsArray($this->extension->getFunctions());
-        $this->assertCount(3, $this->extension->getFunctions());
+        $this->assertCount(1, $this->extension->getFunctions());
     }
 
     /**
@@ -41,18 +41,6 @@ class DataGridExtensionTest extends OrmTestCase
     public function testGenerateGrid($env, $grid): void
     {
         $this->assertEquals('', $this->extension->generateGrid($env, $grid));
-    }
-
-    public function testFunctionExists(): void
-    {
-        $this->assertTrue($this->extension->functionExists(static::$kernel->getContainer()->get('twig'), 'max'));
-        $this->assertFalse($this->extension->functionExists(static::$kernel->getContainer()->get('twig'), 'grid_test'));
-    }
-
-    public function testCallFunction(): void
-    {
-        $this->assertEquals(3, $this->extension->callFunction(static::$kernel->getContainer()->get('twig'), 'max', [1, 3, 2, -4]));
-        $this->assertNull($this->extension->callFunction(static::$kernel->getContainer()->get('twig'), 'grid_test'));
     }
 
     public function gridProvider()
