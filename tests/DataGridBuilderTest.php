@@ -42,13 +42,13 @@ class DataGridBuilderTest extends OrmTestCase
     public function testWrongColumnClass(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->builder->addColumn('wrongClass', []);
+        $this->builder->addColumn('attribute', 'wrongClass');
     }
 
     public function testAddColumn()
     {
         $this->builder
-            ->addColumn(self::SERIAL_COLUMN);
+            ->addColumn('attribute', self::SERIAL_COLUMN);
         $this->assertCount(1, $this->builder->getColumns());
         $this->assertInstanceOf(SerialColumn::class, $this->builder->getColumns()[0]);
 
@@ -56,20 +56,15 @@ class DataGridBuilderTest extends OrmTestCase
         $this->assertCount(2, $this->builder->getColumns());
         $this->assertInstanceOf(DataColumn::class, $this->builder->getColumns()[1]);
 
-        $this->builder->addColumn(self::BOOLEAN_COLUMN, [
-            'attribute' => 'isEnabled'
-        ]);
+        $this->builder->addColumn('isEnabled', self::BOOLEAN_COLUMN);
         $this->assertCount(3, $this->builder->getColumns());
         $this->assertInstanceOf(BooleanColumn::class, $this->builder->getColumns()[2]);
 
-        $this->builder->addColumn(self::IMAGE_COLUMN, [
-            'attribute' => 'logo'
-        ]);
+        $this->builder->addColumn('logo', self::IMAGE_COLUMN);
         $this->assertCount(4, $this->builder->getColumns());
         $this->assertInstanceOf(ImageColumn::class, $this->builder->getColumns()[3]);
 
-        $this->builder->addColumn(self::DATE_COLUMN, [
-            'attribute' => 'creationDate',
+        $this->builder->addColumn('creationDate', self::DATE_COLUMN, [
             'filter' => [
                 'class' => 'Pfilsx\DataGrid\Grid\Filters\DateFilter'
             ]
@@ -78,8 +73,8 @@ class DataGridBuilderTest extends OrmTestCase
         $this->assertInstanceOf(DateColumn::class, $this->builder->getColumns()[4]);
         $this->assertTrue($this->builder->hasFilters());
 
-        $this->builder->addColumn(self::ACTION_COLUMN, [
-            'pathPrefix' => 'category_'
+        $this->builder->addActionColumn([
+            'pathPrefix' => 'prefix_'
         ]);
         $this->assertCount(6, $this->builder->getColumns());
         $this->assertInstanceOf(ActionColumn::class, $this->builder->getColumns()[5]);
@@ -119,7 +114,7 @@ class DataGridBuilderTest extends OrmTestCase
              * @var $column AbstractColumn
              */
             if ($column->hasSort()) {
-                if ($column->getAttribute() == 'creationDate') {
+                if ($column instanceof DataColumn && $column->getAttribute() == 'creationDate') {
                     $this->assertEquals('DESC', $column->getSort());
                 } else {
                     $this->assertTrue($column->getSort());

@@ -139,10 +139,6 @@ abstract class AbstractColumn
         return $this->sort;
     }
 
-    public function getAttribute()
-    {
-        return null;
-    }
 
     public function getFilterValue()
     {
