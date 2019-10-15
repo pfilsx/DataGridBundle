@@ -4,7 +4,6 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
-use Pfilsx\DataGrid\DataGridException;
 
 class RelationColumn extends DataColumn
 {
@@ -14,7 +13,7 @@ class RelationColumn extends DataColumn
     {
         parent::checkConfiguration();
         if (!is_string($this->labelAttribute) || empty($this->labelAttribute)) {
-            throw new DataGridException('labelAttribute property must be set for RelationColumn');
+            $this->labelAttribute = 'id';
         }
     }
 
@@ -38,6 +37,14 @@ class RelationColumn extends DataColumn
                 : htmlspecialchars($result);
         }
         return is_string($obj) ? $obj : '';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLabelAttribute()
+    {
+        return $this->labelAttribute;
     }
 
     /**

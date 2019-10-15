@@ -31,6 +31,14 @@ class DataColumn extends AbstractColumn
     /**
      * @return string
      */
+    public function getLabel(): string
+    {
+        return !empty($this->label) ? $this->label : $this->attribute;
+    }
+
+    /**
+     * @return string
+     */
     public function getFormat(): string
     {
         return $this->format;

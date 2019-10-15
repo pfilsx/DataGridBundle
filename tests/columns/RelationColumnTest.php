@@ -4,7 +4,6 @@
 namespace Pfilsx\DataGrid\tests\columns;
 
 
-use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\RelationColumn;
 use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\tests\OrmTestCase;
@@ -28,11 +27,11 @@ class RelationColumnTest extends OrmTestCase
 
     public function testCheckConfiguration(): void
     {
-        $this->expectException(DataGridException::class);
-        new RelationColumn($this->containerArray, [
+        $column = new RelationColumn($this->containerArray, [
             'attribute' => 'test_attribute',
             'template' => 'test_template.html.twig'
         ]);
+        $this->assertEquals('id', $column->getLabelAttribute());
     }
 
     public function testGetHeadContent(): void

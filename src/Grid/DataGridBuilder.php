@@ -5,6 +5,7 @@ namespace Pfilsx\DataGrid\Grid;
 
 
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
+use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use InvalidArgumentException;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
@@ -47,11 +48,12 @@ class DataGridBuilder implements DataGridBuilderInterface
     }
 
     /**
+     * @param string $attribute
      * @param string $columnClass
      * @param array $config
      * @return $this
      */
-    public function addColumn(string $columnClass, array $config = []): DataGridBuilderInterface
+    public function addColumn(string $attribute, string $columnClass = DataColumn::class, array $config = []): DataGridBuilderInterface
     {
         if (!is_subclass_of($columnClass, AbstractColumn::class)) {
             throw new InvalidArgumentException('Expected subclass of' . AbstractColumn::class);
@@ -59,7 +61,7 @@ class DataGridBuilder implements DataGridBuilderInterface
         /**
          * @var AbstractColumn $column
          */
-        $column = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config));
+        $column = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config, ['attribute' => $attribute]));
         $this->columns[] = $column;
         if ($column->hasFilter() && $column->isVisible()) {
             $this->hasFilters = true;
@@ -74,7 +76,16 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     public function addDataColumn(string $attribute, array $config = []): DataGridBuilderInterface
     {
-        return $this->addColumn(DataColumn::class, array_merge(['label' => $attribute], $config, ['attribute' => $attribute]));
+        return $this->addColumn($attribute, DataColumn::class, $config);
+    }
+
+    /**
+     * @param array $config
+     * @return $this
+     */
+    public function addActionColumn(array $config = []): DataGridBuilderInterface
+    {
+        return $this->addColumn('id', ActionColumn::class, $config);
     }
 
     /**

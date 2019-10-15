@@ -4,14 +4,17 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 interface DataGridBuilderInterface
 {
 
-    public function addColumn(string $columnClass, array $config = []): self;
+    public function addColumn(string $attribute, string $columnClass = DataColumn::class, array $config = []): self;
 
     public function addDataColumn(string $attribute, array $config = []): self;
+
+    public function addActionColumn(array $config = []): self;
 
     public function setTemplate(string $path): self;
 
