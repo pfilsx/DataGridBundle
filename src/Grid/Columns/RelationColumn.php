@@ -17,15 +17,14 @@ class RelationColumn extends DataColumn
         }
     }
 
-    public function getHeadContent()
+    /**
+     * @return string
+     */
+    public function getLabel(): string
     {
-        return !empty($this->label)
-            ? ucfirst($this->label)
-            : (!empty($this->attribute)
-                ? ucfirst($this->attribute) . '.' . ucfirst($this->labelAttribute)
-                : ucfirst($this->labelAttribute)
-            );
+        return !empty($this->label) ? $this->label : "{$this->attribute}.{$this->labelAttribute}";
     }
+    
 
     public function getCellContent($entity)
     {
