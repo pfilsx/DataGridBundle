@@ -4,6 +4,7 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
 
 abstract class AbstractColumn
@@ -26,12 +27,12 @@ abstract class AbstractColumn
 
     protected $template;
     /**
-     * @var array
+     * @var DataGridServiceContainer
      *
      */
     protected $container;
 
-    public function __construct(array $container, array $config = [])
+    public function __construct(DataGridServiceContainer $container, array $config = [])
     {
 
         $this->container = $container;

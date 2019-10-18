@@ -4,6 +4,7 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
@@ -17,7 +18,7 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     protected $pager;
     /**
-     * @var array
+     * @var DataGridServiceContainer
      */
     protected $container;
     /**
@@ -40,9 +41,9 @@ class DataGridBuilder implements DataGridBuilderInterface
 
     /**
      * DataGridBuilder constructor.
-     * @param array $container
+     * @param DataGridServiceContainer $container
      */
-    public function __construct(array $container)
+    public function __construct(DataGridServiceContainer $container)
     {
         $this->container = $container;
     }

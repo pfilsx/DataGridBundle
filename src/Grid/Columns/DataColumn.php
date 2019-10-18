@@ -66,7 +66,11 @@ class DataColumn extends AbstractColumn
 
     public function getHeadContent()
     {
-        return !empty($this->label) ? ucfirst($this->label) : (!empty($this->attribute) ? ucfirst($this->attribute) : '');
+        $label = $this->getLabel();
+        if (($translator = $this->container->getTranslator()) !== null){
+            $label = $translator->trans($label, []);
+        }
+        return ucfirst($label);
     }
 
     public function getFilterContent()

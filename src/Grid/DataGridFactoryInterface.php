@@ -5,17 +5,11 @@ namespace Pfilsx\DataGrid\Grid;
 
 
 use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
+use Pfilsx\DataGrid\DataGridServiceContainer;
 
 interface DataGridFactoryInterface
 {
-    public function __construct(ManagerRegistry $doctrine,
-                                RouterInterface $router,
-                                Environment $twig,
-                                RequestStack $requestStack, DataGridConfigurationInterface $configs);
+    public function __construct(DataGridServiceContainer $container, DataGridConfigurationInterface $configs);
 
     public function createGrid(string $gridType, $dataProvider): DataGrid;
 }

@@ -54,7 +54,7 @@ class ActionColumn extends AbstractColumn
                 /**
                  * @var Template $template
                  */
-                $template = $this->container['twig']->loadTemplate($this->template);
+                $template = $this->container->getTwig()->loadTemplate($this->template);
                 return $template->renderBlock('action_button', [
                     'url' => $this->generateUrl($entity, $matches[1]),
                     'action' => $matches[1],
@@ -74,13 +74,13 @@ class ActionColumn extends AbstractColumn
     protected function generateUrl($item, $action)
     {
         if (is_callable($this->urlGenerator)) {
-            return call_user_func_array($this->urlGenerator, [$item, $action, $this->container['router']]);
+            return call_user_func_array($this->urlGenerator, [$item, $action, $this->container->getRouter()]);
         } elseif (!empty($this->identifier) && $item->has($this->identifier)) {
-            return $this->container['router']->generate($this->pathPrefix . $action, [
+            return $this->container->getRouter()->generate($this->pathPrefix . $action, [
                 'id' => $item->get($this->identifier)
             ]);
         } elseif ($item->hasIdentifier()) {
-            return $this->container['router']->generate($this->pathPrefix . $action, [
+            return $this->container->getRouter()->generate($this->pathPrefix . $action, [
                 'id' => $item->get($item->getIdentifier())
             ]);
         } else {

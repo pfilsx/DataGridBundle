@@ -6,6 +6,7 @@
     <parameters>
         <parameter key="data_grid.twig_extension.class">Pfilsx\DataGrid\Twig\DataGridExtension</parameter>
         <parameter key="data_grid.configuration.class">Pfilsx\DataGrid\Config\DataGridConfiguration</parameter>
+        <parameter key="data_grid.service_container.class">Pfilsx\DataGrid\DataGridServiceContainer</parameter>
         <parameter key="data_grid.renderer.class">Pfilsx\DataGrid\Maker\GridTypeRenderer</parameter>
         <parameter key="data_grid.maker.class">Pfilsx\DataGrid\Maker\MakeGrid</parameter>
     </parameters>
@@ -18,6 +19,14 @@
 
         <service id="data_grid.configuration" class="%data_grid.configuration.class%" public="false">
             <argument type="collection"/>
+        </service>
+
+        <service id="data_grid.service_container" class="%data_grid.service_container.class%" public="false">
+            <argument type="service" id="doctrine"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="twig"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="translator" on-invalid="null"/>
         </service>
 
         <service id="data_grid.renderer.grid_type_renderer" class="%data_grid.renderer.class%">

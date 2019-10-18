@@ -6,16 +6,16 @@ namespace Pfilsx\DataGrid\Grid;
 
 use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
 
 class DataGridFactory implements DataGridFactoryInterface
 {
-    protected $container = [];
+    /**
+     * @var DataGridServiceContainer
+     */
+    protected $container;
     /**
      * @var Request
      */
@@ -42,17 +42,14 @@ class DataGridFactory implements DataGridFactoryInterface
     protected $queryParams;
 
     public function __construct(
-        ManagerRegistry $doctrine,
-        RouterInterface $router,
-        Environment $twig,
-        RequestStack $requestStack,
+        DataGridServiceContainer $container,
         DataGridConfigurationInterface $configs
     )
     {
-        $this->request = $this->container['request'] = $requestStack->getCurrentRequest();
-        $this->defaultOptions['twig'] = $this->container['twig'] = $twig;
-        $this->defaultOptions['router'] = $this->container['router'] = $router;
-        $this->container['doctrine'] = $doctrine;
+        $this->container = $container;
+        $this->request = $container->getRequest()->getCurrentRequest();
+        $this->defaultOptions['twig'] = $container->getTwig();
+        $this->defaultOptions['router'] = $container->getRouter();
         $this->gridBuilder = new DataGridBuilder($this->container);
         $this->filterBuilder = new DataGridFiltersBuilder();
 
@@ -70,7 +67,7 @@ class DataGridFactory implements DataGridFactoryInterface
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
-        $provider = DataProvider::create($dataProvider, $this->container['doctrine']);
+        $provider = DataProvider::create($dataProvider, $this->container->getDoctrine());
         $this->gridBuilder->setProvider($provider);
         $this->filterBuilder->setProvider($provider);
 

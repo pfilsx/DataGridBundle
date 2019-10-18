@@ -27,7 +27,7 @@ class ImageColumn extends DataColumn
                 /**
                  * @var Template $template
                  */
-                $template = $this->container['twig']->loadTemplate($this->template);
+                $template = $this->container->getTwig()->loadTemplate($this->template);
                 return $template->renderBlock('grid_img', [
                     'src' => $value,
                     'width' => $this->width,

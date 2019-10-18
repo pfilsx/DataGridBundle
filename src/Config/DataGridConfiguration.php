@@ -3,7 +3,11 @@
 
 namespace Pfilsx\DataGrid\Config;
 
-
+/**
+ * Class DataGridConfiguration
+ * @package Pfilsx\DataGrid\Config
+ * @internal
+ */
 class DataGridConfiguration implements DataGridConfigurationInterface
 {
     protected $template;
