@@ -5,22 +5,29 @@ namespace Pfilsx\tests\providers;
 
 
 use DateTime;
+use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Items\ArrayGridItem;
 use Pfilsx\DataGrid\Grid\Pager;
 use Pfilsx\DataGrid\Grid\Providers\ArrayDataProvider;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Pfilsx\tests\OrmTestCase;
 
-class ArrayDataProviderTest extends TestCase
+class ArrayDataProviderTest extends OrmTestCase
 {
     /**
      * @var DataProvider
      */
     protected $provider;
+    /**
+     * @var DataProvider
+     */
+    protected $provider2;
 
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $itemsSets = $this->getItemSets();
 
         $this->provider = DataProvider::create([
@@ -29,12 +36,35 @@ class ArrayDataProviderTest extends TestCase
             $itemsSets[2],
             $itemsSets[4]
         ]);
+        $this->provider2 = DataProvider::create([
+            new class{
+                protected $id = 1;
+                public function getId(){
+                    return $this->id;
+                }
+            },
+            new class{
+                protected $id = 2;
+                public function getId(){
+                    return $this->id;
+                }
+            }
+        ], $this->containerArray['doctrine']);
         $this->provider->setPager(new Pager());
     }
 
     public function testType(): void
     {
         $this->assertInstanceOf(ArrayDataProvider::class, $this->provider);
+        $this->assertInstanceOf(ArrayDataProvider::class, $this->provider2);
+    }
+
+    public function testWrongCreation(): void {
+        $this->expectException(DataGridException::class);
+        DataProvider::create([
+            'first',
+            'second'
+        ]);
     }
 
     public function testGetItems(): void
@@ -43,6 +73,17 @@ class ArrayDataProviderTest extends TestCase
         $this->assertIsArray($items);
         $this->assertCount(4, $items);
         $this->assertEquals(4, $this->provider->getTotalCount());
+    }
+
+    public function testPager(): void {
+        $this->provider->getPager()->disable();
+        $this->assertEquals(false, $this->provider->getPager()->isEnabled());
+        $this->provider->getPager()->enable();
+        $this->assertEquals(true, $this->provider->getPager()->isEnabled());
+        $this->provider->getPager()->setLimit(2);
+        $this->assertEquals(2, $this->provider->getPager()->getLimit());
+        $items = $this->provider->getItems();
+        $this->assertCount(2, $items);
     }
 
     /**

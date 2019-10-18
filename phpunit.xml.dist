@@ -27,6 +27,8 @@
             <exclude>
                 <directory suffix="Interface.php">./src</directory>
                 <directory prefix="Abstract">./src</directory>
+                <directory>./src/DependencyInjection</directory>
+                <directory>./src/Maker</directory>
                 <directory>./src/Resources</directory>
                 <file>./src/Grid/Providers/DataProvider.php</file>
             </exclude>
