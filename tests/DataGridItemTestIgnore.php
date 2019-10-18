@@ -5,17 +5,16 @@ namespace Pfilsx\DataGrid\tests;
 
 
 use Pfilsx\DataGrid\DataGridException;
-use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\tests\OrmTestCase;
 use Pfilsx\tests\TestEntities\Node;
 
-class DataGridItemTest extends OrmTestCase
+class DataGridItemTestIgnore extends OrmTestCase
 {
 
 
     public function testRow(): void
     {
-        $item = new DataGridItem();
+        $item = new DataGridItemOld();
         $row = [
             'id' => 1
         ];
@@ -26,15 +25,15 @@ class DataGridItemTest extends OrmTestCase
 
     public function testHasOnEmpty(): void
     {
-        $item = new DataGridItem();
+        $item = new DataGridItemOld();
         $this->assertFalse($item->has('id'));
     }
 
     /**
      * @dataProvider itemsProvider
-     * @param DataGridItem $item
+     * @param DataGridItemOld $item
      */
-    public function testHas(DataGridItem $item): void
+    public function testHas(DataGridItemOld $item): void
     {
         $this->assertTrue($item->has('id'));
         $this->assertFalse($item->has('test'));
@@ -42,15 +41,15 @@ class DataGridItemTest extends OrmTestCase
 
     public function testGetOnEmpty(): void
     {
-        $item = new DataGridItem();
+        $item = new DataGridItemOld();
         $this->assertNull($item->get('id'));
     }
 
     /**
      * @dataProvider itemsProvider
-     * @param DataGridItem $item
+     * @param DataGridItemOld $item
      */
-    public function testGet(DataGridItem $item): void
+    public function testGet(DataGridItemOld $item): void
     {
         $this->assertEquals(1, $item->get('id'));
 
@@ -60,7 +59,7 @@ class DataGridItemTest extends OrmTestCase
 
     public function testGetId(): void
     {
-        $item = new DataGridItem();
+        $item = new DataGridItemOld();
         $this->assertNull($item->getId());
 
         $item->setEntityManager($this->getEntityManager());
@@ -74,7 +73,7 @@ class DataGridItemTest extends OrmTestCase
 
     public function itemsProvider()
     {
-        $item = new DataGridItem();
+        $item = new DataGridItemOld();
         $entity = new class
         {
             protected $id = 1;
@@ -86,7 +85,7 @@ class DataGridItemTest extends OrmTestCase
         };
         $item->setEntity($entity);
 
-        $item2 = new DataGridItem();
+        $item2 = new DataGridItemOld();
         $item2->setRow([
             'id' => 1
         ]);

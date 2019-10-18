@@ -5,7 +5,7 @@ namespace Pfilsx\tests\providers;
 
 
 use DateTime;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\ArrayGridItem;
 use Pfilsx\DataGrid\Grid\Pager;
 use Pfilsx\DataGrid\Grid\Providers\ArrayDataProvider;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
@@ -122,14 +122,10 @@ class ArrayDataProviderTest extends TestCase
     public function sortDataProvider(): array
     {
         $itemSets = $this->getItemSets();
-        $item1 = new DataGridItem();
-        $item1->setRow($itemSets[1]);
-        $item2 = new DataGridItem();
-        $item2->setRow($itemSets[2]);
-        $item3 = new DataGridItem();
-        $item3->setRow($itemSets[3]);
-        $item4 = new DataGridItem();
-        $item4->setRow($itemSets[4]);
+        $item1 = new ArrayGridItem($itemSets[1], 'id');
+        $item2 = new ArrayGridItem($itemSets[2], 'id');
+        $item3 = new ArrayGridItem($itemSets[3], 'id');
+        $item4 = new ArrayGridItem($itemSets[4], 'id');
         return [
             [
                 'id',

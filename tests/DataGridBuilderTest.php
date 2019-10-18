@@ -35,7 +35,7 @@ class DataGridBuilderTest extends OrmTestCase
     {
         parent::setUp();
         $this->builder = new DataGridBuilder($this->containerArray);
-        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->getEntityManager());
+        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->containerArray['doctrine']);
         $this->builder->setProvider($provider);
     }
 

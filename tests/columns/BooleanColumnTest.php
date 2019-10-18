@@ -6,7 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\BooleanColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -57,8 +57,7 @@ class BooleanColumnTest extends OrmTestCase
                 return $this->enabled;
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('yes', $this->testColumn->getCellContent($item));
         $entity->enabled = false;
         $this->assertEquals('no', $this->testColumn->getCellContent($item));

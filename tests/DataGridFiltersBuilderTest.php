@@ -22,7 +22,7 @@ class DataGridFiltersBuilderTest extends OrmTestCase
     {
         parent::setUp();
         $this->builder = new DataGridFiltersBuilder();
-        $provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class), $this->getEntityManager());
+        $provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class), $this->containerArray['doctrine']);
         $this->builder->setProvider($provider);
     }
 

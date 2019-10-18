@@ -25,7 +25,6 @@ class EntityFilterTest extends OrmTestCase
             'entityClass' => Node::class,
             'template' => 'test_template.html.twig'
         ]);
-        $this->createEntityManager();
     }
 
     public function testGetLabel(): void

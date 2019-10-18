@@ -21,7 +21,7 @@ class QueryBuilderDataProviderTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class)->createQueryBuilder('qb1'), $this->getEntityManager());
+        $this->provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class)->createQueryBuilder('qb1'), $this->containerArray['doctrine']);
         $this->provider->setPager(new Pager());
     }
 

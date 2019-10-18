@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Pfilsx\DataGrid\Grid\Columns\RelationColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -56,11 +56,10 @@ class RelationColumnTest extends OrmTestCase
                 };
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
-        $item->setEntity(new class
+        $item->setData(new class
         {
             public function getTestAttribute()
             {

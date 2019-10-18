@@ -4,10 +4,9 @@
 namespace Pfilsx\DataGrid\tests\columns;
 
 
-use Exception;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 use Pfilsx\tests\TestEntities\Node;
 
@@ -83,9 +82,7 @@ class ActionColumnTest extends OrmTestCase
     {
         $entity = new Node();
         $entity->setId(1);
-        $item = new DataGridItem();
-        $item->setEntity($entity);
-        $item->setEntityManager($this->getEntityManager());
+        $item = new EntityGridItem($entity, 'id');
         $this->assertEquals('_show ', $this->testColumn->getCellContent($item));
 
         $column = new ActionColumn($this->containerArray, [
@@ -114,8 +111,8 @@ class ActionColumnTest extends OrmTestCase
         $entity = new class()
         {
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
+        $item->setIdentifier('id');
         $column = new ActionColumn($this->containerArray, [
             'pathPrefix' => 'test_prefix_',
             'template' => 'test_template.html.twig',
