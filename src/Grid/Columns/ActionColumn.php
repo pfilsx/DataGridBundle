@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\Grid\Columns;
 
 use Exception;
 use Pfilsx\DataGrid\DataGridException;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\DataGridItemInterface;
 use Twig\Template;
 
 class ActionColumn extends AbstractColumn
@@ -66,7 +66,7 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @param DataGridItem $item
+     * @param DataGridItemInterface $item
      * @param string $action
      * @return mixed|string
      * @throws Exception
@@ -76,9 +76,13 @@ class ActionColumn extends AbstractColumn
         if (is_callable($this->urlGenerator)) {
             return call_user_func_array($this->urlGenerator, [$item, $action, $this->container['router']]);
         } elseif (!empty($this->identifier) && $item->has($this->identifier)) {
-            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get($this->identifier)]);
-        } elseif ($item->has('id')) {
-            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get('id')]);
+            return $this->container['router']->generate($this->pathPrefix . $action, [
+                'id' => $item->get($this->identifier)
+            ]);
+        } elseif ($item->hasIdentifier()) {
+            return $this->container['router']->generate($this->pathPrefix . $action, [
+                'id' => $item->get($item->getIdentifier())
+            ]);
         } else {
             throw new DataGridException('Could not generate url for action: ' . $action);
         }

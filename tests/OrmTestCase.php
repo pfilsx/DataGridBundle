@@ -45,6 +45,8 @@ class OrmTestCase extends KernelTestCase
             'doctrine' => $kernel->getContainer()->get('doctrine'),
             'request' => $kernel->getContainer()->get('request_stack')->getCurrentRequest()
         ];
+
+        $this->createEntityManager();
     }
 
     /**

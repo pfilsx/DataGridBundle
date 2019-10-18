@@ -8,8 +8,8 @@ use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -112,8 +112,7 @@ class DataColumnTest extends OrmTestCase
                 return $this->data;
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
         $column = new DataColumn($this->containerArray, [
@@ -139,8 +138,7 @@ class DataColumnTest extends OrmTestCase
         $entity = new class
         {
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->testColumn->getCellContent($item);
     }
 }

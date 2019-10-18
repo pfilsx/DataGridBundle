@@ -5,11 +5,10 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 
 use DateTime;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
-use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Hydrators\DataGridHydrator;
+use Pfilsx\DataGrid\Grid\Items\ArrayGridItem;
 use ReflectionClass;
 
 class QueryBuilderDataProvider extends DataProvider
@@ -18,12 +17,10 @@ class QueryBuilderDataProvider extends DataProvider
      * @var QueryBuilder
      */
     protected $builder;
-    protected $entityManager;
 
-    public function __construct(QueryBuilder $builder, EntityManager $manager)
+    public function __construct(QueryBuilder $builder)
     {
         $this->builder = $builder;
-        $this->entityManager = $manager;
     }
 
     public function getItems(): array
@@ -38,9 +35,7 @@ class QueryBuilderDataProvider extends DataProvider
             ->addCustomHydrationMode($hydratorName, DataGridHydrator::class);
 
         return array_map(function ($row) {
-            $item = new DataGridItem();
-            $item->setRow($row);
-            $item->setEntityManager($this->entityManager);
+            $item = new ArrayGridItem($row, array_key_exists('id', $row) ? 'id' : null);
             return $item;
         }, $this->builder->getQuery()->getResult($hydratorName));
     }
