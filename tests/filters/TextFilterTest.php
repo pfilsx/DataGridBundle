@@ -15,7 +15,7 @@ class TextFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new TextFilter($this->containerArray, [
+        $this->testFilter = new TextFilter($this->serviceContainer, [
             'template' => 'test_template.html.twig'
         ]);
     }

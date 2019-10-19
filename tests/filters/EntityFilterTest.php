@@ -20,7 +20,7 @@ class EntityFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new EntityFilter($this->containerArray, [
+        $this->testFilter = new EntityFilter($this->serviceContainer, [
             'label' => 'user',
             'entityClass' => Node::class,
             'template' => 'test_template.html.twig'

@@ -18,7 +18,7 @@ class DateFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new DateFilter($this->containerArray, [
+        $this->testFilter = new DateFilter($this->serviceContainer, [
             'minDate' => '01-01-1990',
             'maxDate' => 'now',
             'template' => 'test_template.html.twig'

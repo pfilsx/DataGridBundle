@@ -34,8 +34,8 @@ class DataGridBuilderTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->builder = new DataGridBuilder($this->containerArray);
-        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->containerArray['doctrine']);
+        $this->builder = new DataGridBuilder($this->serviceContainer);
+        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->serviceContainer->getDoctrine());
         $this->builder->setProvider($provider);
     }
 

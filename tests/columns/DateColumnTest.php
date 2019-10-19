@@ -20,7 +20,7 @@ class DateColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new DateColumn($this->containerArray, [
+        $this->testColumn = new DateColumn($this->serviceContainer, [
             'attribute' => 'testAttribute',
             'dateFormat' => 'm-d-Y',
             'template' => 'test_template.html.twig'
@@ -52,7 +52,7 @@ class DateColumnTest extends OrmTestCase
 
     public function testGetCellContentNoFormat(): void
     {
-        $column = new DateColumn($this->containerArray, [
+        $column = new DateColumn($this->serviceContainer, [
             'value' => function () {
                 return '01-01-1970';
             },

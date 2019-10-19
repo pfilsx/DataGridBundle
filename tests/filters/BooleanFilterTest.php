@@ -16,7 +16,7 @@ class BooleanFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new BooleanFilter($this->containerArray, [
+        $this->testFilter = new BooleanFilter($this->serviceContainer, [
             'trueChoice' => 'yes',
             'falseChoice' => 'no',
             'template' => 'test_template.html.twig'

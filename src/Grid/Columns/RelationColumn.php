@@ -24,7 +24,7 @@ class RelationColumn extends DataColumn
     {
         return !empty($this->label) ? $this->label : "{$this->attribute}.{$this->labelAttribute}";
     }
-    
+
 
     public function getCellContent($entity)
     {

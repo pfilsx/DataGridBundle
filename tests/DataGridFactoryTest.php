@@ -5,6 +5,7 @@ namespace Pfilsx\DataGrid\tests;
 
 use InvalidArgumentException;
 use Pfilsx\DataGrid\Config\DataGridConfiguration;
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
 use Pfilsx\tests\OrmTestCase;
@@ -43,11 +44,15 @@ class DataGridFactoryTest extends OrmTestCase
         ]);
         $stack = new RequestStack();
         $stack->push($request);
-        $this->factory = new DataGridFactory(
+        /** @noinspection PhpParamsInspection */
+        $container = new DataGridServiceContainer(
             static::$kernel->getContainer()->get('doctrine'),
             static::$kernel->getContainer()->get('router'),
             static::$kernel->getContainer()->get('twig'),
-            $stack, $this->configuration);
+            $stack,
+            static::$kernel->getContainer()->get('translator')
+        );
+        $this->factory = new DataGridFactory($container, $this->configuration);
     }
 
     public function testWrongGridTypeException(): void
@@ -81,10 +86,15 @@ class DataGridFactoryTest extends OrmTestCase
         ]);
         $stack = new RequestStack();
         $stack->push($request);
-        $factory2 = new DataGridFactory(static::$kernel->getContainer()->get('doctrine'),
+        /** @noinspection PhpParamsInspection */
+        $container = new DataGridServiceContainer(
+            static::$kernel->getContainer()->get('doctrine'),
             static::$kernel->getContainer()->get('router'),
             static::$kernel->getContainer()->get('twig'),
-            $stack, $this->configuration);
+            $stack,
+            static::$kernel->getContainer()->get('translator')
+        );
+        $factory2 = new DataGridFactory($container, $this->configuration);
         $grid2 = $factory2->createGrid(get_class($this->createMock(AbstractGridType::class)), $this->getEntityManager()->getRepository(Node::class));
 
         $this->assertEquals([

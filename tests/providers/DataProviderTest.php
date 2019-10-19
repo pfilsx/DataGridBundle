@@ -17,17 +17,17 @@ class DataProviderTest extends OrmTestCase
     public function testCreate(): void
     {
         $repository = $this->getEntityManager()->getRepository(Node::class);
-        $provider1 = DataProvider::create($repository, $this->containerArray['doctrine']);
+        $provider1 = DataProvider::create($repository, $this->serviceContainer->getDoctrine());
         $this->assertInstanceOf(RepositoryDataProvider::class, $provider1);
 
         $qb = $repository->createQueryBuilder('qb1');
-        $provider2 = DataProvider::create($qb, $this->containerArray['doctrine']);
+        $provider2 = DataProvider::create($qb, $this->serviceContainer->getDoctrine());
         $this->assertInstanceOf(QueryBuilderDataProvider::class, $provider2);
 
-        $provider3 = DataProvider::create([], $this->containerArray['doctrine']);
+        $provider3 = DataProvider::create([], $this->serviceContainer->getDoctrine());
         $this->assertInstanceOf(ArrayDataProvider::class, $provider3);
 
         $this->expectException(DataGridException::class);
-        DataProvider::create('', $this->containerArray['doctrine']);
+        DataProvider::create('', $this->serviceContainer->getDoctrine());
     }
 }

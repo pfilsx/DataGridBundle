@@ -6,6 +6,7 @@ namespace Pfilsx\tests;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\tests\TestEntities\Node;
 use Pfilsx\tests\TestEntities\NodeAssoc;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,12 +19,11 @@ class OrmTestCase extends KernelTestCase
      * @var EntityManager
      */
     protected $em;
-    /**
-     * @var
-     */
-    protected $pdo;
 
-    protected $containerArray = [];
+    /**
+     * @var DataGridServiceContainer
+     */
+    protected $serviceContainer;
 
 
     protected function setUp(): void
@@ -39,12 +39,15 @@ class OrmTestCase extends KernelTestCase
             'doctrine:schema:create'
         )));
 
-        $this->containerArray = [
-            'twig' => $kernel->getContainer()->get('twig'),
-            'router' => $kernel->getContainer()->get('router'),
-            'doctrine' => $kernel->getContainer()->get('doctrine'),
-            'request' => $kernel->getContainer()->get('request_stack')->getCurrentRequest()
-        ];
+
+        /** @noinspection PhpParamsInspection */
+        $this->serviceContainer = new DataGridServiceContainer(
+            $kernel->getContainer()->get('doctrine'),
+            $kernel->getContainer()->get('router'),
+            $kernel->getContainer()->get('twig'),
+            $kernel->getContainer()->get('request_stack'),
+            $kernel->getContainer()->get('translator')
+        );
 
         $this->createEntityManager();
     }
@@ -61,11 +64,6 @@ class OrmTestCase extends KernelTestCase
         return $this->em;
     }
 
-    public function getConnection()
-    {
-        $pdo = $this->em->getConnection();
-        return $this->createDefaultDBConnection($pdo, ':memory:');
-    }
 
     public function getEntityManager()
     {

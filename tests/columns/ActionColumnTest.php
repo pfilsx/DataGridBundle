@@ -21,7 +21,7 @@ class ActionColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new ActionColumn($this->containerArray, [
+        $this->testColumn = new ActionColumn($this->serviceContainer, [
             'buttonsTemplate' => '{show} {delete}',
             'buttons' => [
                 'show' => function ($entity, $url) {
@@ -85,7 +85,7 @@ class ActionColumnTest extends OrmTestCase
         $item = new EntityGridItem($entity, 'id');
         $this->assertEquals('_show ', $this->testColumn->getCellContent($item));
 
-        $column = new ActionColumn($this->containerArray, [
+        $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
             'identifier' => 'id',
             'template' => 'test_template.html.twig',
@@ -95,7 +95,7 @@ class ActionColumnTest extends OrmTestCase
         $this->assertCount(3, $buttons);
         $this->assertEquals(['show', 'edit', 'delete'], $buttons);
 
-        $column = new ActionColumn($this->containerArray, [
+        $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
             'template' => 'test_template.html.twig',
             'buttonsTemplate' => '{show} {edit} {delete}'
@@ -113,7 +113,7 @@ class ActionColumnTest extends OrmTestCase
         };
         $item = new EntityGridItem($entity);
         $item->setIdentifier('id');
-        $column = new ActionColumn($this->containerArray, [
+        $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
             'template' => 'test_template.html.twig',
         ]);
