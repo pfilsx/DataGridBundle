@@ -5,38 +5,34 @@ namespace Pfilsx\DataGrid\Grid;
 
 
 use Doctrine\Common\Collections\Criteria;
-use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
+use Pfilsx\DataGrid\Config\ConfigurationContainerInterface;
+use Pfilsx\DataGrid\Config\ConfigurationInterface;
+use Pfilsx\DataGrid\DataGridServiceContainer;
+use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
+use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 use Twig\Template;
 
 /**
  * Class DataGrid
  * @package Pfilsx\DataGrid\Grid
  * @internal
+ * TODO translation_domain in columns and builder
  */
 class DataGrid
 {
-    /**
-     * @var bool
-     */
-    protected $showTitles = true;
-
     /**
      * @var Template
      */
     protected $template;
     /**
-     * @var RouterInterface
+     * @var DataGridServiceContainer
      */
-    protected $router;
+    protected $container;
+
     /**
-     * @var Environment
+     * @var ConfigurationInterface
      */
-    protected $twig;
-
-    protected $noDataMessage = 'No data found';
-
-
+    protected $configuration;
     /**
      * @var Criteria
      */
@@ -49,55 +45,76 @@ class DataGrid
     /**
      * DataGrid constructor.
      * @param DataGridBuilderInterface $builder
-     * @param array $defaultOptions
+     * @param ConfigurationContainerInterface $defaultConfiguration
+     * @param DataGridServiceContainer $container
      * @internal
      */
-    public function __construct(DataGridBuilderInterface $builder, array $defaultOptions = [])
+    public function __construct(
+        DataGridBuilderInterface $builder,
+        ConfigurationContainerInterface $defaultConfiguration,
+        DataGridServiceContainer $container
+    )
     {
         $this->builder = $builder;
-        $this->twig = $defaultOptions['twig'];
-        $this->setConfigurationOptions(array_merge($defaultOptions, $builder->getOptions()));
+        $this->container = $container;
+        $this->configuration = $defaultConfiguration->getInstance($builder->getInstance())->merge($builder->getConfiguration());
+        $this->setTemplate($this->configuration->getTemplate());
+        $this->configurePagerOptions();
     }
 
     /**
      * @internal
-     * @param $options
      */
-    protected function setConfigurationOptions($options)
+    protected function configurePagerOptions()
     {
-        foreach ($options as $key => $value) {
-            $setter = 'set' . ucfirst($key);
-            if (method_exists($this, $setter)) {
-                $this->$setter($value);
-            }
+        $pager = $this->builder->getProvider()->getPager();
+        $pager->setLimit($this->configuration->getPaginationLimit());
+        if ($this->configuration->getPaginationEnabled()){
+            $pager->enable();
+        } else {
+            $pager->disable();
         }
     }
-
-    public function getShowTitles()
+    /**
+     * @return bool
+     * @internal
+     */
+    public function getShowTitles(): bool
     {
-        return $this->showTitles;
+        return $this->configuration->getShowTitles();
     }
 
-    protected function setShowTitles($value)
-    {
-        $this->showTitles = (bool)$value;
-    }
-
-    public function getProvider()
+    /**
+     * @return Providers\DataProviderInterface
+     * @internal
+     */
+    public function getProvider(): DataProviderInterface
     {
         return $this->builder->getProvider();
     }
 
-    public function getColumns()
+    /**
+     * @return AbstractColumn[]
+     * @internal
+     */
+    public function getColumns(): array
     {
         return $this->builder->getColumns();
     }
 
+    /**
+     * @return bool
+     * @internal
+     */
     public function hasFilters()
     {
         return $this->builder->hasFilters();
     }
 
+    /**
+     * @return array
+     * @internal
+     */
     public function getData()
     {
         return $this->getProvider()->getItems();
@@ -105,6 +122,7 @@ class DataGrid
 
     /**
      * @return Template
+     * @internal
      */
     public function getTemplate()
     {
@@ -120,28 +138,22 @@ class DataGrid
      */
     public function setTemplate(string $path)
     {
-        $template = $this->twig->loadTemplate($path);
-        $this->template = $template;
-    }
-
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
-    protected function setRouter(RouterInterface $router)
-    {
-        $this->router = $router;
+        $this->template = $this->container->getTwig()->loadTemplate($path);
+        foreach ($this->builder->getColumns() as $column){
+            $column->setTemplate($this->template);
+        }
     }
 
     public function getNoDataMessage()
     {
-        return $this->noDataMessage;
+        return $this->container->getTranslator() !== null
+            ? $this->container->getTranslator()->trans($this->configuration->getNoDataMessage(), [], $this->configuration->getTranslationDomain())
+            : ucfirst($this->configuration->getNoDataMessage());
     }
 
     protected function setNoDataMessage(string $message)
     {
-        $this->noDataMessage = $message;
+        $this->configuration->setNoDataMessage($message);
     }
 
     public function hasPagination()

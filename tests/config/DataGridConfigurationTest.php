@@ -2,7 +2,7 @@
 
 namespace Pfilsx\DataGrid\tests\config;
 
-use Pfilsx\DataGrid\Config\DataGridConfiguration;
+use Pfilsx\DataGrid\Config\Configuration;
 use PHPUnit\Framework\TestCase;
 
 class DataGridConfigurationTest extends TestCase
@@ -15,7 +15,7 @@ class DataGridConfigurationTest extends TestCase
      */
     public function testConfiguration($config, $result): void
     {
-        $configuration = new DataGridConfiguration($config);
+        $configuration = new Configuration($config);
 
         $this->assertEquals($result, $configuration->getConfigs());
     }

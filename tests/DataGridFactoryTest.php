@@ -4,7 +4,7 @@
 namespace Pfilsx\DataGrid\tests;
 
 use InvalidArgumentException;
-use Pfilsx\DataGrid\Config\DataGridConfiguration;
+use Pfilsx\DataGrid\Config\Configuration;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
@@ -27,7 +27,7 @@ class DataGridFactoryTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->configuration = new DataGridConfiguration([
+        $this->configuration = new Configuration([
             'template' => 'test_template.html.twig',
             'noDataMessage' => 'empty',
             'showTitles' => false,

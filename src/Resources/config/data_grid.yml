@@ -1,4 +1,4 @@
 services:
   Pfilsx\DataGrid\Grid\DataGridFactoryInterface:
     class: Pfilsx\DataGrid\Grid\DataGridFactory
-    arguments: ['@data_grid.service_container', '@data_grid.configuration']
+    arguments: ['@data_grid.service_container', '@data_grid.configuration_container']

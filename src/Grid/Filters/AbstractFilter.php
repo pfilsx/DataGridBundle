@@ -9,13 +9,12 @@ use Twig\Template;
 
 abstract class AbstractFilter
 {
-    protected $defaultTemplate = '@DataGrid/grid.blocks.html.twig';
     /**
      * @var DataGridServiceContainer
      */
     protected $container;
     /**
-     * @var \Twig_Template|null
+     * @var Template|null
      */
     protected $template;
     /**
@@ -39,10 +38,9 @@ abstract class AbstractFilter
         return $this->template;
     }
 
-    public function setTemplate(?string $template)
+    public function setTemplate(?Template $template)
     {
-        $twig = $this->container->getTwig();
-        $this->template = is_string($template) ? $twig->loadTemplate($template) : $twig->loadTemplate($this->defaultTemplate);
+        $this->template = $template;
     }
 
     public function getOptions()
@@ -64,14 +62,10 @@ abstract class AbstractFilter
 
     protected function prepareValue(&$value)
     {
-
     }
 
     public function render($attribute, $value): string
     {
-        if (!$this->template instanceof Template || !$this->template->hasBlock('grid_filter', [])) {
-            $this->template = $this->container->getTwig()->loadTemplate($this->defaultTemplate);
-        }
         $this->prepareValue($value);
         return $this->template->renderBlock('grid_filter', array_merge($this->getParams(), [
             'attribute' => $attribute,

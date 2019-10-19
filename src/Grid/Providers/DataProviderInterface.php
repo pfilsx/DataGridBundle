@@ -6,6 +6,11 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 use Pfilsx\DataGrid\Grid\Pager;
 
+/**
+ * Interface DataProviderInterface
+ * @package Pfilsx\DataGrid\Grid\Providers
+ * @internal
+ */
 interface DataProviderInterface
 {
     public function getItems(): array;

@@ -4,6 +4,8 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\Config\ConfigurationInterface;
+use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
@@ -22,21 +24,16 @@ interface DataGridBuilderInterface
 
     public function setShowTitles(bool $flag): self;
 
-    public function enablePagination($options = []): self;
+    public function enablePagination(bool $enabled = true, int $limit = 10): self;
 
     public function setCountFieldName(string $name): self;
 
     /**
      * @internal
-     * @return array
+     * @return AbstractColumn[]
      */
     public function getColumns(): array;
 
-    /**
-     * @internal
-     * @return array
-     */
-    public function getOptions(): array;
 
     public function getProvider(): DataProviderInterface;
 
@@ -65,4 +62,10 @@ interface DataGridBuilderInterface
      * @return bool
      */
     public function hasPagination(): bool;
+
+    public function getConfiguration(): ConfigurationInterface;
+
+    public function setInstance(string $name): void;
+
+    public function getInstance(): string;
 }

@@ -51,11 +51,7 @@ class ActionColumn extends AbstractColumn
                         $this->generateUrl($entity, $matches[1])
                     ]);
                 }
-                /**
-                 * @var Template $template
-                 */
-                $template = $this->container->getTwig()->loadTemplate($this->template);
-                return $template->renderBlock('action_button', [
+                return $this->template->renderBlock('action_button', [
                     'url' => $this->generateUrl($entity, $matches[1]),
                     'action' => $matches[1],
                     'entity' => $entity

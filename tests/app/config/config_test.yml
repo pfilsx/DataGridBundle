@@ -1,8 +1,8 @@
 data_grid:
-  template: 'grid.blocks.html.twig'
-  noDataMessage: 'Записей не найдено'
-  pagination:
-    limit: 10
+    instances:
+      default:
+        template: 'grid.blocks.html.twig'
+        no_data_message: 'Записей не найдено'
 framework:
   trusted_hosts: ~
   secret: "test"

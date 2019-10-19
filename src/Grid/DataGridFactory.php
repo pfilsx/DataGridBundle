@@ -4,7 +4,8 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
+use Pfilsx\DataGrid\Config\ConfigurationContainerInterface;
+use Pfilsx\DataGrid\Config\ConfigurationInterface;
 use InvalidArgumentException;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
@@ -33,32 +34,21 @@ class DataGridFactory implements DataGridFactoryInterface
      */
     protected $gridType;
     /**
-     * @var array
+     * @var ConfigurationContainerInterface
      */
-    protected $defaultOptions = [];
+    protected $defaultConfiguration;
     /**
      * @var array
      */
     protected $queryParams;
 
-    public function __construct(
-        DataGridServiceContainer $container,
-        DataGridConfigurationInterface $configs
-    )
+    public function __construct(DataGridServiceContainer $container, ConfigurationContainerInterface $configs)
     {
         $this->container = $container;
         $this->request = $container->getRequest()->getCurrentRequest();
-        $this->defaultOptions['twig'] = $container->getTwig();
-        $this->defaultOptions['router'] = $container->getRouter();
+        $this->defaultConfiguration = $configs;
         $this->gridBuilder = new DataGridBuilder($this->container);
         $this->filterBuilder = new DataGridFiltersBuilder();
-
-        foreach ($configs->getConfigs() as $key => $value) {
-            $setter = 'setDefault' . ucfirst($key);
-            if (method_exists($this, $setter)) {
-                $this->$setter($value);
-            }
-        }
     }
 
 
@@ -79,7 +69,7 @@ class DataGridFactory implements DataGridFactoryInterface
             $this->gridBuilder->getPager()->setTotalCount($provider->getTotalCount());
         }
 
-        return new DataGrid($this->gridBuilder, $this->defaultOptions);
+        return new DataGrid($this->gridBuilder, $this->defaultConfiguration, $this->container);
     }
 
     protected function handleRequest(): void
