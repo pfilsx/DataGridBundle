@@ -19,7 +19,7 @@ class BooleanFilterTest extends OrmTestCase
         $this->testFilter = new BooleanFilter($this->serviceContainer, [
             'trueChoice' => 'yes',
             'falseChoice' => 'no',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

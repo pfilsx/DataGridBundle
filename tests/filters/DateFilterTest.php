@@ -21,7 +21,7 @@ class DateFilterTest extends OrmTestCase
         $this->testFilter = new DateFilter($this->serviceContainer, [
             'minDate' => '01-01-1990',
             'maxDate' => 'now',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

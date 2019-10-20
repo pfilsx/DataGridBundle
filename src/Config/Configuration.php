@@ -76,12 +76,12 @@ class Configuration implements ConfigurationInterface
     public function getConfigsArray(): array
     {
         return [
-            'template' => $this->template,
-            'paginationEnabled' => $this->paginationEnabled,
-            'paginationLimit' => $this->paginationLimit,
-            'noDataMessage' => $this->noDataMessage,
-            'showTitles' => $this->showTitles,
-            'translationDomain' => $this->translationDomain
+            'template' => $this->getTemplate(),
+            'paginationEnabled' => $this->getPaginationEnabled(),
+            'paginationLimit' => $this->getPaginationLimit(),
+            'noDataMessage' => $this->getNoDataMessage(),
+            'showTitles' => $this->getShowTitles(),
+            'translationDomain' => $this->getTranslationDomain()
         ];
     }
 

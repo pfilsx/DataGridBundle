@@ -18,6 +18,7 @@ use Pfilsx\tests\TestEntities\Node;
  */
 class ActionColumnTest extends OrmTestCase
 {
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,7 +37,7 @@ class ActionColumnTest extends OrmTestCase
                 'show' => true,
                 'delete' => false
             ],
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 
@@ -88,8 +89,8 @@ class ActionColumnTest extends OrmTestCase
         $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
             'identifier' => 'id',
-            'template' => 'test_template.html.twig',
-            'buttonsTemplate' => '{show} {edit} {delete}'
+            'buttonsTemplate' => '{show} {edit} {delete}',
+            'template' => $this->template
         ]);
         $buttons = explode(' ', $column->getCellContent($item));
         $this->assertCount(3, $buttons);
@@ -97,8 +98,8 @@ class ActionColumnTest extends OrmTestCase
 
         $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
-            'template' => 'test_template.html.twig',
-            'buttonsTemplate' => '{show} {edit} {delete}'
+            'buttonsTemplate' => '{show} {edit} {delete}',
+            'template' => $this->template
         ]);
         $buttons = explode(' ', $column->getCellContent($item));
         $this->assertCount(3, $buttons);
@@ -115,7 +116,7 @@ class ActionColumnTest extends OrmTestCase
         $item->setIdentifier('id');
         $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
-            'template' => 'test_template.html.twig',
+            'template' => $this->template
         ]);
         $column->getCellContent($item);
     }

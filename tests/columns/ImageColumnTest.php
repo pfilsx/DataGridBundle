@@ -28,7 +28,7 @@ class ImageColumnTest extends OrmTestCase
                 return 'Test alt';
             },
             'noImageMessage' => 'Empty',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 
@@ -76,7 +76,7 @@ class ImageColumnTest extends OrmTestCase
         $column = new ImageColumn($this->serviceContainer, [
             'format' => 'raw',
             'attribute' => 'testAttribute',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
         $this->assertEquals('/path/to/image.jpg', $column->getCellContent($item));
     }

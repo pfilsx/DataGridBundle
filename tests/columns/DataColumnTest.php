@@ -32,7 +32,7 @@ class DataColumnTest extends OrmTestCase
                 'class' => 'test_class',
                 'data_row' => false
             ],
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

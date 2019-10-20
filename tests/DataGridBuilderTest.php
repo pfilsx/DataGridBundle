@@ -82,24 +82,15 @@ class DataGridBuilderTest extends OrmTestCase
         return $this->builder;
     }
 
-    /**
-     * @depends testAddColumn
-     * @param DataGridBuilder $builder
-     */
-    public function testSetTemplate($builder): void
-    {
-        $builder->setTemplate('test_template.html.twig');
-        $this->assertEquals('test_template.html.twig', $builder->getOptions()['template']);
-    }
 
     public function testSetPagination(): void
     {
-        $this->builder->enablePagination(['limit' => 10]);
-        $this->assertTrue($this->builder->hasPagination());
-        $this->assertEquals(10, $this->builder->getPager()->getLimit());
+        $this->builder->enablePagination(true, 10);
+        $this->assertTrue($this->builder->getConfiguration()->getPaginationEnabled());
+        $this->assertEquals(10, $this->builder->getConfiguration()->getPaginationLimit());
 
         $this->builder->enablePagination(false);
-        $this->assertFalse($this->builder->hasPagination());
+        $this->assertFalse($this->builder->getConfiguration()->getPaginationEnabled());
     }
 
     /**

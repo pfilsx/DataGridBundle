@@ -12,6 +12,7 @@ use Pfilsx\tests\TestEntities\NodeAssoc;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
+use Twig\Template;
 
 class OrmTestCase extends KernelTestCase
 {
@@ -24,6 +25,10 @@ class OrmTestCase extends KernelTestCase
      * @var DataGridServiceContainer
      */
     protected $serviceContainer;
+    /**
+     * @var Template
+     */
+    protected $template;
 
 
     protected function setUp(): void
@@ -50,6 +55,8 @@ class OrmTestCase extends KernelTestCase
         );
 
         $this->createEntityManager();
+
+        $this->template = $this->serviceContainer->getTwig()->loadTemplate('test_template.html.twig');
     }
 
     /**

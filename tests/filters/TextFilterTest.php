@@ -16,7 +16,7 @@ class TextFilterTest extends OrmTestCase
     {
         parent::setUp();
         $this->testFilter = new TextFilter($this->serviceContainer, [
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

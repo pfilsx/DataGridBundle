@@ -22,7 +22,7 @@ class CustomFilterTest extends OrmTestCase
             'value' => function () {
                 return 'test_filter';
             },
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

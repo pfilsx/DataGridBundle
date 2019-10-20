@@ -4,7 +4,7 @@
 namespace Pfilsx\DataGrid\tests;
 
 use InvalidArgumentException;
-use Pfilsx\DataGrid\Config\Configuration;
+use Pfilsx\DataGrid\Config\ConfigurationContainer;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
@@ -12,7 +12,6 @@ use Pfilsx\tests\OrmTestCase;
 use Pfilsx\tests\TestEntities\Node;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Template;
 
 class DataGridFactoryTest extends OrmTestCase
@@ -27,12 +26,15 @@ class DataGridFactoryTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->configuration = new Configuration([
-            'template' => 'test_template.html.twig',
-            'noDataMessage' => 'empty',
-            'showTitles' => false,
-            'pagination' => [
-                'limit' => 5
+        $this->configuration = new ConfigurationContainer([
+            'instances' => [
+                'default' => [
+                    'template' => 'test_template.html.twig',
+                    'no_data_message' => 'empty',
+                    'show_titles' => false,
+                    'pagination_enabled' => true,
+                    'pagination_limit' => 5
+                ]
             ]
         ]);
         $request = new Request();
@@ -66,7 +68,6 @@ class DataGridFactoryTest extends OrmTestCase
         $grid = $this->factory->createGrid(get_class($this->createMock(AbstractGridType::class)), $this->getEntityManager()->getRepository(Node::class));
         $this->assertEquals('empty', $grid->getNoDataMessage());
         $this->assertTrue($grid->hasPagination());
-        $this->assertInstanceOf(RouterInterface::class, $grid->getRouter());
         $this->assertInstanceOf(Template::class, $grid->getTemplate());
         $this->assertIsArray($grid->getData());
         $this->assertNotEmpty($grid->getData());
@@ -75,7 +76,7 @@ class DataGridFactoryTest extends OrmTestCase
         $this->assertFalse($grid->getShowTitles());
         $this->assertEquals([
             'currentPage' => 1,
-            'pages' => [1, 2, 3]
+            'pages' => []
         ], $grid->getPaginationOptions());
 
         $request = new Request();
@@ -99,7 +100,7 @@ class DataGridFactoryTest extends OrmTestCase
 
         $this->assertEquals([
             'currentPage' => 1,
-            'pages' => [1, 2, 3]
+            'pages' => []
         ], $grid2->getPaginationOptions());
     }
 }

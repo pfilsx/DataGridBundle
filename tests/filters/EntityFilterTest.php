@@ -23,7 +23,7 @@ class EntityFilterTest extends OrmTestCase
         $this->testFilter = new EntityFilter($this->serviceContainer, [
             'label' => 'user',
             'entityClass' => Node::class,
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

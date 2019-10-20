@@ -21,8 +21,10 @@ class ConfigurationContainer implements ConfigurationContainerInterface
             'pagination_limit' => 10,
             'translation_domain' => null
         ]);
-        foreach ($config['instances'] as $key => $configuration) {
-            $this->instances[$key] = new Configuration($configuration);
+        if (!empty($config['instances'])){
+            foreach ($config['instances'] as $key => $configuration) {
+                $this->instances[$key] = new Configuration($configuration);
+            }
         }
     }
 
