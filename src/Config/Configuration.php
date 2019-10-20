@@ -89,9 +89,9 @@ class Configuration implements ConfigurationInterface
     {
         $result = clone $this;
         foreach ($configuration->getConfigsArray() as $key => $value) {
-            if (!empty($value)) {
+            if ($value !== null) {
                 $setter = 'set' . ucfirst($key);
-                $this->$setter($value);
+                $result->$setter($value);
             }
         }
         return $result;

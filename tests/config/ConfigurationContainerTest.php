@@ -6,7 +6,7 @@ use Pfilsx\DataGrid\Config\Configuration;
 use Pfilsx\DataGrid\Config\ConfigurationContainer;
 use PHPUnit\Framework\TestCase;
 
-class DataGridConfigurationTest extends TestCase
+class ConfigurationContainerTest extends TestCase
 {
     /**
      * @param $config

@@ -140,4 +140,23 @@ class DataGridBuilderTest extends OrmTestCase
             }
         }
     }
+
+    public function testConfiguration(): void
+    {
+        $this->builder->setNoDataMessage('Test Message');
+        $this->builder->setTemplate('test_template');
+        $this->builder->setShowTitles(false);
+        $this->builder->enablePagination(true, 15);
+        $this->assertEquals([
+            'template' => 'test_template',
+            'paginationEnabled' => true,
+            'paginationLimit' => 15,
+            'noDataMessage' => 'Test Message',
+            'showTitles' => false,
+            'translationDomain' => null
+        ], $this->builder->getConfiguration()->getConfigsArray());
+
+        $this->builder->setInstance('test');
+        $this->assertEquals('test', $this->builder->getInstance());
+    }
 }

@@ -5,8 +5,9 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\EntityFilter;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 /**
  * Class EntityFilterTest

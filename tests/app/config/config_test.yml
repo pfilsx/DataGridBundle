@@ -23,7 +23,7 @@ doctrine:
     entity_managers:
       default:
         mappings:
-          Pfilsx\tests\TestEntities\Node:
+          Pfilsx\tests\app\Entity\Node:
             type: xml
             dir: "%kernel.root_dir%/app/Resources/config/doctrine"
-            prefix: Pfilsx\tests\TestEntities
+            prefix: Pfilsx\tests\app\Entity

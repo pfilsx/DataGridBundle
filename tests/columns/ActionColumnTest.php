@@ -7,8 +7,9 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 /**
  * Class ActionColumnTest

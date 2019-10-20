@@ -60,6 +60,11 @@ class DataGrid
         $this->configuration = $defaultConfiguration->getInstance($builder->getInstance())->merge($builder->getConfiguration());
         $this->setTemplate($this->configuration->getTemplate());
         $this->configurePagerOptions();
+        if (!empty($this->configuration->getTranslationDomain())){
+            foreach ($this->builder->getColumns() as $column){
+                $column->setTranslationDomain($this->configuration->getTranslationDomain());
+            }
+        }
     }
 
     /**
@@ -71,6 +76,7 @@ class DataGrid
         $pager->setLimit($this->configuration->getPaginationLimit());
         if ($this->configuration->getPaginationEnabled()){
             $pager->enable();
+            $pager->setTotalCount($this->getProvider()->getTotalCount());
         } else {
             $pager->disable();
         }
@@ -149,11 +155,6 @@ class DataGrid
         return $this->container->getTranslator() !== null
             ? $this->container->getTranslator()->trans($this->configuration->getNoDataMessage(), [], $this->configuration->getTranslationDomain())
             : ucfirst($this->configuration->getNoDataMessage());
-    }
-
-    protected function setNoDataMessage(string $message)
-    {
-        $this->configuration->setNoDataMessage($message);
     }
 
     public function hasPagination()

@@ -8,8 +8,9 @@ use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Pager;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use Pfilsx\DataGrid\Grid\Providers\QueryBuilderDataProvider;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 class QueryBuilderDataProviderTest extends OrmTestCase
 {

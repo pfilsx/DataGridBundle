@@ -68,7 +68,7 @@ class DataColumn extends AbstractColumn
     {
         $label = $this->getLabel();
         if (($translator = $this->container->getTranslator()) !== null){
-            $label = $translator->trans($label, []);
+            $label = $translator->trans($label, [], $this->translationDomain);
         }
         return ucfirst($label);
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Pfilsx\tests\TestEntities;
+namespace Pfilsx\tests\app\Entity;
 
 
 use Doctrine\Common\Collections\ArrayCollection;

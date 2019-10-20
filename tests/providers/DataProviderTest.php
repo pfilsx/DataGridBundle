@@ -9,8 +9,9 @@ use Pfilsx\DataGrid\Grid\Providers\ArrayDataProvider;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use Pfilsx\DataGrid\Grid\Providers\QueryBuilderDataProvider;
 use Pfilsx\DataGrid\Grid\Providers\RepositoryDataProvider;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 class DataProviderTest extends OrmTestCase
 {

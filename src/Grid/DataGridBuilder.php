@@ -122,10 +122,12 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
-    public function enablePagination(bool $enabled = true, int $limit = 10): DataGridBuilderInterface
+    public function enablePagination(bool $enabled = true, ?int $limit = null): DataGridBuilderInterface
     {
         $this->configuration->setPaginationEnabled($enabled);
-        $this->configuration->setPaginationLimit($limit);
+        if ($limit !== null){
+            $this->configuration->setPaginationLimit($limit);
+        }
         return $this;
     }
 

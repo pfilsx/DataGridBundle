@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Expression;
 use Pfilsx\DataGrid\Grid\DataGridFiltersBuilder;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
+use Pfilsx\tests\app\Entity\Node;
+use Pfilsx\tests\app\Entity\NodeAssoc;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
-use Pfilsx\tests\TestEntities\NodeAssoc;
 
 class DataGridFiltersBuilderTest extends OrmTestCase
 {

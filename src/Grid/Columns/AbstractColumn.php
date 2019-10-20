@@ -36,6 +36,8 @@ abstract class AbstractColumn
      */
     protected $container;
 
+    protected $translationDomain = null;
+
     public function __construct(DataGridServiceContainer $container, array $config = [])
     {
 
@@ -194,6 +196,10 @@ abstract class AbstractColumn
     protected function setVisible(bool $visibility): void
     {
         $this->isVisible = $visibility;
+    }
+
+    public function setTranslationDomain(?string $domain): void {
+        $this->translationDomain = $domain;
     }
 
 }

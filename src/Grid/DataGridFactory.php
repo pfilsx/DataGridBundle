@@ -64,10 +64,8 @@ class DataGridFactory implements DataGridFactoryInterface
         /** @var AbstractGridType $type */
         $this->gridType = new $gridType($this->container);
         $this->gridType->buildGrid($this->gridBuilder);
+        //TODO move handle request to grid init
         $this->handleRequest();
-        if ($this->gridBuilder->hasPagination()) {
-            $this->gridBuilder->getPager()->setTotalCount($provider->getTotalCount());
-        }
 
         return new DataGrid($this->gridBuilder, $this->defaultConfiguration, $this->container);
     }
@@ -93,13 +91,11 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function handlePagination()
     {
-        if ($this->gridBuilder->hasPagination()) {
-            if (array_key_exists('page', $this->queryParams)) {
-                $this->setPage($this->queryParams['page']);
-                unset($this->queryParams['page']);
-            } else {
-                $this->setPage(1);
-            }
+        if (array_key_exists('page', $this->queryParams)) {
+            $this->setPage($this->queryParams['page']);
+            unset($this->queryParams['page']);
+        } else {
+            $this->setPage(1);
         }
     }
 
@@ -123,27 +119,5 @@ class DataGridFactory implements DataGridFactoryInterface
     protected function setPage($page)
     {
         $this->gridBuilder->getPager()->setPage(is_numeric($page) ? (int)$page : 1);
-    }
-
-    protected function setDefaultTemplate($template)
-    {
-        $this->gridBuilder->setTemplate($template);
-    }
-
-    protected function setDefaultNoDataMessage($message)
-    {
-        $this->gridBuilder->setNoDataMessage($message);
-    }
-
-    protected function setDefaultPagination($pagination)
-    {
-        if ($pagination['enabled']) {
-            $this->gridBuilder->enablePagination($pagination['options']);
-        }
-    }
-
-    protected function setDefaultShowTitles($showTitles)
-    {
-        $this->gridBuilder->setShowTitles($showTitles);
     }
 }
