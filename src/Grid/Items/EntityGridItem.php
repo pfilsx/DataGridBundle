@@ -35,7 +35,7 @@ class EntityGridItem extends DataGridItem
 
     private function getPropertyAccessVariations(string $attribute): array
     {
-        $camelAttribute = preg_replace_callback('/_([A-z]?)/', function ($matches) {
+        $camelAttribute = preg_replace_callback('/_([a-z]?)/', function ($matches) {
             return isset($matches[1]) ? strtoupper($matches[1]) : '';
         }, $attribute);
         $getter = 'get' . $camelAttribute;

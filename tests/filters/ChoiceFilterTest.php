@@ -18,9 +18,9 @@ class ChoiceFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new ChoiceFilter($this->containerArray, [
+        $this->testFilter = new ChoiceFilter($this->serviceContainer, [
             'choices' => [0, 1, 2, 3],
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

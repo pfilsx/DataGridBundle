@@ -4,6 +4,9 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\Config\Configuration;
+use Pfilsx\DataGrid\Config\ConfigurationInterface;
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
@@ -17,7 +20,7 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     protected $pager;
     /**
-     * @var array
+     * @var DataGridServiceContainer
      */
     protected $container;
     /**
@@ -29,22 +32,24 @@ class DataGridBuilder implements DataGridBuilderInterface
      * @var AbstractColumn[]
      */
     protected $columns = [];
-    /**
-     * @var array
-     */
-    protected $options = [
-        'template' => '@DataGrid/grid.blocks.html.twig'
-    ];
 
     protected $hasFilters = false;
 
     /**
-     * DataGridBuilder constructor.
-     * @param array $container
+     * @var Configuration
      */
-    public function __construct(array $container)
+    protected $configuration;
+
+    protected $instance = 'default';
+
+    /**
+     * DataGridBuilder constructor.
+     * @param DataGridServiceContainer $container
+     */
+    public function __construct(DataGridServiceContainer $container)
     {
         $this->container = $container;
+        $this->configuration = new Configuration();
     }
 
     /**
@@ -61,7 +66,7 @@ class DataGridBuilder implements DataGridBuilderInterface
         /**
          * @var AbstractColumn $column
          */
-        $column = new $columnClass($this->container, array_merge(['template' => $this->options['template']], $config, ['attribute' => $attribute]));
+        $column = new $columnClass($this->container, array_merge($config, ['attribute' => $attribute]));
         $this->columns[] = $column;
         if ($column->hasFilter() && $column->isVisible()) {
             $this->hasFilters = true;
@@ -94,37 +99,34 @@ class DataGridBuilder implements DataGridBuilderInterface
      */
     public function setTemplate(string $path): DataGridBuilderInterface
     {
-        $this->options['template'] = $path;
-        foreach ($this->columns as $column) {
-            $column->setTemplate($path);
-        }
+        $this->configuration->setTemplate($path);
         return $this;
     }
-
     /**
      * @param string $message
      * @return $this
      */
     public function setNoDataMessage(string $message): DataGridBuilderInterface
     {
-        $this->options['noDataMessage'] = $message;
+        $this->configuration->setNoDataMessage($message);
         return $this;
     }
 
+    /**
+     * @param bool $flag
+     * @return DataGridBuilderInterface
+     */
     public function setShowTitles(bool $flag): DataGridBuilderInterface
     {
-        $this->options['showTitles'] = $flag;
+        $this->configuration->setShowTitles($flag);
         return $this;
     }
 
-    public function enablePagination($options = []): DataGridBuilderInterface
+    public function enablePagination(bool $enabled = true, ?int $limit = null): DataGridBuilderInterface
     {
-        if (is_array($options) && !empty($options)) {
-            $this->getPager()->enable();
-            $this->getPager()->setOptions($options);
-        } else {
-            $this->getPager()->disable();
-            $this->getPager()->setLimit(null);
+        $this->configuration->setPaginationEnabled($enabled);
+        if ($limit !== null){
+            $this->configuration->setPaginationLimit($limit);
         }
         return $this;
     }
@@ -137,20 +139,11 @@ class DataGridBuilder implements DataGridBuilderInterface
 
     /**
      * @internal
-     * @return array
+     * @return AbstractColumn[]
      */
     public function getColumns(): array
     {
         return $this->columns;
-    }
-
-    /**
-     * @internal
-     * @return array
-     */
-    public function getOptions(): array
-    {
-        return $this->options;
     }
 
     public function getProvider(): DataProviderInterface
@@ -218,5 +211,37 @@ class DataGridBuilder implements DataGridBuilderInterface
     public function hasPagination(): bool
     {
         return $this->getPager()->isEnabled() && is_integer($this->getPager()->getLimit());
+    }
+
+    /**
+     * @return Configuration
+     * @internal
+     */
+    public function getConfiguration(): ConfigurationInterface
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @internal
+     * @return string
+     */
+    public function getInstance(): string {
+        return $this->instance;
+    }
+
+    /**
+     * @param string $name
+     * @return DataGridBuilderInterface
+     */
+    public function setInstance(string $name): DataGridBuilderInterface {
+        $this->instance = $name;
+        return $this;
+    }
+
+    public function setTranslationDomain(string $domain): DataGridBuilderInterface
+    {
+        $this->configuration->setTranslationDomain($domain);
+        return $this;
     }
 }

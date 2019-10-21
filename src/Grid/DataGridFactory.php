@@ -4,18 +4,19 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
-use Pfilsx\DataGrid\Config\DataGridConfigurationInterface;
+use Pfilsx\DataGrid\Config\ConfigurationContainerInterface;
+use Pfilsx\DataGrid\Config\ConfigurationInterface;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
 
 class DataGridFactory implements DataGridFactoryInterface
 {
-    protected $container = [];
+    /**
+     * @var DataGridServiceContainer
+     */
+    protected $container;
     /**
      * @var Request
      */
@@ -33,35 +34,21 @@ class DataGridFactory implements DataGridFactoryInterface
      */
     protected $gridType;
     /**
-     * @var array
+     * @var ConfigurationContainerInterface
      */
-    protected $defaultOptions = [];
+    protected $defaultConfiguration;
     /**
      * @var array
      */
     protected $queryParams;
 
-    public function __construct(
-        ManagerRegistry $doctrine,
-        RouterInterface $router,
-        Environment $twig,
-        RequestStack $requestStack,
-        DataGridConfigurationInterface $configs
-    )
+    public function __construct(DataGridServiceContainer $container, ConfigurationContainerInterface $configs)
     {
-        $this->request = $this->container['request'] = $requestStack->getCurrentRequest();
-        $this->defaultOptions['twig'] = $this->container['twig'] = $twig;
-        $this->defaultOptions['router'] = $this->container['router'] = $router;
-        $this->container['doctrine'] = $doctrine;
+        $this->container = $container;
+        $this->request = $container->getRequest()->getCurrentRequest();
+        $this->defaultConfiguration = $configs;
         $this->gridBuilder = new DataGridBuilder($this->container);
         $this->filterBuilder = new DataGridFiltersBuilder();
-
-        foreach ($configs->getConfigs() as $key => $value) {
-            $setter = 'setDefault' . ucfirst($key);
-            if (method_exists($this, $setter)) {
-                $this->$setter($value);
-            }
-        }
     }
 
 
@@ -70,19 +57,17 @@ class DataGridFactory implements DataGridFactoryInterface
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
         }
-        $provider = DataProvider::create($dataProvider, $this->container['doctrine']);
+        $provider = DataProvider::create($dataProvider, $this->container->getDoctrine());
         $this->gridBuilder->setProvider($provider);
         $this->filterBuilder->setProvider($provider);
 
         /** @var AbstractGridType $type */
         $this->gridType = new $gridType($this->container);
         $this->gridType->buildGrid($this->gridBuilder);
+        //TODO move handle request to grid init
         $this->handleRequest();
-        if ($this->gridBuilder->hasPagination()) {
-            $this->gridBuilder->getPager()->setTotalCount($provider->getTotalCount());
-        }
 
-        return new DataGrid($this->gridBuilder, $this->defaultOptions);
+        return new DataGrid($this->gridBuilder, $this->defaultConfiguration, $this->container);
     }
 
     protected function handleRequest(): void
@@ -106,13 +91,11 @@ class DataGridFactory implements DataGridFactoryInterface
 
     protected function handlePagination()
     {
-        if ($this->gridBuilder->hasPagination()) {
-            if (array_key_exists('page', $this->queryParams)) {
-                $this->setPage($this->queryParams['page']);
-                unset($this->queryParams['page']);
-            } else {
-                $this->setPage(1);
-            }
+        if (array_key_exists('page', $this->queryParams)) {
+            $this->setPage($this->queryParams['page']);
+            unset($this->queryParams['page']);
+        } else {
+            $this->setPage(1);
         }
     }
 
@@ -136,27 +119,5 @@ class DataGridFactory implements DataGridFactoryInterface
     protected function setPage($page)
     {
         $this->gridBuilder->getPager()->setPage(is_numeric($page) ? (int)$page : 1);
-    }
-
-    protected function setDefaultTemplate($template)
-    {
-        $this->gridBuilder->setTemplate($template);
-    }
-
-    protected function setDefaultNoDataMessage($message)
-    {
-        $this->gridBuilder->setNoDataMessage($message);
-    }
-
-    protected function setDefaultPagination($pagination)
-    {
-        if ($pagination['enabled']) {
-            $this->gridBuilder->enablePagination($pagination['options']);
-        }
-    }
-
-    protected function setDefaultShowTitles($showTitles)
-    {
-        $this->gridBuilder->setShowTitles($showTitles);
     }
 }

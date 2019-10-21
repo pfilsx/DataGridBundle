@@ -24,11 +24,7 @@ class ImageColumn extends DataColumn
         $value = (string)$this->getCellValue($entity);
         if (!empty($value)) {
             if ($this->format === 'html') {
-                /**
-                 * @var Template $template
-                 */
-                $template = $this->container['twig']->loadTemplate($this->template);
-                return $template->renderBlock('grid_img', [
+                return $this->template->renderBlock('grid_img', [
                     'src' => $value,
                     'width' => $this->width,
                     'height' => $this->height,

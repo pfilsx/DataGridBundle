@@ -34,8 +34,8 @@ class DataGridBuilderTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->builder = new DataGridBuilder($this->containerArray);
-        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->containerArray['doctrine']);
+        $this->builder = new DataGridBuilder($this->serviceContainer);
+        $provider = DataProvider::create($this->createMock(ServiceEntityRepository::class), $this->serviceContainer->getDoctrine());
         $this->builder->setProvider($provider);
     }
 
@@ -82,24 +82,15 @@ class DataGridBuilderTest extends OrmTestCase
         return $this->builder;
     }
 
-    /**
-     * @depends testAddColumn
-     * @param DataGridBuilder $builder
-     */
-    public function testSetTemplate($builder): void
-    {
-        $builder->setTemplate('test_template.html.twig');
-        $this->assertEquals('test_template.html.twig', $builder->getOptions()['template']);
-    }
 
     public function testSetPagination(): void
     {
-        $this->builder->enablePagination(['limit' => 10]);
-        $this->assertTrue($this->builder->hasPagination());
-        $this->assertEquals(10, $this->builder->getPager()->getLimit());
+        $this->builder->enablePagination(true, 10);
+        $this->assertTrue($this->builder->getConfiguration()->getPaginationEnabled());
+        $this->assertEquals(10, $this->builder->getConfiguration()->getPaginationLimit());
 
         $this->builder->enablePagination(false);
-        $this->assertFalse($this->builder->hasPagination());
+        $this->assertFalse($this->builder->getConfiguration()->getPaginationEnabled());
     }
 
     /**
@@ -148,5 +139,24 @@ class DataGridBuilderTest extends OrmTestCase
                 $this->assertNull($column->getFilterValue());
             }
         }
+    }
+
+    public function testConfiguration(): void
+    {
+        $this->builder->setNoDataMessage('Test Message');
+        $this->builder->setTemplate('test_template');
+        $this->builder->setShowTitles(false);
+        $this->builder->enablePagination(true, 15);
+        $this->assertEquals([
+            'template' => 'test_template',
+            'paginationEnabled' => true,
+            'paginationLimit' => 15,
+            'noDataMessage' => 'Test Message',
+            'showTitles' => false,
+            'translationDomain' => null
+        ], $this->builder->getConfiguration()->getConfigsArray());
+
+        $this->builder->setInstance('test');
+        $this->assertEquals('test', $this->builder->getInstance());
     }
 }

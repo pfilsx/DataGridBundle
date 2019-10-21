@@ -4,6 +4,8 @@
 namespace Pfilsx\DataGrid\Grid;
 
 
+use Pfilsx\DataGrid\Config\ConfigurationInterface;
+use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
@@ -22,47 +24,64 @@ interface DataGridBuilderInterface
 
     public function setShowTitles(bool $flag): self;
 
-    public function enablePagination($options = []): self;
+    public function enablePagination(bool $enabled = true, int $limit = 10): self;
 
     public function setCountFieldName(string $name): self;
 
+    public function setInstance(string $name): self;
+
+    public function setTranslationDomain(string $domain): self;
+
     /**
+     * @return AbstractColumn[]
      * @internal
-     * @return array
      */
     public function getColumns(): array;
 
-    /**
-     * @internal
-     * @return array
-     */
-    public function getOptions(): array;
 
     public function getProvider(): DataProviderInterface;
 
     /**
-     * @internal
      * @param DataProviderInterface $provider
+     * @internal
      */
     public function setProvider(DataProviderInterface $provider): void;
 
+    /**
+     * @return bool
+     * @internal
+     */
     public function hasFilters(): bool;
 
     /**
-     * @internal
      * @param array $filters
+     * @internal
      */
     public function setFiltersValues(array $filters): void;
 
     /**
-     * @internal
      * @return Pager
+     * @internal
      */
     public function getPager(): Pager;
 
     /**
-     * @internal
      * @return bool
+     * @internal
      */
     public function hasPagination(): bool;
+
+    /**
+     * @return ConfigurationInterface
+     * @internal
+     */
+    public function getConfiguration(): ConfigurationInterface;
+
+    /**
+     * @return string
+     * @internal
+     */
+    public function getInstance(): string;
+
+
 }

@@ -4,17 +4,17 @@
 namespace Pfilsx\DataGrid\Grid\Filters;
 
 
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Twig\Template;
 
 abstract class AbstractFilter
 {
-    protected $defaultTemplate = '@DataGrid/grid.blocks.html.twig';
     /**
-     * @var array
+     * @var DataGridServiceContainer
      */
     protected $container;
     /**
-     * @var \Twig_Template|null
+     * @var Template|null
      */
     protected $template;
     /**
@@ -22,7 +22,7 @@ abstract class AbstractFilter
      */
     protected $options = [];
 
-    public function __construct(array $container, array $config = [])
+    public function __construct(DataGridServiceContainer $container, array $config = [])
     {
         $this->container = $container;
         foreach ($config as $key => $value) {
@@ -38,10 +38,9 @@ abstract class AbstractFilter
         return $this->template;
     }
 
-    public function setTemplate(?string $template)
+    public function setTemplate(?Template $template)
     {
-        $twig = $this->container['twig'];
-        $this->template = is_string($template) ? $twig->loadTemplate($template) : $twig->loadTemplate($this->defaultTemplate);
+        $this->template = $template;
     }
 
     public function getOptions()
@@ -63,14 +62,10 @@ abstract class AbstractFilter
 
     protected function prepareValue(&$value)
     {
-
     }
 
     public function render($attribute, $value): string
     {
-        if (!$this->template instanceof Template || !$this->template->hasBlock('grid_filter', [])) {
-            $this->template = $this->container['twig']->loadTemplate($this->defaultTemplate);
-        }
         $this->prepareValue($value);
         return $this->template->renderBlock('grid_filter', array_merge($this->getParams(), [
             'attribute' => $attribute,

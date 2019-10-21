@@ -18,7 +18,7 @@ class SerialColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new SerialColumn($this->containerArray);
+        $this->testColumn = new SerialColumn($this->serviceContainer);
     }
 
     public function testGetHeadContent(): void

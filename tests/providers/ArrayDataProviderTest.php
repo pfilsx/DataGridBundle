@@ -49,7 +49,7 @@ class ArrayDataProviderTest extends OrmTestCase
                     return $this->id;
                 }
             }
-        ], $this->containerArray['doctrine']);
+        ], $this->serviceContainer->getDoctrine());
         $this->provider->setPager(new Pager());
     }
 

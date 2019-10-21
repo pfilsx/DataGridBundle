@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Pfilsx\tests;
+namespace Pfilsx\tests\app;
 
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
@@ -25,8 +25,8 @@ class AppKernel extends Kernel
         $bundles = array(
             new FrameworkBundle(),
             new DoctrineBundle(),
-            new DataGridBundle(),
             new TwigBundle(),
+            new DataGridBundle(),
         );
         return $bundles;
     }
@@ -34,11 +34,11 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/app/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
     public function getCacheDir()
     {
-        return __DIR__ . '/app/cache/' . $this->environment;
+        return __DIR__ . '/cache/' . $this->environment;
     }
 }

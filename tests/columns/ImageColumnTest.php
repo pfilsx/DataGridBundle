@@ -20,7 +20,7 @@ class ImageColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new ImageColumn($this->containerArray, [
+        $this->testColumn = new ImageColumn($this->serviceContainer, [
             'attribute' => 'testAttribute',
             'width' => 20,
             'height' => 20,
@@ -28,7 +28,7 @@ class ImageColumnTest extends OrmTestCase
                 return 'Test alt';
             },
             'noImageMessage' => 'Empty',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 
@@ -73,10 +73,10 @@ class ImageColumnTest extends OrmTestCase
         $item = new EntityGridItem($entity);
         $this->assertEquals('<img src="/path/to/image.jpg" height="20" width="20" alt="Test alt"/>', trim($this->testColumn->getCellContent($item)));
 
-        $column = new ImageColumn($this->containerArray, [
+        $column = new ImageColumn($this->serviceContainer, [
             'format' => 'raw',
             'attribute' => 'testAttribute',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
         $this->assertEquals('/path/to/image.jpg', $column->getCellContent($item));
     }

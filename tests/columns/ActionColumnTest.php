@@ -7,8 +7,9 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 /**
  * Class ActionColumnTest
@@ -18,10 +19,11 @@ use Pfilsx\tests\TestEntities\Node;
  */
 class ActionColumnTest extends OrmTestCase
 {
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new ActionColumn($this->containerArray, [
+        $this->testColumn = new ActionColumn($this->serviceContainer, [
             'buttonsTemplate' => '{show} {delete}',
             'buttons' => [
                 'show' => function ($entity, $url) {
@@ -36,7 +38,7 @@ class ActionColumnTest extends OrmTestCase
                 'show' => true,
                 'delete' => false
             ],
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 
@@ -85,20 +87,20 @@ class ActionColumnTest extends OrmTestCase
         $item = new EntityGridItem($entity, 'id');
         $this->assertEquals('_show ', $this->testColumn->getCellContent($item));
 
-        $column = new ActionColumn($this->containerArray, [
+        $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
             'identifier' => 'id',
-            'template' => 'test_template.html.twig',
-            'buttonsTemplate' => '{show} {edit} {delete}'
+            'buttonsTemplate' => '{show} {edit} {delete}',
+            'template' => $this->template
         ]);
         $buttons = explode(' ', $column->getCellContent($item));
         $this->assertCount(3, $buttons);
         $this->assertEquals(['show', 'edit', 'delete'], $buttons);
 
-        $column = new ActionColumn($this->containerArray, [
+        $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
-            'template' => 'test_template.html.twig',
-            'buttonsTemplate' => '{show} {edit} {delete}'
+            'buttonsTemplate' => '{show} {edit} {delete}',
+            'template' => $this->template
         ]);
         $buttons = explode(' ', $column->getCellContent($item));
         $this->assertCount(3, $buttons);
@@ -113,9 +115,9 @@ class ActionColumnTest extends OrmTestCase
         };
         $item = new EntityGridItem($entity);
         $item->setIdentifier('id');
-        $column = new ActionColumn($this->containerArray, [
+        $column = new ActionColumn($this->serviceContainer, [
             'pathPrefix' => 'test_prefix_',
-            'template' => 'test_template.html.twig',
+            'template' => $this->template
         ]);
         $column->getCellContent($item);
     }
