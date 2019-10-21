@@ -232,8 +232,16 @@ class DataGridBuilder implements DataGridBuilderInterface
 
     /**
      * @param string $name
+     * @return DataGridBuilderInterface
      */
-    public function setInstance(string $name): void {
+    public function setInstance(string $name): DataGridBuilderInterface {
         $this->instance = $name;
+        return $this;
+    }
+
+    public function setTranslationDomain(string $domain): DataGridBuilderInterface
+    {
+        $this->configuration->setTranslationDomain($domain);
+        return $this;
     }
 }

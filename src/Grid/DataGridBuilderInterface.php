@@ -28,9 +28,13 @@ interface DataGridBuilderInterface
 
     public function setCountFieldName(string $name): self;
 
+    public function setInstance(string $name): self;
+
+    public function setTranslationDomain(string $domain): self;
+
     /**
-     * @internal
      * @return AbstractColumn[]
+     * @internal
      */
     public function getColumns(): array;
 
@@ -38,34 +42,46 @@ interface DataGridBuilderInterface
     public function getProvider(): DataProviderInterface;
 
     /**
-     * @internal
      * @param DataProviderInterface $provider
+     * @internal
      */
     public function setProvider(DataProviderInterface $provider): void;
 
+    /**
+     * @return bool
+     * @internal
+     */
     public function hasFilters(): bool;
 
     /**
-     * @internal
      * @param array $filters
+     * @internal
      */
     public function setFiltersValues(array $filters): void;
 
     /**
-     * @internal
      * @return Pager
+     * @internal
      */
     public function getPager(): Pager;
 
     /**
-     * @internal
      * @return bool
+     * @internal
      */
     public function hasPagination(): bool;
 
+    /**
+     * @return ConfigurationInterface
+     * @internal
+     */
     public function getConfiguration(): ConfigurationInterface;
 
-    public function setInstance(string $name): void;
-
+    /**
+     * @return string
+     * @internal
+     */
     public function getInstance(): string;
+
+
 }

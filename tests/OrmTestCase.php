@@ -6,12 +6,8 @@ namespace Pfilsx\tests;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\app\Entity\NodeAssoc;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
 use Twig\Template;
 
 class OrmTestCase extends KernelTestCase
@@ -20,11 +16,6 @@ class OrmTestCase extends KernelTestCase
      * @var EntityManager
      */
     protected $em;
-
-    /**
-     * @var DataGridServiceContainer
-     */
-    protected $serviceContainer;
     /**
      * @var Template
      */
@@ -33,26 +24,7 @@ class OrmTestCase extends KernelTestCase
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-        $application->run(new ArrayInput(array(
-            'doctrine:schema:drop',
-            '--force' => true
-        )));
-        $application->run(new ArrayInput(array(
-            'doctrine:schema:create'
-        )));
-
-
-        /** @noinspection PhpParamsInspection */
-        $this->serviceContainer = new DataGridServiceContainer(
-            $kernel->getContainer()->get('doctrine'),
-            $kernel->getContainer()->get('router'),
-            $kernel->getContainer()->get('twig'),
-            $kernel->getContainer()->get('request_stack'),
-            $kernel->getContainer()->get('translator')
-        );
+        parent::setUp();
 
         $this->createEntityManager();
 

@@ -3,7 +3,6 @@
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
-         backupGlobals="false"
          colors="true"
          bootstrap="./tests/bootstrap.php"
 >
@@ -12,12 +11,12 @@
         <env name="APP_ENV" value="test"/>
         <env name="SHELL_VERBOSITY" value="-1"/>
         <server name="KERNEL_DIR" value="./tests/app/"/>
-        <server name="KERNEL_CLASS" value="Pfilsx\tests\AppKernel"/>
+        <server name="KERNEL_CLASS" value="Pfilsx\tests\app\AppKernel"/>
     </php>
 
     <testsuites>
         <testsuite name="DataGridBundle Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 

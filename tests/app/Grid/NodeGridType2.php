@@ -24,6 +24,7 @@ class NodeGridType2 extends AbstractGridType
             ->addActionColumn([
                 'prefix' => 'test_prefix_'
             ])
+            ->setTranslationDomain('test')
             ->enablePagination(false);
     }
 

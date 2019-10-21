@@ -11,10 +11,10 @@ framework:
   templating:
     engines: ['twig']
   router:
-    resource: "%kernel.root_dir%/app/config/routing.yml"
+    resource: "%kernel.root_dir%/config/routing.yml"
 twig:
   paths:
-    "%kernel.root_dir%/app/Resources/views/": __main__
+    "%kernel.root_dir%/Resources/views/": __main__
 doctrine:
   dbal:
     driver:   'pdo_sqlite'
@@ -25,5 +25,5 @@ doctrine:
         mappings:
           Pfilsx\tests\app\Entity\Node:
             type: xml
-            dir: "%kernel.root_dir%/app/Resources/config/doctrine"
+            dir: "%kernel.root_dir%/Resources/config/doctrine"
             prefix: Pfilsx\tests\app\Entity

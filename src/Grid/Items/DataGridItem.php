@@ -30,7 +30,7 @@ abstract class DataGridItem implements DataGridItemInterface
 
     public final function hasIdentifier(): bool
     {
-        return $this->identifier !== null;
+        return $this->identifier !== null && $this->has($this->identifier);
     }
 
     public final function getIdentifier()
