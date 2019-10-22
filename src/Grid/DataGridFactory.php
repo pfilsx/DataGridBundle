@@ -5,7 +5,6 @@ namespace Pfilsx\DataGrid\Grid;
 
 
 use Pfilsx\DataGrid\Config\ConfigurationContainerInterface;
-use Pfilsx\DataGrid\Config\ConfigurationInterface;
 use InvalidArgumentException;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
@@ -52,7 +51,7 @@ class DataGridFactory implements DataGridFactoryInterface
     }
 
 
-    public function createGrid(string $gridType, $dataProvider): DataGrid
+    public function createGrid(string $gridType, $dataProvider): DataGridInterface
     {
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);

@@ -11,5 +11,5 @@ interface DataGridFactoryInterface
 {
     public function __construct(DataGridServiceContainer $container, ConfigurationContainerInterface $configs);
 
-    public function createGrid(string $gridType, $dataProvider): DataGrid;
+    public function createGrid(string $gridType, $dataProvider): DataGridInterface;
 }

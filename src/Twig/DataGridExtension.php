@@ -4,43 +4,80 @@
 namespace Pfilsx\DataGrid\Twig;
 
 
-use Pfilsx\DataGrid\Grid\DataGrid;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Twig\Environment;
+use Pfilsx\DataGrid\Grid\DataGridView;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class DataGridExtension extends AbstractExtension
 {
-    const DEFAULT_TEMPLATE = '@DataGrid/grid.blocks.html.twig';
-    protected $requestStack;
-
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('grid_view', [$this, 'generateGrid'], [
-                'needs_environment' => true,
+            new TwigFunction('grid_start', [$this, 'gridStart'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_head', [$this, 'gridHead'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_filters', [$this, 'gridFilters'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_body', [$this, 'gridBody'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_end', [$this, 'gridEnd'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_pagination', [$this, 'gridPagination'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_widget', [$this, 'gridWidget'], [
+                'is_safe' => ['html']
+            ]),
+            new TwigFunction('grid_view', [$this, 'gridView'], [
                 'is_safe' => ['html']
             ]),
         ];
     }
 
-    public function generateGrid(Environment $environment, DataGrid $grid, array $attributes = [])
+    public function gridStart(DataGridView $gridView, array $attributes = [])
     {
-        $template = $grid->getTemplate();
-        if (!$template->hasBlock('grid_table', [])) {
-            $template = $environment->loadTemplate(self::DEFAULT_TEMPLATE);
-            $grid->setTemplate($template);
-        }
-        return $template->renderBlock('grid_table', [
-            'attr' => $attributes,
-            'data_grid' => $grid,
-            'request' => $this->requestStack->getCurrentRequest()
-        ]);
+        return $gridView->renderGridStart($attributes);
+    }
+
+    public function gridHead(DataGridView $gridView)
+    {
+        return $gridView->renderGridHead();
+    }
+
+    public function gridFilters(DataGridView $gridView)
+    {
+        return $gridView->renderGridFilters();
+    }
+
+    public function gridBody(DataGridView $gridView)
+    {
+        return $gridView->renderGridBody();
+    }
+
+    public function gridEnd(DataGridView $gridView)
+    {
+        return $gridView->renderGridEnd();
+    }
+
+    public function gridPagination(DataGridView $gridView)
+    {
+        return $gridView->renderGridPagination();
+    }
+
+    public function gridWidget(DataGridView $gridView)
+    {
+        return $gridView->renderGridWidget();
+    }
+
+    public function gridView(DataGridView $gridView, array $attributes = [])
+    {
+        return $gridView->renderGridView($attributes);
     }
 }

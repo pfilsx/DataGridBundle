@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Pfilsx\DataGrid\Config\ConfigurationContainer;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
+use Pfilsx\DataGrid\Grid\DataGridView;
 use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\app\Grid\NodeGridType;
 use Pfilsx\tests\app\Grid\NodeGridType2;
@@ -75,6 +76,7 @@ class DataGridFactoryTest extends OrmTestCase
         $this->assertFalse($grid->hasFilters());
         $this->assertNotEmpty($grid->getColumns());
         $this->assertFalse($grid->getShowTitles());
+        $this->assertInstanceOf(DataGridView::class, $grid->createView());
         $this->assertEquals([
             'currentPage' => 1,
             'pages' => [1,2,3]

@@ -16,9 +16,8 @@ use Twig\Template;
  * Class DataGrid
  * @package Pfilsx\DataGrid\Grid
  * @internal
- * TODO translation_domain in columns and builder
  */
-class DataGrid
+class DataGrid implements DataGridInterface
 {
     /**
      * @var Template
@@ -142,7 +141,7 @@ class DataGrid
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      */
-    public function setTemplate(string $path)
+    protected function setTemplate(string $path)
     {
         $this->template = $this->container->getTwig()->loadTemplate($path);
         foreach ($this->builder->getColumns() as $column){
@@ -150,6 +149,10 @@ class DataGrid
         }
     }
 
+    /**
+     * @internal
+     * @return string
+     */
     public function getNoDataMessage()
     {
         return $this->container->getTranslator() !== null
@@ -157,13 +160,26 @@ class DataGrid
             : ucfirst($this->configuration->getNoDataMessage());
     }
 
+    /**
+     * @internal
+     * @return bool
+     */
     public function hasPagination()
     {
         return $this->builder->hasPagination();
     }
 
+    /**
+     * @internal
+     * @return array
+     */
     public function getPaginationOptions()
     {
         return $this->builder->getPager()->getPaginationOptions();
+    }
+
+    public function createView(): DataGridView
+    {
+        return new DataGridView($this, $this->container);
     }
 }
