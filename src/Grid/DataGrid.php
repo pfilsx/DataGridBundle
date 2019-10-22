@@ -16,9 +16,8 @@ use Twig\Template;
  * Class DataGrid
  * @package Pfilsx\DataGrid\Grid
  * @internal
- * TODO translation_domain in columns and builder
  */
-class DataGrid
+class DataGrid implements DataGridInterface
 {
     /**
      * @var Template
@@ -38,33 +37,55 @@ class DataGrid
      */
     protected $filtersCriteria;
     /**
+     * @var AbstractGridType
+     */
+    protected $gridType;
+
+    /**
      * @var DataGridBuilderInterface
      */
     protected $builder;
+    /**
+     * @var DataGridFiltersBuilderInterface
+     */
+    protected $filterBuilder;
 
     /**
      * DataGrid constructor.
-     * @param DataGridBuilderInterface $builder
+     * @param AbstractGridType $type
+     * @param DataProviderInterface $dataProvider
      * @param ConfigurationContainerInterface $defaultConfiguration
      * @param DataGridServiceContainer $container
      * @internal
      */
     public function __construct(
-        DataGridBuilderInterface $builder,
+        AbstractGridType $type,
+        DataProviderInterface $dataProvider,
         ConfigurationContainerInterface $defaultConfiguration,
         DataGridServiceContainer $container
     )
     {
-        $this->builder = $builder;
+        $this->gridType = $type;
         $this->container = $container;
-        $this->configuration = $defaultConfiguration->getInstance($builder->getInstance())->merge($builder->getConfiguration());
+
+        $this->configureBuilders($dataProvider);
+
+        $this->configuration = $defaultConfiguration->getInstance($this->builder->getInstance())
+            ->merge($this->builder->getConfiguration());
+
         $this->setTemplate($this->configuration->getTemplate());
-        $this->configurePagerOptions();
-        if (!empty($this->configuration->getTranslationDomain())){
-            foreach ($this->builder->getColumns() as $column){
-                $column->setTranslationDomain($this->configuration->getTranslationDomain());
-            }
-        }
+        $this->setTranslationDomain($this->configuration->getTranslationDomain());
+
+    }
+
+    protected function configureBuilders(DataProviderInterface $dataProvider)
+    {
+        $this->builder = new DataGridBuilder($this->container);
+        $this->builder->setProvider($dataProvider);
+        $this->gridType->buildGrid($this->builder);
+
+        $this->filterBuilder = new DataGridFiltersBuilder();
+        $this->filterBuilder->setProvider($dataProvider);
     }
 
     /**
@@ -74,20 +95,13 @@ class DataGrid
     {
         $pager = $this->builder->getProvider()->getPager();
         $pager->setLimit($this->configuration->getPaginationLimit());
-        if ($this->configuration->getPaginationEnabled()){
+        if ($this->configuration->getPaginationEnabled()) {
             $pager->enable();
             $pager->setTotalCount($this->getProvider()->getTotalCount());
+            $pager->rebuildPaginationOptions();
         } else {
             $pager->disable();
         }
-    }
-    /**
-     * @return bool
-     * @internal
-     */
-    public function getShowTitles(): bool
-    {
-        return $this->configuration->getShowTitles();
     }
 
     /**
@@ -136,20 +150,9 @@ class DataGrid
     }
 
     /**
+     * @return string
      * @internal
-     * @param string $path
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      */
-    public function setTemplate(string $path)
-    {
-        $this->template = $this->container->getTwig()->loadTemplate($path);
-        foreach ($this->builder->getColumns() as $column){
-            $column->setTemplate($this->template);
-        }
-    }
-
     public function getNoDataMessage()
     {
         return $this->container->getTranslator() !== null
@@ -157,13 +160,104 @@ class DataGrid
             : ucfirst($this->configuration->getNoDataMessage());
     }
 
+    /**
+     * @return bool
+     * @internal
+     */
     public function hasPagination()
     {
         return $this->builder->hasPagination();
     }
 
+    /**
+     * @return array
+     * @internal
+     */
     public function getPaginationOptions()
     {
         return $this->builder->getPager()->getPaginationOptions();
+    }
+
+    /**
+     * @return DataGridView
+     */
+    public function createView(): DataGridView
+    {
+        $this->handleRequest();
+        $this->configurePagerOptions();
+        return new DataGridView($this, $this->container);
+    }
+
+    /**
+     * @param string $path
+     */
+    protected function setTemplate(string $path)
+    {
+        $this->template = $this->container->getTwig()->loadTemplate($path);
+        foreach ($this->builder->getColumns() as $column) {
+            $column->setTemplate($this->template);
+        }
+    }
+
+    /**
+     * @param string $domain
+     */
+    protected function setTranslationDomain(?string $domain)
+    {
+        foreach ($this->builder->getColumns() as $column) {
+            $column->setTranslationDomain($domain);
+        }
+    }
+
+    protected function handleRequest(): void
+    {
+        $request = $this->container->getRequest()->getCurrentRequest();
+        $queryParams = $request !== null ? $request->query->get('data_grid', []) : [];
+
+        $this->handleSorting($queryParams);
+
+        $this->handlePagination($queryParams);
+
+        $this->handleFilters($queryParams);
+    }
+
+    protected function handleSorting(array &$queryParams)
+    {
+        if (array_key_exists('sortBy', $queryParams)) {
+            $this->setSort($queryParams['sortBy']);
+            unset($queryParams['sortBy']);
+        }
+    }
+
+    protected function handlePagination(array &$queryParams)
+    {
+        if (array_key_exists('page', $queryParams)) {
+            $this->setPage($queryParams['page']);
+            unset($queryParams['page']);
+        } else {
+            $this->setPage(1);
+        }
+    }
+
+    protected function handleFilters(array $queryParams)
+    {
+        $this->builder->setFiltersValues($queryParams);
+        $this->filterBuilder->setParams($queryParams);
+        $this->gridType->handleFilters($this->filterBuilder, $queryParams);
+    }
+
+    protected function setSort($attribute)
+    {
+        $first = substr($attribute, 0, 1);
+        if ($first == '-') {
+            $this->builder->setSort(substr($attribute, 1), 'DESC');
+        } else {
+            $this->builder->setSort($attribute, 'ASC');
+        }
+    }
+
+    protected function setPage($page)
+    {
+        $this->builder->getPager()->setPage(is_numeric($page) ? (int)$page : 1);
     }
 }

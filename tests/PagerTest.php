@@ -44,6 +44,7 @@ class PagerTest extends TestCase
 
         $pager->setPage($page);
         $pager->setTotalCount($count);
+        $pager->rebuildPaginationOptions();
         $this->assertEquals($result, $pager->getPaginationOptions());
     }
 

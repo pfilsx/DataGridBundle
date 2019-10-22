@@ -63,10 +63,6 @@ class Configuration implements ConfigurationInterface
         $this->paginationLimit = $limit;
     }
 
-    public function setShowTitles(bool $showTitles): void
-    {
-        $this->showTitles = $showTitles;
-    }
 
     public function setTranslationDomain(?string $domain): void
     {
@@ -80,7 +76,6 @@ class Configuration implements ConfigurationInterface
             'paginationEnabled' => $this->getPaginationEnabled(),
             'paginationLimit' => $this->getPaginationLimit(),
             'noDataMessage' => $this->getNoDataMessage(),
-            'showTitles' => $this->getShowTitles(),
             'translationDomain' => $this->getTranslationDomain()
         ];
     }
@@ -105,11 +100,6 @@ class Configuration implements ConfigurationInterface
     public function getPaginationEnabled(): ?bool
     {
         return $this->paginationEnabled;
-    }
-
-    public function getShowTitles(): ?bool
-    {
-        return $this->showTitles;
     }
 
     public function getTranslationDomain(): ?string

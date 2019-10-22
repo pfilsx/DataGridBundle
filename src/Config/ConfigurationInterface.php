@@ -28,10 +28,6 @@ interface ConfigurationInterface
 
     public function setPaginationEnabled(bool $value): void;
 
-    public function getShowTitles(): ?bool;
-
-    public function setShowTitles(bool $showTitles): void;
-
     public function getTranslationDomain(): ?string;
 
     public function setTranslationDomain(string $domain): void;

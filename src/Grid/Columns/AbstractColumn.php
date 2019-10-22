@@ -10,7 +10,7 @@ use Twig\Template;
 
 abstract class AbstractColumn
 {
-    protected $attributes;
+    protected $attributes = [];
 
     protected $value = null;
 

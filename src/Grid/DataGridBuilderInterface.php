@@ -22,8 +22,6 @@ interface DataGridBuilderInterface
 
     public function setNoDataMessage(string $message): self;
 
-    public function setShowTitles(bool $flag): self;
-
     public function enablePagination(bool $enabled = true, int $limit = 10): self;
 
     public function setCountFieldName(string $name): self;
@@ -83,5 +81,10 @@ interface DataGridBuilderInterface
      */
     public function getInstance(): string;
 
-
+    /**
+     * @param string $attribute
+     * @param string $direction
+     * @internal
+     */
+    public function setSort(string $attribute, string $direction);
 }

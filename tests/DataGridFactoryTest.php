@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Pfilsx\DataGrid\Config\ConfigurationContainer;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
+use Pfilsx\DataGrid\Grid\DataGridView;
 use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\app\Grid\NodeGridType;
 use Pfilsx\tests\app\Grid\NodeGridType2;
@@ -67,6 +68,7 @@ class DataGridFactoryTest extends OrmTestCase
     public function testCreateGrid(): void
     {
         $grid = $this->factory->createGrid(NodeGridType::class, $this->getEntityManager()->getRepository(Node::class));
+        $grid->createView();
         $this->assertEquals('empty', $grid->getNoDataMessage());
         $this->assertTrue($grid->hasPagination());
         $this->assertInstanceOf(Template::class, $grid->getTemplate());
@@ -74,7 +76,7 @@ class DataGridFactoryTest extends OrmTestCase
         $this->assertNotEmpty($grid->getData());
         $this->assertFalse($grid->hasFilters());
         $this->assertNotEmpty($grid->getColumns());
-        $this->assertFalse($grid->getShowTitles());
+        $this->assertInstanceOf(DataGridView::class, $grid->createView());
         $this->assertEquals([
             'currentPage' => 1,
             'pages' => [1,2,3]
@@ -98,7 +100,7 @@ class DataGridFactoryTest extends OrmTestCase
         );
         $factory2 = new DataGridFactory($container, $this->configuration);
         $grid2 = $factory2->createGrid(NodeGridType2::class, $this->getEntityManager()->getRepository(Node::class));
-
+        $grid2->createView();
         $this->assertFalse($grid2->hasPagination());
     }
 }

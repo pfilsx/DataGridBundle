@@ -4,8 +4,6 @@
 namespace Pfilsx\DataGrid\DependencyInjection;
 
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -37,7 +35,6 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('template')->defaultValue('@DataGrid/grid.blocks.html.twig')->end()
                             ->scalarNode('no_data_message')->defaultValue('No data found')->end()
-                            ->scalarNode('show_titles')->defaultValue(true)->end()
                             ->booleanNode('pagination_enabled')->defaultValue(true)->end()
                             ->integerNode('pagination_limit')->defaultValue(10)->end()
                             ->scalarNode('translation_domain')->defaultNull()->end()
