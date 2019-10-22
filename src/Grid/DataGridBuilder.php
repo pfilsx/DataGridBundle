@@ -112,16 +112,6 @@ class DataGridBuilder implements DataGridBuilderInterface
         return $this;
     }
 
-    /**
-     * @param bool $flag
-     * @return DataGridBuilderInterface
-     */
-    public function setShowTitles(bool $flag): DataGridBuilderInterface
-    {
-        $this->configuration->setShowTitles($flag);
-        return $this;
-    }
-
     public function enablePagination(bool $enabled = true, ?int $limit = null): DataGridBuilderInterface
     {
         $this->configuration->setPaginationEnabled($enabled);
@@ -164,7 +154,7 @@ class DataGridBuilder implements DataGridBuilderInterface
     public function setSort(string $attribute, string $direction)
     {
         foreach ($this->columns as $column) {
-            if ($column->hasSort() && $column->getAttribute() == $attribute) {
+            if ($column instanceof DataColumn && $column->hasSort() && $column->getAttribute() == $attribute) {
                 $column->setSort($direction);
                 $this->provider->setSort([$attribute => $direction]);
                 break;
@@ -188,7 +178,7 @@ class DataGridBuilder implements DataGridBuilderInterface
     public function setFiltersValues(array $filters): void
     {
         foreach ($this->columns as $column) {
-            if ($column->hasFilter() && array_key_exists($column->getAttribute(), $filters)) {
+            if ($column instanceof DataColumn && $column->hasFilter() && array_key_exists($column->getAttribute(), $filters)) {
                 $column->setFilterValue($filters[$column->getAttribute()]);
             }
         }

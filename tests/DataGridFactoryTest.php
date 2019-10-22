@@ -68,6 +68,7 @@ class DataGridFactoryTest extends OrmTestCase
     public function testCreateGrid(): void
     {
         $grid = $this->factory->createGrid(NodeGridType::class, $this->getEntityManager()->getRepository(Node::class));
+        $grid->createView();
         $this->assertEquals('empty', $grid->getNoDataMessage());
         $this->assertTrue($grid->hasPagination());
         $this->assertInstanceOf(Template::class, $grid->getTemplate());
@@ -75,7 +76,6 @@ class DataGridFactoryTest extends OrmTestCase
         $this->assertNotEmpty($grid->getData());
         $this->assertFalse($grid->hasFilters());
         $this->assertNotEmpty($grid->getColumns());
-        $this->assertFalse($grid->getShowTitles());
         $this->assertInstanceOf(DataGridView::class, $grid->createView());
         $this->assertEquals([
             'currentPage' => 1,
@@ -100,7 +100,7 @@ class DataGridFactoryTest extends OrmTestCase
         );
         $factory2 = new DataGridFactory($container, $this->configuration);
         $grid2 = $factory2->createGrid(NodeGridType2::class, $this->getEntityManager()->getRepository(Node::class));
-
+        $grid2->createView();
         $this->assertFalse($grid2->hasPagination());
     }
 }

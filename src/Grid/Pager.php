@@ -93,7 +93,6 @@ class Pager
 
     public function getPaginationOptions()
     {
-        $this->rebuildPaginationOptions();
         return [
             'currentPage' => $this->page,
             'pages' => $this->pages

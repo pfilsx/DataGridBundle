@@ -13,14 +13,12 @@ class ConfigurationTest extends TestCase
     {
         $configuration = new Configuration([
             'template' => 'test/grid.blocks.html.twig',
-            'show_titles' => false,
             'pagination_enabled' => true,
             'pagination_limit' => 15,
             'translation_domain' => 'test'
         ]);
 
         $this->assertEquals('test/grid.blocks.html.twig', $configuration->getTemplate());
-        $this->assertFalse($configuration->getShowTitles());
         $this->assertTrue($configuration->getPaginationEnabled());
         $this->assertEquals(15, $configuration->getPaginationLimit());
         $this->assertEquals('test', $configuration->getTranslationDomain());
@@ -30,7 +28,6 @@ class ConfigurationTest extends TestCase
     {
         $configuration = new Configuration([
             'template' => 'test/grid.blocks.html.twig',
-            'show_titles' => false,
             'pagination_enabled' => true,
             'pagination_limit' => 15,
             'translation_domain' => null
@@ -49,7 +46,6 @@ class ConfigurationTest extends TestCase
 
         $this->assertEquals([
             'template' => 'test/grid.blocks.html.twig',
-            'showTitles' => false,
             'paginationEnabled' => true,
             'paginationLimit' => 10,
             'translationDomain' => 'test',
