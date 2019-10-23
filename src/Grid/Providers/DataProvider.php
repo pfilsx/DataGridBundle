@@ -5,7 +5,10 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Pfilsx\DataGrid\DataGridException;
@@ -19,6 +22,21 @@ abstract class DataProvider implements DataProviderInterface
     protected $pager;
 
     protected $countFieldName;
+
+    /**
+     * @var ManagerRegistry
+     */
+    protected $registry;
+
+    /**
+     * @var ObjectManager
+     */
+    protected $entityManager;
+
+    public function __construct(ManagerRegistry $registry = null)
+    {
+        $this->registry = $registry;
+    }
 
     /**
      * @internal
@@ -83,23 +101,52 @@ abstract class DataProvider implements DataProviderInterface
     /**
      * @param $attribute
      * @param $value
+     * @throws DataGridException
      */
     protected function equalDate($attribute, $value): void
     {
         throw new DataGridException("Method equalDate() is not supported in " . static::class);
     }
 
+    protected function getEntityIdentifier(string $className){
+        $metadata = $this->getEntityMetadata($className);
+        if ($metadata === null) return null;
+        return !empty($metadata->getIdentifier()) ? $metadata->getIdentifier()[0] : null;
+    }
 
-    public static function create($data, EntityManager $doctrine = null): DataProviderInterface
+    /**
+     * @param string $className
+     * @return ClassMetadata|null
+     */
+    protected function getEntityMetadata(string $className)
+    {
+        $metadata = null;
+
+        /** @var EntityManagerInterface $em */
+        foreach ($this->registry->getManagers() as $em) {
+            $cmf = $em->getMetadataFactory();
+
+            foreach ($cmf->getAllMetadata() as $m) {
+                if ($m->getName() === $className) {
+                    $this->entityManager = $em;
+                    return $m;
+                }
+            }
+        }
+        return $metadata;
+    }
+
+
+    public static function create($data, ManagerRegistry $doctrine = null): DataProviderInterface
     {
         if ($data instanceof EntityRepository && $doctrine !== null) {
             return new RepositoryDataProvider($data, $doctrine);
         }
-        if ($data instanceof QueryBuilder && $doctrine !== null) {
-            return new QueryBuilderDataProvider($data, $doctrine);
+        if ($data instanceof QueryBuilder) {
+            return new QueryBuilderDataProvider($data);
         }
         if (is_array($data)) {
-            return new ArrayDataProvider($data);
+            return new ArrayDataProvider($data, $doctrine);
         }
         throw new DataGridException('Provided data must be one of: ' . implode(', ', [
                 ServiceEntityRepository::class,

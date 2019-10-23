@@ -6,11 +6,9 @@ namespace Pfilsx\tests;
 
 use DateTime;
 use Doctrine\ORM\EntityManager;
-use Pfilsx\tests\TestEntities\Node;
-use Pfilsx\tests\TestEntities\NodeAssoc;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
+use Pfilsx\tests\app\Entity\Node;
+use Pfilsx\tests\app\Entity\NodeAssoc;
+use Twig\Template;
 
 class OrmTestCase extends KernelTestCase
 {
@@ -19,32 +17,18 @@ class OrmTestCase extends KernelTestCase
      */
     protected $em;
     /**
-     * @var
+     * @var Template
      */
-    protected $pdo;
-
-    protected $containerArray = [];
+    protected $template;
 
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-        $application->run(new ArrayInput(array(
-            'doctrine:schema:drop',
-            '--force' => true
-        )));
-        $application->run(new ArrayInput(array(
-            'doctrine:schema:create'
-        )));
+        parent::setUp();
 
-        $this->containerArray = [
-            'twig' => $kernel->getContainer()->get('twig'),
-            'router' => $kernel->getContainer()->get('router'),
-            'doctrine' => $kernel->getContainer()->get('doctrine'),
-            'request' => $kernel->getContainer()->get('request_stack')->getCurrentRequest()
-        ];
+        $this->createEntityManager();
+
+        $this->template = $this->serviceContainer->getTwig()->loadTemplate('test_template.html.twig');
     }
 
     /**
@@ -59,11 +43,6 @@ class OrmTestCase extends KernelTestCase
         return $this->em;
     }
 
-    public function getConnection()
-    {
-        $pdo = $this->em->getConnection();
-        return $this->createDefaultDBConnection($pdo, ':memory:');
-    }
 
     public function getEntityManager()
     {

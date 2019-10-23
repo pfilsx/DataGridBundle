@@ -31,6 +31,14 @@ class DataColumn extends AbstractColumn
     /**
      * @return string
      */
+    public function getLabel(): string
+    {
+        return !empty($this->label) ? $this->label : $this->attribute;
+    }
+
+    /**
+     * @return string
+     */
     public function getFormat(): string
     {
         return $this->format;
@@ -58,7 +66,11 @@ class DataColumn extends AbstractColumn
 
     public function getHeadContent()
     {
-        return !empty($this->label) ? ucfirst($this->label) : (!empty($this->attribute) ? ucfirst($this->attribute) : '');
+        $label = $this->getLabel();
+        if (($translator = $this->container->getTranslator()) !== null){
+            $label = $translator->trans($label, [], $this->translationDomain);
+        }
+        return ucfirst($label);
     }
 
     public function getFilterContent()

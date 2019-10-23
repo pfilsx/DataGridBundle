@@ -6,7 +6,7 @@ Usage
 
 .. code-block:: php
 
-    $builder->addColumn(self::ACTION_COLUMN, [
+    $builder->addActionColumn([
         'pathPrefix' => 'path_prefix'
     ]);
 
@@ -49,7 +49,7 @@ Path prefix would be used in default url generation.
 
 visible - boolean(default: true)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-whether to display a column.
+Whether to display a column.
 
 urlGenerator - callable(default: null)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,10 +57,8 @@ Can be used to override default url generation function.
 
 .. code-block:: php
 
-    $builder->addColumn(self::ACTION_COLUMN, [
-        'buttons' => [
-            'urlGenerator' => function($entity, string $action, RouterInterface $router){
+    $builder->addActionColumn([
+        'urlGenerator' => function($entity, string $action, RouterInterface $router){
                 return $router->generate('entity-'.$action, ['guid' => $entity->getId()]);
-            }
-        ]
+        }
     ]);

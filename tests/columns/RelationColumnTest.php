@@ -4,9 +4,8 @@
 namespace Pfilsx\DataGrid\tests\columns;
 
 
-use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Columns\RelationColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -17,7 +16,7 @@ class RelationColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new RelationColumn($this->containerArray, [
+        $this->testColumn = new RelationColumn($this->serviceContainer, [
             'attribute' => 'test_attribute',
             'labelAttribute' => 'title',
             'format' => 'html',
@@ -28,18 +27,18 @@ class RelationColumnTest extends OrmTestCase
 
     public function testCheckConfiguration(): void
     {
-        $this->expectException(DataGridException::class);
-        new RelationColumn($this->containerArray, [
+        $column = new RelationColumn($this->serviceContainer, [
             'attribute' => 'test_attribute',
             'template' => 'test_template.html.twig'
         ]);
+        $this->assertEquals('id', $column->getLabelAttribute());
     }
 
     public function testGetHeadContent(): void
     {
         $this->assertEquals('Test', $this->testColumn->getHeadContent());
-        $column = new RelationColumn($this->containerArray, ['attribute' => 'testAttribute', 'labelAttribute' => 'title']);
-        $this->assertEquals('TestAttribute.Title', $column->getHeadContent());
+        $column = new RelationColumn($this->serviceContainer, ['attribute' => 'testAttribute', 'labelAttribute' => 'title']);
+        $this->assertEquals('TestAttribute.title', $column->getHeadContent());
     }
 
     public function testGetCellContent(): void
@@ -57,11 +56,10 @@ class RelationColumnTest extends OrmTestCase
                 };
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
-        $item->setEntity(new class
+        $item->setData(new class
         {
             public function getTestAttribute()
             {

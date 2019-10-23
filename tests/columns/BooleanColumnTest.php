@@ -6,7 +6,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\BooleanColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -21,7 +21,7 @@ class BooleanColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new BooleanColumn($this->containerArray, [
+        $this->testColumn = new BooleanColumn($this->serviceContainer, [
             'attribute' => 'testAttribute',
             'trueValue' => 'yes',
             'falseValue' => 'no',
@@ -57,13 +57,12 @@ class BooleanColumnTest extends OrmTestCase
                 return $this->enabled;
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('yes', $this->testColumn->getCellContent($item));
         $entity->enabled = false;
         $this->assertEquals('no', $this->testColumn->getCellContent($item));
 
-        $column = new BooleanColumn($this->containerArray, [
+        $column = new BooleanColumn($this->serviceContainer, [
             'value' => function () {
                 return 'no';
             },
@@ -73,7 +72,7 @@ class BooleanColumnTest extends OrmTestCase
         $this->assertIsCallable($column->getValue());
         $this->assertEquals('no', $column->getCellContent($item));
 
-        $column = new BooleanColumn($this->containerArray, ['value' => false]);
+        $column = new BooleanColumn($this->serviceContainer, ['value' => false]);
         $this->assertEquals('No', $column->getCellContent($item));
 
     }

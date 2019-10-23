@@ -18,11 +18,11 @@ class CustomFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new CustomFilter($this->containerArray, [
+        $this->testFilter = new CustomFilter($this->serviceContainer, [
             'value' => function () {
                 return 'test_filter';
             },
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 

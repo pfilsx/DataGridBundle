@@ -6,7 +6,7 @@ Usage
 
 .. code-block:: php
 
-    $builder->addColumn(self::SERIAL_COLUMN);
+    $builder->addSerialColumn();
 
 Configuration
 -------------

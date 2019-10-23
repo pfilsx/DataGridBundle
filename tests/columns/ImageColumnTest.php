@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\tests\columns;
 
 
 use Pfilsx\DataGrid\Grid\Columns\ImageColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -20,7 +20,7 @@ class ImageColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new ImageColumn($this->containerArray, [
+        $this->testColumn = new ImageColumn($this->serviceContainer, [
             'attribute' => 'testAttribute',
             'width' => 20,
             'height' => 20,
@@ -28,7 +28,7 @@ class ImageColumnTest extends OrmTestCase
                 return 'Test alt';
             },
             'noImageMessage' => 'Empty',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 
@@ -57,8 +57,7 @@ class ImageColumnTest extends OrmTestCase
                 return null;
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('Empty', $this->testColumn->getCellContent($item));
     }
 
@@ -71,14 +70,13 @@ class ImageColumnTest extends OrmTestCase
                 return '/path/to/image.jpg';
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('<img src="/path/to/image.jpg" height="20" width="20" alt="Test alt"/>', trim($this->testColumn->getCellContent($item)));
 
-        $column = new ImageColumn($this->containerArray, [
+        $column = new ImageColumn($this->serviceContainer, [
             'format' => 'raw',
             'attribute' => 'testAttribute',
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
         $this->assertEquals('/path/to/image.jpg', $column->getCellContent($item));
     }

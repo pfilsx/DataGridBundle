@@ -8,8 +8,9 @@ use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Pager;
 use Pfilsx\DataGrid\Grid\Providers\DataProvider;
 use Pfilsx\DataGrid\Grid\Providers\QueryBuilderDataProvider;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 class QueryBuilderDataProviderTest extends OrmTestCase
 {
@@ -21,7 +22,7 @@ class QueryBuilderDataProviderTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class)->createQueryBuilder('qb1'), $this->getEntityManager());
+        $this->provider = DataProvider::create($this->getEntityManager()->getRepository(Node::class)->createQueryBuilder('qb1'), $this->serviceContainer->getDoctrine());
         $this->provider->setPager(new Pager());
     }
 

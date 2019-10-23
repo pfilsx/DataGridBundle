@@ -6,9 +6,7 @@ Usage
 
 .. code-block:: php
 
-    $builder->addColumn(self::IMAGE_COLUMN, [
-        'attribute' => 'entity_attribute'
-    ]);
+    $builder->addColumn('entity_attribute', self::IMAGE_COLUMN);
 
 Configuration
 -------------
@@ -19,16 +17,12 @@ Alt attribute callback.
 
 .. code-block:: php
 
-    $builder->addColumn(self::IMAGE_COLUMN, [
-        'attribute' => 'entity_attribute',
+    $builder->addColumn('entity_attribute', self::IMAGE_COLUMN, [
+        ...
         'alt' => function($entity){
             return $entity->getAlt();
         }
     ]);
-
-attribute - string(default: null)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Entity attribute.
 
 attributes - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,7 +50,7 @@ Can be used to override default output generation.
 
 .. code-block:: php
 
-    $builder->addColumn(self::IMAGE_COLUMN, [
+    $builder->addColumn('entity_attribute', self::IMAGE_COLUMN, [
         'value' => function($entity) {
             return $entity->getImgTag();
         }

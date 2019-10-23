@@ -5,8 +5,9 @@ namespace Pfilsx\DataGrid\tests\filters;
 
 
 use Pfilsx\DataGrid\Grid\Filters\EntityFilter;
+use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
+
 
 /**
  * Class EntityFilterTest
@@ -20,12 +21,11 @@ class EntityFilterTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testFilter = new EntityFilter($this->containerArray, [
+        $this->testFilter = new EntityFilter($this->serviceContainer, [
             'label' => 'user',
             'entityClass' => Node::class,
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
-        $this->createEntityManager();
     }
 
     public function testGetLabel(): void

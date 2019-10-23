@@ -4,11 +4,13 @@
 namespace Pfilsx\DataGrid\Grid\Columns;
 
 
+use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
+use Twig\Template;
 
 abstract class AbstractColumn
 {
-    protected $attributes;
+    protected $attributes = [];
 
     protected $value = null;
 
@@ -24,14 +26,19 @@ abstract class AbstractColumn
 
     protected $isVisible = true;
 
+    /**
+     * @var Template
+     */
     protected $template;
     /**
-     * @var array
+     * @var DataGridServiceContainer
      *
      */
     protected $container;
 
-    public function __construct(array $container, array $config = [])
+    protected $translationDomain = null;
+
+    public function __construct(DataGridServiceContainer $container, array $config = [])
     {
 
         $this->container = $container;
@@ -139,10 +146,6 @@ abstract class AbstractColumn
         return $this->sort;
     }
 
-    public function getAttribute()
-    {
-        return null;
-    }
 
     public function getFilterValue()
     {
@@ -193,6 +196,10 @@ abstract class AbstractColumn
     protected function setVisible(bool $visibility): void
     {
         $this->isVisible = $visibility;
+    }
+
+    public function setTranslationDomain(?string $domain): void {
+        $this->translationDomain = $domain;
     }
 
 }

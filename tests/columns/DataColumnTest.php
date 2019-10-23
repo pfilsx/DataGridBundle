@@ -8,8 +8,8 @@ use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\AbstractGridType;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
-use Pfilsx\DataGrid\Grid\DataGridItem;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 use Pfilsx\tests\OrmTestCase;
 
 /**
@@ -23,7 +23,7 @@ class DataColumnTest extends OrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->testColumn = new DataColumn($this->containerArray, [
+        $this->testColumn = new DataColumn($this->serviceContainer, [
             'attribute' => 'test_attribute',
             'format' => 'html',
             'label' => 'test',
@@ -32,7 +32,7 @@ class DataColumnTest extends OrmTestCase
                 'class' => 'test_class',
                 'data_row' => false
             ],
-            'template' => 'test_template.html.twig'
+            'template' => $this->template
         ]);
     }
 
@@ -46,7 +46,7 @@ class DataColumnTest extends OrmTestCase
     public function testAttributeOrValueException(): void
     {
         $this->expectException(DataGridException::class);
-        new DataColumn($this->containerArray);
+        new DataColumn($this->serviceContainer);
     }
 
     public function testGetAttribute(): void
@@ -94,7 +94,7 @@ class DataColumnTest extends OrmTestCase
     public function testGetHeadContent(): void
     {
         $this->assertEquals('Test', $this->testColumn->getHeadContent());
-        $column = new DataColumn($this->containerArray, [
+        $column = new DataColumn($this->serviceContainer, [
             'attribute' => 'testAttribute',
             'template' => 'test_template.html.twig'
         ]);
@@ -112,11 +112,10 @@ class DataColumnTest extends OrmTestCase
                 return $this->data;
             }
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->assertEquals('test_data', $this->testColumn->getCellContent($item));
 
-        $column = new DataColumn($this->containerArray, [
+        $column = new DataColumn($this->serviceContainer, [
             'value' => function () {
                 return 'test_data';
             },
@@ -126,7 +125,7 @@ class DataColumnTest extends OrmTestCase
         $this->assertIsCallable($column->getValue());
         $this->assertEquals('test_data', $column->getCellContent($item));
 
-        $column = new DataColumn($this->containerArray, [
+        $column = new DataColumn($this->serviceContainer, [
             'value' => 'test_data',
             'template' => 'test_template.html.twig'
         ]);
@@ -139,8 +138,7 @@ class DataColumnTest extends OrmTestCase
         $entity = new class
         {
         };
-        $item = new DataGridItem();
-        $item->setEntity($entity);
+        $item = new EntityGridItem($entity);
         $this->testColumn->getCellContent($item);
     }
 }

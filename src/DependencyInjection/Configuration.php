@@ -28,14 +28,18 @@ class Configuration implements ConfigurationInterface
         }
         $rootNode
             ->children()
-            ->scalarNode('template')->defaultValue('@DataGrid/grid.blocks.html.twig')->end()
-            ->scalarNode('noDataMessage')->defaultValue('No data found')->end()
-            ->scalarNode('showTitles')->defaultValue(true)->end()
-            ->arrayNode('pagination')
-            ->children()
-            ->integerNode('limit')->defaultValue(10)->end()
-            ->end()
-            ->end()
+                ->arrayNode('instances')
+                    ->normalizeKeys(false)
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('template')->defaultValue('@DataGrid/grid.blocks.html.twig')->end()
+                            ->scalarNode('no_data_message')->defaultValue('No data found')->end()
+                            ->booleanNode('pagination_enabled')->defaultValue(true)->end()
+                            ->integerNode('pagination_limit')->defaultValue(10)->end()
+                            ->scalarNode('translation_domain')->defaultNull()->end()
+                        ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

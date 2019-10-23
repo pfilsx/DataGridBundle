@@ -49,7 +49,7 @@ class EntityFilter extends AbstractFilter
 
     protected function getParams(): array
     {
-        $manager = $this->container['doctrine']->getRepository($this->entityClass);
+        $manager = $this->container->getDoctrine()->getRepository($this->entityClass);
         $queryResult = $manager->createQueryBuilder('dgq')
             ->select(['dgq.id', 'dgq.' . $this->label])->orderBy('dgq.id')->getQuery()->getArrayResult();
         $choices = [];

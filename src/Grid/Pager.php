@@ -89,7 +89,6 @@ class Pager
     public function setTotalCount(int $totalCount): void
     {
         $this->totalCount = $totalCount;
-        $this->rebuildPaginationOptions();
     }
 
     public function getPaginationOptions()

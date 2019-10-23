@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\Grid\Columns;
 
 use Exception;
 use Pfilsx\DataGrid\DataGridException;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\DataGridItemInterface;
 use Twig\Template;
 
 class ActionColumn extends AbstractColumn
@@ -51,11 +51,7 @@ class ActionColumn extends AbstractColumn
                         $this->generateUrl($entity, $matches[1])
                     ]);
                 }
-                /**
-                 * @var Template $template
-                 */
-                $template = $this->container['twig']->loadTemplate($this->template);
-                return $template->renderBlock('action_button', [
+                return $this->template->renderBlock('action_button', [
                     'url' => $this->generateUrl($entity, $matches[1]),
                     'action' => $matches[1],
                     'entity' => $entity
@@ -66,7 +62,7 @@ class ActionColumn extends AbstractColumn
     }
 
     /**
-     * @param DataGridItem $item
+     * @param DataGridItemInterface $item
      * @param string $action
      * @return mixed|string
      * @throws Exception
@@ -74,11 +70,15 @@ class ActionColumn extends AbstractColumn
     protected function generateUrl($item, $action)
     {
         if (is_callable($this->urlGenerator)) {
-            return call_user_func_array($this->urlGenerator, [$item, $action, $this->container['router']]);
+            return call_user_func_array($this->urlGenerator, [$item, $action, $this->container->getRouter()]);
         } elseif (!empty($this->identifier) && $item->has($this->identifier)) {
-            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get($this->identifier)]);
-        } elseif ($item->has('id')) {
-            return $this->container['router']->generate($this->pathPrefix . $action, ['id' => $item->get('id')]);
+            return $this->container->getRouter()->generate($this->pathPrefix . $action, [
+                'id' => $item->get($this->identifier)
+            ]);
+        } elseif ($item->hasIdentifier()) {
+            return $this->container->getRouter()->generate($this->pathPrefix . $action, [
+                'id' => $item->get($item->getIdentifier())
+            ]);
         } else {
             throw new DataGridException('Could not generate url for action: ' . $action);
         }

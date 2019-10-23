@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Pfilsx\tests\TestEntities\Node" table="node">
+    <entity name="Pfilsx\tests\app\Entity\Node" table="node">
 
         <id name="id" type="integer" column="id"/>
         <field name="content" column="content" type="text" nullable="true"/>
@@ -12,11 +12,11 @@
         <field name="createdAt" column="created_at" type="datetime"/>
         <field name="parentId" column="parent_id" type="integer" nullable="true"/>
 
-        <one-to-many field="subNodeList" target-entity="Pfilsx\tests\TestEntities\Node" mapped-by="mainNode"/>
-        <many-to-one field="mainNode" target-entity="Pfilsx\tests\TestEntities\Node" inversed-by="subNodeList">
+        <one-to-many field="subNodeList" target-entity="Pfilsx\tests\app\Entity\Node" mapped-by="mainNode"/>
+        <many-to-one field="mainNode" target-entity="Pfilsx\tests\app\Entity\Node" inversed-by="subNodeList">
             <join-column name="mainNodeId" referenced-column-name="id"/>
         </many-to-one>
-        <many-to-one field="assoc" target-entity="Pfilsx\tests\TestEntities\NodeAssoc" inversed-by="nodeList">
+        <many-to-one field="assoc" target-entity="Pfilsx\tests\app\Entity\NodeAssoc" inversed-by="nodeList">
             <join-column name="assoc_id" referenced-column-name="id"/>
         </many-to-one>
 

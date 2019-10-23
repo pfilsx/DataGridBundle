@@ -1,28 +1,13 @@
-{% block grid_table %}
+{% block grid_start %}
     {% set attr = attr|merge({'class': attr.class|default('')~' data_grid_table'}) %}
     <table {{ block('attributes') }}>
-        <thead>
-        {{ block('grid_head') }}
-        </thead>
-        <tbody>
-        {{ block('grid_body') }}
-        </tbody>
-    </table>
-    {% if data_grid.hasPagination and data_grid.paginationOptions.pages|length > 1 %}
-        {{ block('pagination') }}
-    {% endif %}
 {% endblock %}
 
 {% block grid_head %}
     <tr>
         {% for column in data_grid.columns %}
             {% if column.isVisible %}
-                {% if column.hasAttributes %}
-                    {% set attr = column.attributes %}
-                {% else %}
-                    {% set attr = [] %}
-                {% endif %}
-
+                {% set attr = column.attributes|default({}) %}
                 <th {{ block('attributes') }}>
                     {% if column.hasSort %}
                         {% if column.getSort is same as('ASC') %}
@@ -43,11 +28,15 @@
             {% endif %}
         {% endfor %}
     </tr>
+{% endblock %}
+
+{% block grid_filters %}
     {% if data_grid.hasFilters %}
         <tr>
             {% for column in data_grid.columns %}
                 {% if column.isVisible %}
-                    <th>{{ column.filterContent|raw }}</th>
+                    {% set attr = column.attributes|default({}) %}
+                    <th {{ block('attributes') }}>{{ column.filterContent|raw }}</th>
                 {% endif %}
             {% endfor %}
         </tr>
@@ -59,11 +48,7 @@
         <tr>
             {% for column in data_grid.columns %}
                 {% if column.isVisible %}
-                    {% if column.hasAttributes %}
-                        {% set attr = column.attributes %}
-                    {% else %}
-                        {% set attr = [] %}
-                    {% endif %}
+                    {% set attr = column.attributes|default({}) %}
                     <td {{ block('attributes') }}>{{ column.getCellContent(entity)|raw }}</td>
                 {% endif %}
             {% endfor %}
@@ -75,13 +60,37 @@
     {% endfor %}
 {% endblock %}
 
+{% block grid_end %}
+    </table>
+{% endblock %}
+
+{% block grid_pagination %}
+    {% if data_grid.hasPagination and data_grid.paginationOptions.pages|length > 1 %}
+        {% set pages = data_grid.paginationOptions.pages %}
+        {% set current_page = data_grid.paginationOptions.currentPage %}
+        {{ block('paginator') }}
+    {% endif %}
+{% endblock %}
+
+{% block paginator %}
+    {% for i in pages %}
+        {% if i == current_page %}
+            {{ i }}
+        {% elseif i is same as(null) %}
+            ...
+        {% else %}
+            <a href="{{ path(request.get('_route'),
+                request.query|merge({'data_grid': request.query.get('data_grid')|default({})|merge({'page': i})})) }}"
+               class="data_grid_page" data-page="{{ i }}">{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
 {% block attributes -%}
 
     {%- for attrname, attrvalue in attr -%}
         {{- " " -}}
-        {%- if attrname in ['placeholder', 'title'] -%}
-            {{- attrname }}="{{ translation_domain is same as(false) ? attrvalue : attrvalue|trans({}, translation_domain) }}"
-        {%- elseif attrvalue is same as(true) -%}
+        {%- if attrvalue is same as(true) -%}
             {{- attrname }}="{{ attrname }}"
         {%- elseif attrvalue is not same as(false) -%}
             {{- attrname }}="{{ attrvalue }}"
@@ -109,21 +118,6 @@
     <img src="{{ asset(src) }}" height="{{ height }}" width="{{ width }}" alt="{{ alt }}"/>
 {% endblock %}
 
-{% block pagination %}
-    {% set pages = data_grid.paginationOptions.pages %}
-    {% set current_page = data_grid.paginationOptions.currentPage %}
-    {% for i in pages %}
-        {% if i == current_page %}
-            {{ i }}
-        {% elseif i is same as(null) %}
-            ...
-        {% else %}
-            <a href="{{ path(request.get('_route'),
-                request.query|merge({'data_grid': request.query.get('data_grid')|default({})|merge({'page': i})})) }}"
-               class="data_grid_page" data-page="{{ i }}">{{ i }}</a>
-        {% endif %}
-    {% endfor %}
-{% endblock %}
 
 {% block grid_filter %}
     {% set attr = options|merge({class: (options.class|default('') ~ ' data_grid_filter')|trim}) %}

@@ -6,11 +6,12 @@ Configuration Reference
     .. code-block:: yaml
 
         data_grid:
-            # template used for rendering grid blocks
-            template: 'grid/grid.blocks.html.twig'
-            # message used in case of no data found
-            noDataMessage: 'Записей не найдено'
-            # pagination configuration
-            pagination:
+            instances:
+                # template used for rendering grid blocks
+                template: 'grid/grid.blocks.html.twig'
+                # message used in case of no data found
+                noDataMessage: 'Записей не найдено'
+                # pagination configuration
+                pagination_enabled: true
                 # num of data rows on each page
-                limit: 10
+                pagination_limit: 10

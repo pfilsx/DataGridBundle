@@ -1,6 +1,6 @@
 <?php
 
-namespace Pfilsx\tests\TestEntities;
+namespace Pfilsx\tests\app\Entity;
 
 class Node
 {

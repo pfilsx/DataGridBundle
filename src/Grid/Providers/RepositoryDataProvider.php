@@ -6,9 +6,9 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
-use Pfilsx\DataGrid\Grid\DataGridItem;
+use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
 
 class RepositoryDataProvider extends DataProvider
 {
@@ -18,18 +18,16 @@ class RepositoryDataProvider extends DataProvider
      */
     protected $repository;
 
-    protected $entityManager;
-
     /**
      * @var Criteria
      */
     protected $criteria;
 
 
-    public function __construct(EntityRepository $repository, EntityManager $manager)
+    public function __construct(EntityRepository $repository, ManagerRegistry $manager)
     {
         $this->repository = $repository;
-        $this->entityManager = $manager;
+        parent::__construct($manager);
     }
 
 
@@ -38,12 +36,15 @@ class RepositoryDataProvider extends DataProvider
         $this->getCriteria()
             ->setMaxResults($this->getPager()->getLimit())
             ->setFirstResult($this->getPager()->getFirst());
-        return array_map(function ($entity) {
-            $item = new DataGridItem();
-            $item->setEntity($entity);
-            $item->setEntityManager($this->entityManager);
-            return $item;
-        }, $this->repository->matching($this->getCriteria())->toArray());
+        $result = $this->repository->matching($this->getCriteria())->toArray();
+        if (!empty($result)){
+            $identifier = $this->getEntityIdentifier(get_class($result[0]));
+            return array_map(function ($entity) use ($identifier) {
+                $item = new EntityGridItem($entity, $identifier);
+                return $item;
+            }, $result);
+        }
+        return $result;
     }
 
     public function getTotalCount(): int
@@ -83,9 +84,8 @@ class RepositoryDataProvider extends DataProvider
 
     public function addRelationFilter(string $attribute, $value, string $relationClass): DataProviderInterface
     {
-        $metaData = $this->entityManager->getClassMetadata($relationClass);
-        if (!empty($metaData->getIdentifier())) {
-            $identifier = $metaData->getIdentifier()[0];
+        $identifier = $this->getEntityIdentifier($relationClass);
+        if ($identifier !== null) {
             $repository = $this->entityManager->getRepository($relationClass);
             $entity = $repository->findOneBy([$identifier => $value]);
             $this->getCriteria()->andWhere(Criteria::expr()->eq($attribute, $entity));

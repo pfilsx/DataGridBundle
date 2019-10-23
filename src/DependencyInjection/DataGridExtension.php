@@ -21,7 +21,7 @@ class DataGridExtension extends Extension
         $ymlLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $ymlLoader->load('data_grid.yml');
 
-        $container->getDefinition('data_grid.configuration')
+        $container->getDefinition('data_grid.configuration_container')
             ->setArgument(0, $config);
     }
 }

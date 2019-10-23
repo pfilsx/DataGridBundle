@@ -5,10 +5,11 @@ namespace Pfilsx\DataGrid\tests\hydrators;
 use DateTime;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Pfilsx\DataGrid\Grid\Hydrators\DataGridHydrator;
+use Pfilsx\tests\app\Entity\Node;
+use Pfilsx\tests\app\Entity\NodeAssoc;
 use Pfilsx\tests\Mocks\HydratorMockStatement;
 use Pfilsx\tests\OrmTestCase;
-use Pfilsx\tests\TestEntities\Node;
-use Pfilsx\tests\TestEntities\NodeAssoc;
+
 
 class DataGridHydratorTest extends OrmTestCase
 {

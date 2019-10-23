@@ -1,8 +1,8 @@
 data_grid:
-  template: 'grid.blocks.html.twig'
-  noDataMessage: 'Записей не найдено'
-  pagination:
-    limit: 10
+    instances:
+      default:
+        template: 'grid.blocks.html.twig'
+        no_data_message: 'Записей не найдено'
 framework:
   trusted_hosts: ~
   secret: "test"
@@ -11,10 +11,10 @@ framework:
   templating:
     engines: ['twig']
   router:
-    resource: "%kernel.root_dir%/app/config/routing.yml"
+    resource: "%kernel.root_dir%/config/routing.yml"
 twig:
   paths:
-    "%kernel.root_dir%/app/Resources/views/": __main__
+    "%kernel.root_dir%/Resources/views/": __main__
 doctrine:
   dbal:
     driver:   'pdo_sqlite'
@@ -23,7 +23,7 @@ doctrine:
     entity_managers:
       default:
         mappings:
-          Pfilsx\tests\TestEntities\Node:
+          Pfilsx\tests\app\Entity\Node:
             type: xml
-            dir: "%kernel.root_dir%/app/Resources/config/doctrine"
-            prefix: Pfilsx\tests\TestEntities
+            dir: "%kernel.root_dir%/Resources/config/doctrine"
+            prefix: Pfilsx\tests\app\Entity
