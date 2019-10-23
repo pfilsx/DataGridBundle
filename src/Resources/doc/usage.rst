@@ -11,6 +11,12 @@ Step 1: Create data entity
 Step 2: Create data grid type for entity
 ----------------------------------------
 
+.. code-block:: bash
+
+    $ php bin/console make:grid
+
+Command will generate basic GridType code for you. Next step you can customize it:
+
 .. code-block:: php
 
     namespace App\Grid;
@@ -30,14 +36,12 @@ Step 2: Create data grid type for entity
                         'class' => self::FILTER_TEXT
                     ]
                 ])
-                ->addColumn(self::DATA_COLUMN, [
-                    'attribute' => 'title',
+                ->addColumn('title', self::DATA_COLUMN, [
                     'filter' => [
                         'class' => self::FILTER_TEXT
                     ],
                 ])
-                ->addColumn(self::BOOLEAN_COLUMN, [
-                    'attribute' => 'is_enabled',
+                ->addColumn('is_enabled', self::BOOLEAN_COLUMN, [
                     'format' => 'html',
                     'trueValue' => '<i class="fas fa-check"></i>',
                     'falseValue' => '<i class="fas fa-times"></i>',
@@ -46,8 +50,8 @@ Step 2: Create data grid type for entity
                         'class' => self::FILTER_BOOLEAN
                     ]
                 ])
-                ->addColumn(self::ACTION_COLUMN, [
-                    'pathPrefix' => 'entity'
+                ->addActionColumn([
+                    'pathPrefix' => 'entity_action'
                 ]);
         }
 
@@ -69,7 +73,7 @@ Step 3: Create grid in your controller
     {
         $grid = $factory->createGrid(EntityGridType::class, $entityRepository);
         return $this->render('entity/index.html.twig', [
-            'dataGrid' => $grid
+            'grid' => $grid->createView()
         ]);
     }
 
@@ -78,7 +82,7 @@ Step 4: Display grid in your twig template
 
 .. code-block:: twig
 
-    {{ grid_view(dataGrid, {class: 'table'}) }}
+    {{ grid_view(grid, {class: 'table'}) }}
 
 Additional step: Register assets for automating sorting and filtering
 ----------------

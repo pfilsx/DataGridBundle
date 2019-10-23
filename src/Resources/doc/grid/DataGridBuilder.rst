@@ -23,13 +23,12 @@ Usage
                         'class' => self::FILTER_TEXT
                     ]
                 ])
-                ->addColumn(self::DATA_COLUMN, [
-                    'attribute' => 'title',
+                ->addColumn('title', self::DATA_COLUMN, [
                     'filter' => [
                         'class' => self::FILTER_TEXT
                     ],
                 ])
-                ->addColumn(self::ACTION_COLUMN, [
+                ->addActionColumn([
                     'pathPrefix' => 'entity'
                 ]);
         }
@@ -39,15 +38,19 @@ Usage
 Methods Reference
 -----------------
 
-addColumn(string $columnFQN, array $columnOptions = [])
+addColumn(string $attribute, string $columnFQN, array $columnOptions = [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Adds column of specific type to grid. See columns reference for ``$columnOptions`` and listing of default columns.
 
 addDataColumn(string $attribute, array $columnOptions = [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Adds DataColumn to grid. Similar to ``addColumn(self::DATA_COLUMN, ['attribute' => ''])``
+Adds DataColumn to grid. Similar to ``addColumn($attribute, self::DATA_COLUMN, $columnOptions)``
 
-enablePagination(array|false $options = [])
+addActionColumn(array $columnOptions = [])
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adds DataColumn to grid. Similar to ``addColumn('', self::ACTION_COLUMN, $columnOptions)``
+
+enablePagination(boolean $isEnabled, int $limit = 10)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Configures grid pagination options or disable pagination. Only one option available right now - ``limit``.
 ``limit`` - max count of rows on each page.

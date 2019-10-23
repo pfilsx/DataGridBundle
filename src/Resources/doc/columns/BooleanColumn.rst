@@ -6,18 +6,13 @@ Usage
 
 .. code-block:: php
 
-    $builder->addColumn(self::BOOLEAN_COLUMN, [
-        'attribute' => 'entity_attribute',
+    $builder->addColumn('entity_attribute', self::BOOLEAN_COLUMN, [
         'trueValue' => 'yes',
         'falseValue' => 'no'
     ]);
 
 Configuration
 -------------
-
-attribute - string(default: null)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Entity attribute.
 
 attributes - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -29,7 +24,7 @@ Filter configuration. See filters docs.
 
 .. code-block:: php
 
-    $builder->addColumn(self::BOOLEAN_COLUMN, [
+    $builder->addColumn('entity_attribute', self::BOOLEAN_COLUMN, [
         ...
         'filter' => [
             'class' => self::FILTER_BOOLEAN
@@ -58,7 +53,7 @@ Can be used to override default output generation.
 
 .. code-block:: php
 
-    $builder->addColumn(self::BOOLEAN_COLUMN, [
+    $builder->addColumn('entity_attribute', self::BOOLEAN_COLUMN, [
         ...
         'value' => function($entity) {
             return $entity->isEnabled ? 'enabled' : 'disabled';

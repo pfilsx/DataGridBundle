@@ -6,16 +6,11 @@ Usage
 
 .. code-block:: php
 
-    $builder->addColumn(self::DATE_COLUMN, [
-        'attribute' => 'entity_attribute'
-    ]);
+    $builder->addColumn('entity_attribute', self::DATE_COLUMN);
 
 Configuration
 -------------
 
-attribute - string(default: null)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Entity attribute.
 
 attributes - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,7 +26,7 @@ Filter configuration. See filters docs.
 
 .. code-block:: php
 
-    $builder->addColumn(self::DATE_COLUMN, [
+    $builder->addColumn('entity_attribute', self::DATE_COLUMN, [
         ...
         'filter' => [
             'class' => self::FILTER_TEXT
@@ -52,7 +47,7 @@ Can be used to override default output generation.
 
 .. code-block:: php
 
-    $builder->addColumn(self::DATE_COLUMN, [
+    $builder->addColumn('entity_attribute', self::DATE_COLUMN, [
         'value' => function($entity) {
             return $entity->getCreationDate()->format('d.m.Y');
         }

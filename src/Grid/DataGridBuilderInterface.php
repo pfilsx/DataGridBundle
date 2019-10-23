@@ -12,11 +12,13 @@ use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 interface DataGridBuilderInterface
 {
 
-    public function addColumn(string $attribute, string $columnClass = DataColumn::class, array $config = []): self;
+    public function addColumn(string $attribute, string $columnClass = DataColumn::class, array $options = []): self;
 
-    public function addDataColumn(string $attribute, array $config = []): self;
+    public function addSerialColumn(array $options = []): self;
 
-    public function addActionColumn(array $config = []): self;
+    public function addDataColumn(string $attribute, array $options = []): self;
+
+    public function addActionColumn(array $options = []): self;
 
     public function setTemplate(string $path): self;
 

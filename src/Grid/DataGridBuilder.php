@@ -11,6 +11,7 @@ use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Columns\ActionColumn;
 use Pfilsx\DataGrid\Grid\Columns\DataColumn;
 use InvalidArgumentException;
+use Pfilsx\DataGrid\Grid\Columns\SerialColumn;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 
 class DataGridBuilder implements DataGridBuilderInterface
@@ -55,10 +56,10 @@ class DataGridBuilder implements DataGridBuilderInterface
     /**
      * @param string $attribute
      * @param string $columnClass
-     * @param array $config
+     * @param array $options
      * @return $this
      */
-    public function addColumn(string $attribute, string $columnClass = DataColumn::class, array $config = []): DataGridBuilderInterface
+    public function addColumn(string $attribute, string $columnClass = DataColumn::class, array $options = []): DataGridBuilderInterface
     {
         if (!is_subclass_of($columnClass, AbstractColumn::class)) {
             throw new InvalidArgumentException('Expected subclass of' . AbstractColumn::class);
@@ -66,7 +67,7 @@ class DataGridBuilder implements DataGridBuilderInterface
         /**
          * @var AbstractColumn $column
          */
-        $column = new $columnClass($this->container, array_merge($config, ['attribute' => $attribute]));
+        $column = new $columnClass($this->container, array_merge($options, ['attribute' => $attribute]));
         $this->columns[] = $column;
         if ($column->hasFilter() && $column->isVisible()) {
             $this->hasFilters = true;
@@ -76,21 +77,30 @@ class DataGridBuilder implements DataGridBuilderInterface
 
     /**
      * @param string $attribute
-     * @param array $config
+     * @param array $options
      * @return $this
      */
-    public function addDataColumn(string $attribute, array $config = []): DataGridBuilderInterface
+    public function addDataColumn(string $attribute, array $options = []): DataGridBuilderInterface
     {
-        return $this->addColumn($attribute, DataColumn::class, $config);
+        return $this->addColumn($attribute, DataColumn::class, $options);
     }
 
     /**
-     * @param array $config
+     * @param array $options
      * @return $this
      */
-    public function addActionColumn(array $config = []): DataGridBuilderInterface
+    public function addActionColumn(array $options = []): DataGridBuilderInterface
     {
-        return $this->addColumn('id', ActionColumn::class, $config);
+        return $this->addColumn('id', ActionColumn::class, $options);
+    }
+
+    /**
+     * @param array $options
+     * @return $this
+     */
+    public function addSerialColumn(array $options = []): DataGridBuilderInterface
+    {
+        return $this->addColumn('', SerialColumn::class, $options);
     }
 
     /**

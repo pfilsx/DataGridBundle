@@ -47,8 +47,7 @@ class DataGridBuilderTest extends OrmTestCase
 
     public function testAddColumn()
     {
-        $this->builder
-            ->addColumn('attribute', self::SERIAL_COLUMN);
+        $this->builder->addSerialColumn();
         $this->assertCount(1, $this->builder->getColumns());
         $this->assertInstanceOf(SerialColumn::class, $this->builder->getColumns()[0]);
 

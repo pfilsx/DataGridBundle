@@ -25,13 +25,12 @@ You must create your own DataGridType for specific entity. Your type must extend
                         'class' => self::FILTER_TEXT
                     ]
                 ])
-                ->addColumn(self::DATA_COLUMN, [
-                    'attribute' => 'title',
+                ->addColumn('title', self::DATA_COLUMN, [
                     'filter' => [
                         'class' => self::FILTER_TEXT
                     ],
                 ])
-                ->addColumn(self::ACTION_COLUMN, [
+                ->addActionColumn([
                     'pathPrefix' => 'entity'
                 ]);
         }

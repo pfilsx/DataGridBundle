@@ -6,16 +6,10 @@ Usage
 
 .. code-block:: php
 
-    $builder->addColumn(self::DATA_COLUMN, [
-        'attribute' => 'entity_attribute'
-    ]);
+    $builder->addDataColumn('entity_attribute');
 
 Configuration
 -------------
-
-attribute - string(default: null)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Entity attribute.
 
 attributes - array(default: [])
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,7 +21,7 @@ Filter configuration. See filters docs.
 
 .. code-block:: php
 
-    $builder->addColumn(self::DATA_COLUMN, [
+    $builder->addDataColumn('entity_attribute', [
         ...
         'filter' => [
             'class' => self::FILTER_TEXT
@@ -48,7 +42,7 @@ Can be used to override default output generation.
 
 .. code-block:: php
 
-    $builder->addColumn(self::DATA_COLUMN, [
+    $builder->addColumn('entity_attribute', self::DATA_COLUMN, [
         'value' => function($entity) {
             return $entity->isEnabled ? 'enabled' : 'disabled';
         }
