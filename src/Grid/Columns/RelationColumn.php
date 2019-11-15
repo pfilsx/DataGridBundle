@@ -37,7 +37,7 @@ class RelationColumn extends DataColumn
                 ? $result
                 : htmlspecialchars($result);
         }
-        return is_string($obj) ? $obj : '';
+        return is_string($obj) ? (empty($obj) ? $this->emptyValue : $obj) : $this->emptyValue;
     }
 
     /**
