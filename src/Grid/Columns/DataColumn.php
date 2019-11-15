@@ -33,7 +33,9 @@ class DataColumn extends AbstractColumn
      */
     public function getLabel(): string
     {
-        return !empty($this->label) ? $this->label : $this->attribute;
+        return $this->label === false
+            ? ''
+            : (!empty($this->label) ? $this->label : $this->attribute);
     }
 
     /**
@@ -67,7 +69,7 @@ class DataColumn extends AbstractColumn
     public function getHeadContent()
     {
         $label = $this->getLabel();
-        if (($translator = $this->container->getTranslator()) !== null){
+        if (($translator = $this->container->getTranslator()) !== null) {
             $label = $translator->trans($label, [], $this->translationDomain);
         }
         return ucfirst($label);
