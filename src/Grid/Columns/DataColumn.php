@@ -11,6 +11,7 @@ class DataColumn extends AbstractColumn
     protected $attribute;
     protected $format = 'raw';
     protected $sort = true;
+    protected $emptyValue = '';
 
     /**
      * @param mixed $attribute
@@ -54,6 +55,16 @@ class DataColumn extends AbstractColumn
         $this->format = strtolower($format);
     }
 
+    public function getEmptyValue()
+    {
+        return $this->emptyValue;
+    }
+
+    protected function setEmptyValue($value): void
+    {
+        $this->emptyValue = $value;
+    }
+
     protected function checkConfiguration()
     {
         if ((!is_string($this->attribute) || empty($this->attribute)) && $this->value === null) {
@@ -86,9 +97,9 @@ class DataColumn extends AbstractColumn
     public function getCellContent($entity)
     {
         $result = (string)$this->getCellValue($entity);
-        return $this->format === 'html'
-            ? $result
-            : htmlspecialchars($result);
+        return empty($result)
+            ? $this->emptyValue
+            : ($this->format === 'html' ? $result : htmlspecialchars($result));
     }
 
     protected function getCellValue($entity)

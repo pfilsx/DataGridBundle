@@ -17,7 +17,7 @@ class ImageColumn extends DataColumn
 
     protected $alt;
 
-    protected $noImageMessage = '-';
+    protected $emptyValue = '-';
 
     public function getCellContent($entity)
     {
@@ -33,7 +33,7 @@ class ImageColumn extends DataColumn
             }
             return htmlspecialchars($value);
         } else {
-            return $this->noImageMessage;
+            return $this->emptyValue;
         }
     }
 
@@ -86,21 +86,5 @@ class ImageColumn extends DataColumn
     protected function setAlt(callable $alt): void
     {
         $this->alt = $alt;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNoImageMessage(): string
-    {
-        return $this->noImageMessage;
-    }
-
-    /**
-     * @param string $noImageMessage
-     */
-    protected function setNoImageMessage(string $noImageMessage): void
-    {
-        $this->noImageMessage = $noImageMessage;
     }
 }
