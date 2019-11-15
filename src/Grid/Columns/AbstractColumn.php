@@ -100,13 +100,13 @@ abstract class AbstractColumn
      */
     public function getLabel(): string
     {
-        return $this->label;
+        return $this->label === false ? '' : $this->label;
     }
 
     /**
-     * @param string $label
+     * @param string|bool $label
      */
-    protected function setLabel(string $label): void
+    protected function setLabel($label): void
     {
         $this->label = $label;
     }
