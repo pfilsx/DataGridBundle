@@ -22,7 +22,9 @@ class RelationColumn extends DataColumn
      */
     public function getLabel(): string
     {
-        return !empty($this->label) ? $this->label : "{$this->attribute}.{$this->labelAttribute}";
+        return $this->label === false
+            ? ''
+            : (!empty($this->label) ? $this->label : "{$this->attribute}.{$this->labelAttribute}");
     }
 
 
