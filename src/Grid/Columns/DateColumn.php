@@ -18,7 +18,8 @@ class DateColumn extends DataColumn
         } elseif (is_string($value) && !empty($this->dateFormat)) {
             return date($this->dateFormat, strtotime($value));
         }
-        return (string)$value;
+        $value = (string)$value;
+        return empty($value) ? $this->emptyValue : $value;
     }
 
     /**
