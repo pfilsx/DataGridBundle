@@ -17,8 +17,8 @@
                         {% else %}
                             {% set sort_attribute = {'sortBy': column.attribute} %}
                         {% endif %}
-                        <a href="{{ path(request.get('_route'),
-                            request.query|merge({'data_grid': request.query.get('data_grid')|default({})|merge(sort_attribute)})) }}"
+                        <a href="{{ path(request.attributes.get('_route'),
+                            (request.attributes.get('_route_params')|merge(request.query))|merge({'data_grid': request.query.get('data_grid')|default({})|merge(sort_attribute)})) }}"
                            class="data_grid_sort{% if column.getSort is same as('ASC') %} up{% elseif column.getSort is same as('DESC') %} down{% endif %}"
                            data-attribute="{{ column.attribute }}">{{ column.headContent }}</a>
                     {% else %}
@@ -79,8 +79,8 @@
         {% elseif i is same as(null) %}
             ...
         {% else %}
-            <a href="{{ path(request.get('_route'),
-                request.query|merge({'data_grid': request.query.get('data_grid')|default({})|merge({'page': i})})) }}"
+            <a href="{{ path(request.attributes.get('_route'),
+                (request.attributes.get('_route_params')|merge(request.query))|merge({'data_grid': request.query.get('data_grid')|default({})|merge({'page': i})})) }}"
                class="data_grid_page" data-page="{{ i }}">{{ i }}</a>
         {% endif %}
     {% endfor %}

@@ -99,6 +99,7 @@ class DataGridBuilderTest extends OrmTestCase
     public function testSetSort($builder): void
     {
         $builder->setSort('creationDate', 'DESC');
+        $builder->acquireSort();
         foreach ($builder->getColumns() as $column) {
             /**
              * @var $column AbstractColumn

@@ -18,8 +18,6 @@ class Configuration implements ConfigurationInterface
 
     protected $paginationEnabled;
 
-    protected $showTitles;
-
     protected $translationDomain;
 
     public function __construct(array $config = [])

@@ -43,6 +43,8 @@ class DataGridBuilder implements DataGridBuilderInterface
 
     protected $instance = 'default';
 
+    protected $sort = null;
+
     /**
      * DataGridBuilder constructor.
      * @param DataGridServiceContainer $container
@@ -161,16 +163,35 @@ class DataGridBuilder implements DataGridBuilderInterface
         $this->provider = $provider;
     }
 
+    /**
+     * @param string $attribute
+     * @param string $direction
+     */
     public function setSort(string $attribute, string $direction)
     {
-        foreach ($this->columns as $column) {
-            if ($column instanceof DataColumn && $column->hasSort() && $column->getAttribute() == $attribute) {
-                $column->setSort($direction);
-                $this->provider->setSort([$attribute => $direction]);
-                break;
+        $this->sort = [$attribute, $direction];
+    }
+
+    /**
+     * @internal
+     */
+    public function acquireSort(): void
+    {
+        if (is_array($this->sort) && count($this->sort) === 2) {
+            $attribute = $this->sort[0];
+            $direction = $this->sort[1];
+            foreach ($this->columns as $column) {
+                if ($column instanceof DataColumn && $column->hasSort() && $column->getAttribute() == $attribute) {
+                    $column->setSort($direction);
+                    $this->provider->setSort([$attribute => $direction]);
+                    break;
+                }
             }
         }
     }
+
+
+
 
     /**
      * @internal
