@@ -26,14 +26,20 @@ abstract class AbstractGridType
      * @var DataGridServiceContainer
      */
     protected $container;
+    /**
+     * @var array
+     */
+    protected $params;
 
     /**
      * AbstractGridType constructor.
      * @param DataGridServiceContainer $container
+     * @param array $params
      */
-    public function __construct(DataGridServiceContainer $container)
+    public function __construct(DataGridServiceContainer $container, array $params = [])
     {
         $this->container = $container;
+        $this->params = $params;
     }
 
     public abstract function buildGrid(DataGridBuilderInterface $builder): void;
