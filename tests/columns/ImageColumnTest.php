@@ -27,7 +27,7 @@ class ImageColumnTest extends OrmTestCase
             'alt' => function () {
                 return 'Test alt';
             },
-            'noImageMessage' => 'Empty',
+            'emptyValue' => 'Empty',
             'template' => $this->template
         ]);
     }
@@ -49,7 +49,6 @@ class ImageColumnTest extends OrmTestCase
 
     public function testGetNoImageMessage(): void
     {
-        $this->assertEquals('Empty', $this->testColumn->getNoImageMessage());
         $entity = new class
         {
             public function getTestAttribute()
