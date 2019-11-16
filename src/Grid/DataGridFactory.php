@@ -45,7 +45,7 @@ class DataGridFactory implements DataGridFactoryInterface
     }
 
 
-    public function createGrid(string $gridType, $dataSource): DataGridInterface
+    public function createGrid(string $gridType, $dataSource, array $params = []): DataGridInterface
     {
         if (!is_subclass_of($gridType, AbstractGridType::class)) {
             throw new InvalidArgumentException('Expected subclass of ' . AbstractGridType::class);
@@ -53,7 +53,7 @@ class DataGridFactory implements DataGridFactoryInterface
         $provider = DataProvider::create($dataSource, $this->container->getDoctrine());
 
         /** @var AbstractGridType $type */
-        $gridType = new $gridType($this->container);
+        $gridType = new $gridType($this->container, $params);
 
 
         return new DataGrid($gridType, $provider, $this->defaultConfiguration, $this->container);
