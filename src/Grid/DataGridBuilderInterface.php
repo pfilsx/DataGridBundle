@@ -86,7 +86,11 @@ interface DataGridBuilderInterface
     /**
      * @param string $attribute
      * @param string $direction
-     * @internal
      */
     public function setSort(string $attribute, string $direction);
+
+    /**
+     * @internal
+     */
+    public function acquireSort(): void;
 }

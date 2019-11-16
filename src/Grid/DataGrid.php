@@ -227,6 +227,7 @@ class DataGrid implements DataGridInterface
             $this->setSort($queryParams['sortBy']);
             unset($queryParams['sortBy']);
         }
+        $this->builder->acquireSort();
     }
 
     protected function handlePagination(array &$queryParams)
