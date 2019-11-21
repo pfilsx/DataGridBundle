@@ -80,7 +80,7 @@ class DataColumn extends AbstractColumn
     public function getHeadContent()
     {
         $label = $this->getLabel();
-        if (($translator = $this->container->getTranslator()) !== null) {
+        if (!empty($label) && ($translator = $this->container->getTranslator()) !== null) {
             $label = $translator->trans($label, [], $this->translationDomain);
         }
         return ucfirst($label);

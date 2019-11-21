@@ -32,6 +32,14 @@ class EntityGridItem extends DataGridItem
         throw new DataGridException('Unknown property ' . $attribute . ' in ' . get_class($this->data));
     }
 
+    public function __call(string $name, array $arguments)
+    {
+        if (method_exists($this->data, $name)){
+            return call_user_func_array([$this->data, $name], $arguments);
+        }
+        throw new DataGridException('Unknown method ' . $name . ' in ' . get_class($this->data));
+    }
+
 
     private function getPropertyAccessVariations(string $attribute): array
     {
