@@ -6,6 +6,7 @@ namespace Pfilsx\DataGrid\tests;
 use InvalidArgumentException;
 use Pfilsx\DataGrid\Config\ConfigurationContainer;
 use Pfilsx\DataGrid\DataGridServiceContainer;
+use Pfilsx\DataGrid\Extension\DependencyInjection\DependencyInjectionExtension;
 use Pfilsx\DataGrid\Grid\DataGridFactory;
 use Pfilsx\DataGrid\Grid\DataGridView;
 use Pfilsx\tests\app\Entity\Node;
@@ -15,6 +16,7 @@ use Pfilsx\tests\OrmTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Template;
+use Twig\TemplateWrapper;
 
 class DataGridFactoryTest extends OrmTestCase
 {
@@ -56,7 +58,7 @@ class DataGridFactoryTest extends OrmTestCase
             $stack,
             static::$kernel->getContainer()->get('translator')
         );
-        $this->factory = new DataGridFactory($container, $this->configuration);
+        $this->factory = new DataGridFactory($container, $this->configuration, $this->createMock(DependencyInjectionExtension::class));
     }
 
     public function testWrongGridTypeException(): void
@@ -71,7 +73,7 @@ class DataGridFactoryTest extends OrmTestCase
         $grid->createView();
         $this->assertEquals('empty', $grid->getNoDataMessage());
         $this->assertTrue($grid->hasPagination());
-        $this->assertInstanceOf(Template::class, $grid->getTemplate());
+        $this->assertInstanceOf(TemplateWrapper::class, $grid->getTemplate());
         $this->assertIsArray($grid->getData());
         $this->assertNotEmpty($grid->getData());
         $this->assertFalse($grid->hasFilters());
@@ -98,7 +100,7 @@ class DataGridFactoryTest extends OrmTestCase
             $stack,
             static::$kernel->getContainer()->get('translator')
         );
-        $factory2 = new DataGridFactory($container, $this->configuration);
+        $factory2 = new DataGridFactory($container, $this->configuration, $this->createMock(DependencyInjectionExtension::class));
         $grid2 = $factory2->createGrid(NodeGridType2::class, $this->getEntityManager()->getRepository(Node::class));
         $grid2->createView();
         $this->assertFalse($grid2->hasPagination());

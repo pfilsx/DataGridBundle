@@ -6,10 +6,9 @@ use Pfilsx\DataGrid\Grid\DataGrid;
 use Pfilsx\DataGrid\Grid\DataGridView;
 use Pfilsx\DataGrid\Twig\DataGridExtension;
 use Pfilsx\tests\KernelTestCase;
-use ReflectionClass;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\Template;
+use Twig\TemplateWrapper;
 
 class DataGridExtensionTest extends KernelTestCase
 {
@@ -27,7 +26,7 @@ class DataGridExtensionTest extends KernelTestCase
         parent::setUp();
         $this->extension = new DataGridExtension();
 
-        $template = $this->serviceContainer->getTwig()->loadTemplate('test_template.html.twig');
+        $template = $this->serviceContainer->getTwig()->load('test_template.html.twig');
         $grid = $this->createMock(DataGrid::class);
         $grid->expects($this->any())
             ->method('getTemplate')
@@ -103,7 +102,7 @@ class DataGridExtensionTest extends KernelTestCase
         $environment = $this->createMock(Environment::class);
         $environment->expects($this->any())
             ->method('loadTemplate')
-            ->willReturn($this->createMock(Template::class));
+            ->willReturn($this->createMock(TemplateWrapper::class));
         $grid = $this->createGridMock();
         $grid2 = $this->createGridMock(false);
         return [
@@ -115,7 +114,7 @@ class DataGridExtensionTest extends KernelTestCase
     private function createGridMock($withBlock = true)
     {
 
-        $template = $this->createMock(Template::class);
+        $template = $this->createMock(TemplateWrapper::class);
         $template->expects($this->any())
             ->method('hasBlock')
             ->willReturn($withBlock);
