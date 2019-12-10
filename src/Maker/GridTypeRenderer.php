@@ -20,10 +20,6 @@ class GridTypeRenderer
 
     public function render(ClassNameDetails $gridClassDetails, array $gridFields, ClassNameDetails $boundClassDetails = null)
     {
-        foreach ($gridFields as $key => $value){
-            echo $key.' => '.$value.PHP_EOL;
-        }
-
         $this->generator->generateClass(
             $gridClassDetails->getFullName(),
             __DIR__.'/../Resources/skeleton/grid/Type.tpl.php',

@@ -17,6 +17,8 @@ interface DataGridItemInterface extends ArrayAccess
     public function __get(string $attribute);
     public function __isset(string $attribute);
 
+    public function __call(string $name, array $arguments);
+
     public function getData();
 
     public function hasIdentifier(): bool;

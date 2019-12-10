@@ -20,4 +20,9 @@ class ArrayGridItem extends DataGridItem
         }
         throw new DataGridException('Unknown property ' . $attribute);
     }
+
+    public function __call(string $name, array $arguments)
+    {
+        throw new DataGridException('ArrayGridItem does not support methods invoke');
+    }
 }
