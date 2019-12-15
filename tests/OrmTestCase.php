@@ -8,7 +8,7 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use Pfilsx\tests\app\Entity\Node;
 use Pfilsx\tests\app\Entity\NodeAssoc;
-use Twig\Template;
+use Twig\TemplateWrapper;
 
 class OrmTestCase extends KernelTestCase
 {
@@ -17,7 +17,7 @@ class OrmTestCase extends KernelTestCase
      */
     protected $em;
     /**
-     * @var Template
+     * @var TemplateWrapper
      */
     protected $template;
 
@@ -28,7 +28,7 @@ class OrmTestCase extends KernelTestCase
 
         $this->createEntityManager();
 
-        $this->template = $this->serviceContainer->getTwig()->loadTemplate('test_template.html.twig');
+        $this->template = $this->serviceContainer->getTwig()->load('test_template.html.twig');
     }
 
     /**

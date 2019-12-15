@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\Grid;
 
 use Pfilsx\DataGrid\DataGridServiceContainer;
 
-abstract class AbstractGridType
+abstract class AbstractGridType implements GridTypeInterface
 {
     const ACTION_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\ActionColumn';
     const BOOLEAN_COLUMN = 'Pfilsx\DataGrid\Grid\Columns\BooleanColumn';
@@ -23,26 +23,12 @@ abstract class AbstractGridType
     const FILTER_CUSTOM = 'Pfilsx\DataGrid\Grid\Filters\CustomFilter';
 
     /**
-     * @var DataGridServiceContainer
-     */
-    protected $container;
-    /**
      * @var array
      */
     protected $params;
 
-    /**
-     * AbstractGridType constructor.
-     * @param DataGridServiceContainer $container
-     * @param array $params
-     */
-    public function __construct(DataGridServiceContainer $container, array $params = [])
+    public function setParams(array $params)
     {
-        $this->container = $container;
         $this->params = $params;
     }
-
-    public abstract function buildGrid(DataGridBuilderInterface $builder): void;
-
-    public abstract function handleFilters(DataGridFiltersBuilderInterface $builder, array $filters): void;
 }

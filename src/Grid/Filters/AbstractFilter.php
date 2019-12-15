@@ -5,7 +5,7 @@ namespace Pfilsx\DataGrid\Grid\Filters;
 
 
 use Pfilsx\DataGrid\DataGridServiceContainer;
-use Twig\Template;
+use Twig\TemplateWrapper;
 
 abstract class AbstractFilter
 {
@@ -14,7 +14,7 @@ abstract class AbstractFilter
      */
     protected $container;
     /**
-     * @var Template|null
+     * @var TemplateWrapper|null
      */
     protected $template;
     /**
@@ -38,7 +38,7 @@ abstract class AbstractFilter
         return $this->template;
     }
 
-    public function setTemplate(?Template $template)
+    public function setTemplate(?TemplateWrapper $template)
     {
         $this->template = $template;
     }

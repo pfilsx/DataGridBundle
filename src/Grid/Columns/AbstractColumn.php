@@ -6,7 +6,7 @@ namespace Pfilsx\DataGrid\Grid\Columns;
 
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Filters\AbstractFilter;
-use Twig\Template;
+use Twig\TemplateWrapper;
 
 abstract class AbstractColumn
 {
@@ -27,7 +27,7 @@ abstract class AbstractColumn
     protected $isVisible = true;
 
     /**
-     * @var Template
+     * @var TemplateWrapper
      */
     protected $template;
     /**

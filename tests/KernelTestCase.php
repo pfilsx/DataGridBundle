@@ -22,6 +22,7 @@ class KernelTestCase extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
 
     protected function setUp(): void
     {
+
         $kernel = self::bootKernel();
         $this->application = new Application($kernel);
         $this->application->setAutoExit(false);

@@ -11,6 +11,7 @@ use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
 use Twig\Template;
+use Twig\TemplateWrapper;
 
 /**
  * Class DataGrid
@@ -20,7 +21,7 @@ use Twig\Template;
 class DataGrid implements DataGridInterface
 {
     /**
-     * @var Template
+     * @var TemplateWrapper
      */
     protected $template;
     /**
@@ -141,7 +142,7 @@ class DataGrid implements DataGridInterface
     }
 
     /**
-     * @return Template
+     * @return TemplateWrapper
      * @internal
      */
     public function getTemplate()
@@ -193,7 +194,7 @@ class DataGrid implements DataGridInterface
      */
     protected function setTemplate(string $path)
     {
-        $this->template = $this->container->getTwig()->loadTemplate($path);
+        $this->template = $this->container->getTwig()->load($path);
         foreach ($this->builder->getColumns() as $column) {
             $column->setTemplate($this->template);
         }

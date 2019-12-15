@@ -8,13 +8,11 @@ framework:
   secret: "test"
   csrf_protection: false
   test: ~
-  templating:
-    engines: ['twig']
   router:
-    resource: "%kernel.root_dir%/config/routing.yml"
+    resource: "%kernel.project_dir%/tests/app/config/routing.yml"
 twig:
   paths:
-    "%kernel.root_dir%/Resources/views/": __main__
+    "%kernel.project_dir%/tests/app/Resources/views/": __main__
 doctrine:
   dbal:
     driver:   'pdo_sqlite'
@@ -25,5 +23,5 @@ doctrine:
         mappings:
           Pfilsx\tests\app\Entity\Node:
             type: xml
-            dir: "%kernel.root_dir%/Resources/config/doctrine"
+            dir: "%kernel.project_dir%/tests/app/Resources/config/doctrine"
             prefix: Pfilsx\tests\app\Entity

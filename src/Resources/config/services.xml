@@ -38,5 +38,9 @@
             <argument type="service" id="data_grid.renderer.grid_type_renderer" />
             <tag name="maker.command" />
         </service>
+
+        <service id="data_grid.extension" class="Pfilsx\DataGrid\Extension\DependencyInjection\DependencyInjectionExtension">
+            <argument /><!-- All services with tag "data_grid.type" are stored in a service locator by GridPass -->
+        </service>
     </services>
 </container>
