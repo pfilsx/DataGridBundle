@@ -99,10 +99,8 @@ class QueryBuilderDataProvider extends DataProvider
         $this->builder
             ->andWhere($this->builder->expr()->gte($attribute, ':' . $placeholderName))
             ->andWhere($this->builder->expr()->lt($attribute, ':' . $placeholderNameNext));
-        $this->builder->setParameters([
-            $placeholderName => $date,
-            $placeholderNameNext => $nextDate
-        ]);
+        $this->builder->setParameter($placeholderName, $date);
+        $this->builder->setParameter($placeholderNameNext, $nextDate);
     }
 
     protected function ltDate($attribute, $value): void
