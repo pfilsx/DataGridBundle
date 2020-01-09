@@ -23,6 +23,7 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=7.1",
+    "ext-pdo": "*",
     "symfony/framework-bundle": "^4.0 || ^5.0",
     "symfony/orm-pack": "*",
     "symfony/twig-bundle": "^4.0 || ^5.0",
