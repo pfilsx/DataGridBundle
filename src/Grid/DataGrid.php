@@ -10,7 +10,6 @@ use Pfilsx\DataGrid\Config\ConfigurationInterface;
 use Pfilsx\DataGrid\DataGridServiceContainer;
 use Pfilsx\DataGrid\Grid\Columns\AbstractColumn;
 use Pfilsx\DataGrid\Grid\Providers\DataProviderInterface;
-use Twig\Template;
 use Twig\TemplateWrapper;
 
 /**
@@ -213,7 +212,7 @@ class DataGrid implements DataGridInterface
     protected function handleRequest(): void
     {
         $request = $this->container->getRequest()->getCurrentRequest();
-        $queryParams = $request !== null ? $request->query->get('data_grid', []) : [];
+        $queryParams = $request !== null ? $request->query->get('data_grid') ?? [] : [];
 
         $this->handleSorting($queryParams);
 

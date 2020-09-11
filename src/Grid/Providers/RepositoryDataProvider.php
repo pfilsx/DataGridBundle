@@ -6,9 +6,9 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 use DateTime;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class RepositoryDataProvider extends DataProvider
 {
