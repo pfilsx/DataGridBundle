@@ -5,11 +5,11 @@ namespace Pfilsx\DataGrid\Grid\Providers;
 
 
 use DateTime;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Items\ArrayGridItem;
 use Pfilsx\DataGrid\Grid\Items\DataGridItem;
 use Pfilsx\DataGrid\Grid\Items\EntityGridItem;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class ArrayDataProvider extends DataProvider
 {

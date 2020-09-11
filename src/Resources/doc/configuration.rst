@@ -10,7 +10,7 @@ Configuration Reference
                 # template used for rendering grid blocks
                 template: 'grid/grid.blocks.html.twig'
                 # message used in case of no data found
-                noDataMessage: 'Записей не найдено'
+                noDataMessage: 'No records found'
                 # pagination configuration
                 pagination_enabled: true
                 # num of data rows on each page

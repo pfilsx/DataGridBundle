@@ -6,7 +6,6 @@ namespace Pfilsx\DataGrid\Grid\Columns;
 use Exception;
 use Pfilsx\DataGrid\DataGridException;
 use Pfilsx\DataGrid\Grid\Items\DataGridItemInterface;
-use Twig\Template;
 
 class ActionColumn extends AbstractColumn
 {
@@ -54,7 +53,8 @@ class ActionColumn extends AbstractColumn
                 return $this->template->renderBlock('action_button', [
                     'url' => $this->generateUrl($entity, $matches[1]),
                     'action' => $matches[1],
-                    'entity' => $entity
+                    'entity' => $entity,
+                    'identifier' => $this->identifier
                 ]);
             }
             return '';

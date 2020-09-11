@@ -29,7 +29,7 @@ Can be used to override default button rendering.
 
     $builder->addColumn(self::ACTION_COLUMN, [
         'buttons' => [
-            'show' => function(Object $entity, string $url){
+            'show' => function(Object $entity, string $url) {
                 return '<a href="'.$url.'?id='.$entity->id.'">Show</a>';
             }
         ]
@@ -58,7 +58,11 @@ Can be used to override default url generation function.
 .. code-block:: php
 
     $builder->addActionColumn([
-        'urlGenerator' => function($entity, string $action, RouterInterface $router){
+        'urlGenerator' => function($entity, string $action, RouterInterface $router) {
                 return $router->generate('entity-'.$action, ['guid' => $entity->getId()]);
         }
     ]);
+
+identifier - string(default: null)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Can be used to override default identifier field.
