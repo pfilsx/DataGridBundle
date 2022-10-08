@@ -49,7 +49,7 @@ abstract class DataGridItem implements DataGridItemInterface
      * @return boolean true on success or false on failure.
      * The return value will be casted to boolean if non-boolean was returned.
      */
-    public final function offsetExists($offset)
+    public final function offsetExists(mixed $offset): bool
     {
         return $this->has($offset);
     }
@@ -59,7 +59,7 @@ abstract class DataGridItem implements DataGridItemInterface
      * @param string $offset - The offset to retrieve.
      * @return mixed Can return all value types.
      */
-    public final function offsetGet($offset)
+    public final function offsetGet(mixed $offset): mixed
     {
         return $this->get($offset);
     }
@@ -71,7 +71,7 @@ abstract class DataGridItem implements DataGridItemInterface
      * @return void
      * @throws DataGridException
      */
-    public final function offsetSet($offset, $value)
+    public final function offsetSet(mixed $offset, mixed $value): void
     {
         throw new DataGridException("Trying to set read-only property: $offset");
     }
@@ -82,7 +82,7 @@ abstract class DataGridItem implements DataGridItemInterface
      * @return void
      * @throws DataGridException
      */
-    public final function offsetUnset($offset)
+    public final function offsetUnset(mixed $offset): void
     {
         throw new DataGridException("Trying to unset read-only property: $offset");
     }

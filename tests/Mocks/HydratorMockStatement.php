@@ -3,8 +3,10 @@
 namespace Pfilsx\tests\Mocks;
 
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Driver\Result;
 use IteratorAggregate;
 use PDO;
+use Traversable;
 
 class HydratorMockStatement implements IteratorAggregate, Statement
 {
@@ -104,8 +106,9 @@ class HydratorMockStatement implements IteratorAggregate, Statement
     /**
      * {@inheritdoc}
      */
-    public function execute($params = null)
+    public function execute($params = null): Result
     {
+        throw new \Exception("Not implemented");
     }
 
     /**
@@ -118,7 +121,7 @@ class HydratorMockStatement implements IteratorAggregate, Statement
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return $this->_resultSet;
     }

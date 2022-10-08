@@ -20,7 +20,7 @@ class AppKernel extends Kernel
      *
      * @return iterable|BundleInterface[] An iterable of bundle instances
      */
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         $bundles = array(
             new FrameworkBundle(),
@@ -37,7 +37,7 @@ class AppKernel extends Kernel
         $loader->load(__DIR__ . '/config/config_' . $this->getEnvironment() . '.yml');
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return __DIR__ . '/cache/' . $this->environment;
     }
