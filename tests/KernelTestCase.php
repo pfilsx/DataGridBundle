@@ -39,7 +39,7 @@ class KernelTestCase extends \Symfony\Bundle\FrameworkBundle\Test\KernelTestCase
             $kernel->getContainer()->get('router'),
             $kernel->getContainer()->get('twig'),
             $kernel->getContainer()->get('request_stack'),
-            $kernel->getContainer()->get('translator')
+            // $kernel->getContainer()->get('translator')
         );
     }
 }

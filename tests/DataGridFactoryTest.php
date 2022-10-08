@@ -56,7 +56,7 @@ class DataGridFactoryTest extends OrmTestCase
             static::$kernel->getContainer()->get('router'),
             static::$kernel->getContainer()->get('twig'),
             $stack,
-            static::$kernel->getContainer()->get('translator')
+            // static::$kernel->getContainer()->get('translator')
         );
         $this->factory = new DataGridFactory($container, $this->configuration, $this->createMock(DependencyInjectionExtension::class));
     }
